@@ -35,6 +35,14 @@
 @property (nonatomic, strong) NSMutableDictionary * videoSettings;
 @property (nonatomic, strong) NSDictionary * audioSettings;
 
+@property (nonatomic, strong) NSTimer *countDurTimer;
+
+//单个视频片段录制时间
+@property (assign, nonatomic) CGFloat currentVideoDur;
+
+//所有视频录制片段总时长
+@property (assign ,nonatomic) CGFloat totalVideoDur;
+
 @end
 
 
@@ -357,70 +365,126 @@
 
 - (void)startRecord:(NSString *)savePath
 {
+    [self startCountDurTimer];
     
-    //init Video Setting
-    _videoSettings = [[NSMutableDictionary alloc] init];;
-    [_videoSettings setObject:AVVideoCodecH264 forKey:AVVideoCodecKey];
-    [_videoSettings setObject:[NSNumber numberWithInteger:200] forKey:AVVideoWidthKey];
-    [_videoSettings setObject:[NSNumber numberWithInteger:200] forKey:AVVideoHeightKey];
-    
-    //init audio setting
-    AudioChannelLayout channelLayout;
-    memset(&channelLayout, 0, sizeof(AudioChannelLayout));
-    channelLayout.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
-    
-    _audioSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-                     [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
-                     [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
-                     [ NSNumber numberWithFloat: 16000.0 ], AVSampleRateKey,
-                     [ NSData dataWithBytes:&channelLayout length: sizeof( AudioChannelLayout ) ], AVChannelLayoutKey,
-                     [ NSNumber numberWithInt: 32000 ], AVEncoderBitRateKey,
-                     nil];
-
-    
-    
-    NSURL *willSaveURL = [NSURL fileURLWithPath:savePath];
-    
-    
-    _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:willSaveURL size:CGSizeMake(480.0, 640.0) fileType:AVFileTypeMPEG4 outputSettings:nil];
-//    _movieWriter.delegate = self;
-//    [_movieWriter setHasAudioTrack:YES audioSettings:_audioSettings];
-    
-    if (isMeiYanOpen) {
-        [self.beautifyFilter addTarget:_movieWriter];
-    }
-    else
-    {
-        [self.defineImageFilter addTarget:_movieWriter];
+    if ([_delegate respondsToSelector:@selector(videoRecorder:didStartRecordingToOutPutFileAtURL:)]) {
+        [_delegate videoRecorder:self didStartRecordingToOutPutFileAtURL:[NSURL new]];
     }
     
-    [_movieWriter startRecording];
-    
-    [_movieWriter setCompletionBlock:^{
-        NSLog(@"录制成功");
-    }];
+//    //init Video Setting
+//    _videoSettings = [[NSMutableDictionary alloc] init];;
+//    [_videoSettings setObject:AVVideoCodecH264 forKey:AVVideoCodecKey];
+//    [_videoSettings setObject:[NSNumber numberWithInteger:200] forKey:AVVideoWidthKey];
+//    [_videoSettings setObject:[NSNumber numberWithInteger:200] forKey:AVVideoHeightKey];
+//    
+//    //init audio setting
+//    AudioChannelLayout channelLayout;
+//    memset(&channelLayout, 0, sizeof(AudioChannelLayout));
+//    channelLayout.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
+//    
+//    _audioSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+//                     [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+//                     [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
+//                     [ NSNumber numberWithFloat: 16000.0 ], AVSampleRateKey,
+//                     [ NSData dataWithBytes:&channelLayout length: sizeof( AudioChannelLayout ) ], AVChannelLayoutKey,
+//                     [ NSNumber numberWithInt: 32000 ], AVEncoderBitRateKey,
+//                     nil];
+//
+//    
+//    
+//    NSURL *willSaveURL = [NSURL fileURLWithPath:savePath];
+//    
+//    
+//    _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:willSaveURL size:CGSizeMake(480.0, 640.0) fileType:AVFileTypeMPEG4 outputSettings:nil];
+////    _movieWriter.delegate = self;
+////    [_movieWriter setHasAudioTrack:YES audioSettings:_audioSettings];
+//    
+//    if (isMeiYanOpen) {
+//        [self.beautifyFilter addTarget:_movieWriter];
+//    }
+//    else
+//    {
+//        [self.defineImageFilter addTarget:_movieWriter];
+//    }
+//    
+//    [_movieWriter startRecording];
+//    
+//    [_movieWriter setCompletionBlock:^{
+//        NSLog(@"录制成功");
+//    }];
 }
+
+
+- (void)startCountDurTimer
+{
+    self.countDurTimer = [NSTimer scheduledTimerWithTimeInterval:COUNT_DUR_TIMER_INTERVAL target:self selector:@selector(onTimer:) userInfo:nil repeats:YES];
+}
+
+- (void)onTimer:(NSTimer *)timer
+{
+    self.currentVideoDur += COUNT_DUR_TIMER_INTERVAL;
+    
+    if ([_delegate respondsToSelector:@selector(videoRecorder:didRecordingToOutPutFileAtURL:duration:recordedVideosTotalDur:)]) {
+        [_delegate videoRecorder:self didRecordingToOutPutFileAtURL:nil duration:_currentVideoDur recordedVideosTotalDur:_totalVideoDur];
+    }
+    
+    if (_totalVideoDur + _currentVideoDur >= MAX_VIDEO_DUR) {
+        [self stopCurrentVideoRecording];
+    }
+    
+}
+
+- (void)stopCurrentVideoRecording
+{
+    [self stopCountDurTimer];
+    [self stopRecord];
+}
+
+
+- (void)stopCountDurTimer
+{
+    [_countDurTimer invalidate];
+    self.countDurTimer = nil;
+}
+
 
 - (void)stopRecord
 {
-    if (isMeiYanOpen) {
-        [self.beautifyFilter removeTarget:_movieWriter];
-    }
-    else
-    {
-        [self.defineImageFilter removeTarget:_movieWriter];
-    }
     
-    [_movieWriter finishRecording];
+    [self stopCountDurTimer];
+    self.currentVideoDur = 0.0f;
+    if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishRecordingToOutPutFileAtURL:duration:totalDur:error:)]) {
+        [_delegate videoRecorder:self didFinishRecordingToOutPutFileAtURL:nil duration:_currentVideoDur totalDur:_totalVideoDur error:nil];
+    }
+//    if (isMeiYanOpen) {
+//        [self.beautifyFilter removeTarget:_movieWriter];
+//    }
+//    else
+//    {
+//        [self.defineImageFilter removeTarget:_movieWriter];
+//    }
+//    
+//    [_movieWriter finishRecording];
+    
+//    self.totalVideoDur += _currentVideoDur;
+//    NSLog(@"本段视频长度: %f", _currentVideoDur);
+//    NSLog(@"现在的视频总长度: %f", _totalVideoDur);
+//    
+//    if (!error) {
+//        SBVideoData *data = [[SBVideoData alloc] init];
+//        data.duration = _currentVideoDur;
+//        data.fileURL = outputFileURL;
+//        
+//        [_videoFileDataArray addObject:data];
+//    }
+//    
+//    if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishRecordingToOutPutFileAtURL:duration:totalDur:error:)]) {
+//        [_delegate videoRecorder:self didFinishRecordingToOutPutFileAtURL:outputFileURL duration:_currentVideoDur totalDur:_totalVideoDur error:error];
+//    }
+    
 }
 
-- (void)movieRecordingCompleted
-{
-    
-}
-- (void)movieRecordingFailedWithError:(NSError*)error
-{
-    
-}
+
+
 
 @end

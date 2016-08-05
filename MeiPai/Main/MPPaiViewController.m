@@ -9,8 +9,8 @@
 #import "MPPaiViewController.h"
 #import "GPUImage.h"
 #import "MPCameraManager.h"
-
-@interface MPPaiViewController ()
+#import "MPRecordVideoProgressBar.h"
+@interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate>
 {
     GPUImageStillCamera *videoCamera;
 }
@@ -22,8 +22,9 @@
 @property (nonatomic, strong) UIButton *meiButton;
 @property (nonatomic, strong) UIButton *fanButton;
 
-@property (nonatomic, strong) MPCameraManager *cameraManager ;
+@property (nonatomic, strong) MPCameraManager *cameraManager;
 
+@property (nonatomic, strong) MPRecordVideoProgressBar *mpRecordVideoProgressBar;
 @end
 
 @implementation MPPaiViewController
@@ -87,6 +88,7 @@
 - (void)configCamera
 {
     self.cameraManager = [[MPCameraManager alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH) superview:self.view];
+    self.cameraManager.delegate = self;
     [self.cameraManager setFocusImageName:@"camera_focus_bg"];
     [self.cameraManager startCamera];
 }
@@ -103,6 +105,7 @@
     photoMovieButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [photoMovieButton setTitle:@"照片电影" forState:UIControlStateNormal];
     [photoMovieButton setTitleColor:PINKCOLOR forState:UIControlStateHighlighted];
+    [photoMovieButton addTarget:self action:@selector(photoMovieButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:photoMovieButton];
 
     UIButton *importMovieButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -113,13 +116,27 @@
     [importMovieButton setTitle:@"导入视频" forState:UIControlStateNormal];
     importMovieButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [importMovieButton setTitleColor:PINKCOLOR forState:UIControlStateHighlighted];
+    [importMovieButton addTarget:self action:@selector(importMoiveButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:importMovieButton];
     
     UIButton *beginButton = [UIButton buttonWithType:UIButtonTypeCustom];
     beginButton.frame = CGRectMake((SCREEN_WIDTH-80)/2, SCREEN_HEIGHT-44-80, 80, 80);
     [beginButton setImage:[UIImage imageNamed:@"begin"] forState:UIControlStateNormal];
-    [beginButton addTarget:self action:@selector(beginButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [beginButton addTarget:self action:@selector(beginButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [beginButton addTarget:self action:@selector(beginButtonTouchDown) forControlEvents:UIControlEventTouchDown];
+    [beginButton addTarget:self action:@selector(beginButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [beginButton addTarget:self action:@selector(beginButtonTouchUpInside) forControlEvents:UIControlEventTouchUpOutside];
+
     [self.view addSubview:beginButton];
+    
+    
+//    self.progressBar = [ProgressBar getInstance];
+//    [SBCaptureToolKit setView:_progressBar toOriginY:DEVICE_SIZE.width];
+//    [self.view insertSubview:_progressBar belowSubview:_maskView];
+//    [_progressBar startShining];
+    self.mpRecordVideoProgressBar = [[MPRecordVideoProgressBar alloc] initWithFrame:CGRectMake(0, 44+SCREEN_WIDTH, SCREEN_WIDTH, 7)];
+    [self.view addSubview:self.mpRecordVideoProgressBar];
+    
 
 }
 
@@ -136,7 +153,6 @@
 
 }
 
-
 - (void)meiButtonClick:(UIButton *)button
 {
     button.selected = !button.selected;
@@ -150,6 +166,7 @@
     _meiButton.hidden = self.cameraManager.isFrontCamera;
 }
 
+
 - (void)beginButtonClick
 {
     [self.cameraManager snapshotSuccess:^(UIImage *image) {
@@ -157,6 +174,205 @@
     } snapshotFailure:^{
         
     }];
+}
+
+
+- (void)beginButtonTouchDown
+{
+    NSLog(@"开始录");
+    [self.cameraManager startRecord:@""];
+}
+
+- (void)beginButtonTouchUpInside
+{
+    NSLog(@"停止录");
+    [self.cameraManager stopRecord];
+}
+
+- (void)importMoiveButtonClick
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    
+    picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        // Only movie
+        NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        picker.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
+    }
+    
+    [self presentViewController:picker animated:YES completion:nil];
+
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // 1.
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    NSLog(@"info = %@",info);
+    
+    // 2.
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if(![mediaType isEqualToString:@"public.movie"])
+    {
+        NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
+        
+        if (url && ![url isFileURL])
+        {
+            NSLog(@"Input file from camera is invalid.");
+            return;
+        }
+        
+        //        if ([self getVideoDuration:url] > kMaxRecordDuration)
+        //        {
+        //            NSString *ok = NSLocalizedString(@"ok", nil);
+        //            NSString *error = NSLocalizedString(@"error", nil);
+        //            NSString *fileLenHint = NSLocalizedString(@"fileLenHint", nil);
+        //            NSString *seconds = NSLocalizedString(@"seconds", nil);
+        //            NSString *hint = [fileLenHint stringByAppendingFormat:@" %d ", kMaxRecordDuration];
+        //            hint = [hint stringByAppendingString:seconds];
+        //            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:error
+        //                                                            message:hint
+        //                                                           delegate:nil
+        //                                                  cancelButtonTitle:ok
+        //                                                  otherButtonTitles: nil];
+        //            [alert show];
+        //            [alert release];
+        //
+        //            return;
+        //        }
+        
+//        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
+//        {
+//            self.fromSystemCamera = TRUE;
+//        }
+//        else if(picker.sourceType == UIImagePickerControllerSourceTypeSavedPhotosAlbum)
+//        {
+//            self.fromSystemCamera = FALSE;
+//        }
+//        else
+//        {
+//            self.fromSystemCamera = FALSE;
+//        }
+        
+//        // Remove last file
+//        if (self.videoPickURL && [self.videoPickURL isFileURL])
+//        {
+//            
+//            
+//            
+//            if ([[NSFileManager defaultManager] removeItemAtURL:self.videoPickURL error:nil])
+//            {
+//                NSLog(@"Success for delete old pick file: %@", self.videoPickURL);
+//            }
+//            else
+//            {
+//                NSLog(@"Failed for delete old pick file: %@", self.videoPickURL);
+//            }
+//        }
+//        
+//        NSURL *sampleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"150511_JiveBike" ofType:@"mov"]];
+//        
+//        self.videoPickURL = sampleURL;
+//        self.mp4OutputPath = [self getOutputFilePath];
+//        self.hasVideo = YES;
+//        
+//        [self showVideoPlayView:FALSE];
+//        
+//        self.toggleEffects.enabled = TRUE;
+//        self.frameScrollView.hidden = FALSE;
+//        [self getPreviewImage:url];
+    }
+    else
+    {
+        NSLog(@"Error media type");
+        return;
+    }
+}
+
+- (CGFloat)getVideoDuration:(NSURL*)URL
+{
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:URL options:opts];
+    float second = 0;
+    second = urlAsset.duration.value/urlAsset.duration.timescale;
+    
+    return second;
+}
+- (void)photoMovieButtonClick
+{
+    
+}
+
+
+#pragma mark - MPCameraManagerRecorderDelegate
+- (void)videoRecorder:(MPCameraManager *)videoRecorder didStartRecordingToOutPutFileAtURL:(NSURL *)fileURL
+{
+    
+    
+        [self.mpRecordVideoProgressBar startRecordingAVideo];
+    //    NSLog(@"正在录制视频: %@", fileURL);
+    //
+    //    [self.progressBar addProgressView];
+    //    [_progressBar stopShining];
+    //
+    //    [_deleteButton setButtonStyle:DeleteButtonStyleNormal];
+}
+
+- (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishRecordingToOutPutFileAtURL:(NSURL *)outputFileURL duration:(CGFloat)videoDuration totalDur:(CGFloat)totalDur error:(NSError *)error
+{
+    //    if (error) {
+    //        NSLog(@"录制视频错误:%@", error);
+    //    } else {
+    //        NSLog(@"录制视频完成: %@", outputFileURL);
+    //    }
+    //
+    //
+    //    if (totalDur >= MAX_VIDEO_DUR) {
+    //        [self pressOKButton];
+    //    }
+    
+    [_mpRecordVideoProgressBar stopRecordingAVideo];
+}
+
+- (void)videoRecorder:(MPCameraManager *)videoRecorder didRemoveVideoFileAtURL:(NSURL *)fileURL totalDur:(CGFloat)totalDur error:(NSError *)error
+{
+    //    if (error) {
+    //        NSLog(@"删除视频错误: %@", error);
+    //    } else {
+    //        NSLog(@"删除了视频: %@", fileURL);
+    //        NSLog(@"现在视频长度: %f", totalDur);
+    //    }
+    //
+    //    if ([_recorder getVideoCount] > 0) {
+    //        [_deleteButton setStyle:DeleteButtonStyleNormal];
+    //    } else {
+    //        [_deleteButton setStyle:DeleteButtonStyleDisable];
+    //    }
+    //
+    //    _okButton.enabled = (totalDur >= MIN_VIDEO_DUR);
+}
+
+- (void)videoRecorder:(MPCameraManager *)videoRecorder didRecordingToOutPutFileAtURL:(NSURL *)outputFileURL duration:(CGFloat)videoDuration recordedVideosTotalDur:(CGFloat)totalDur
+{
+    
+    //    NSLog(@"%f", videoDuration);
+        [_mpRecordVideoProgressBar setLastProgressToWidth:videoDuration / 10 * _mpRecordVideoProgressBar.frame.size.width];
+    //
+    //    _okButton.enabled = (videoDuration + totalDur >= MIN_VIDEO_DUR);
+}
+
+- (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishMergingVideosToOutPutFileAtURL:(NSURL *)outputFileURL
+{
+    //    [_hud hide:YES];
+    //    self.isProcessingData = NO;
+    //    PlayViewController *playCon = [[PlayViewController alloc] initWithNibName:@"PlayViewController" bundle:nil withVideoFileURL:outputFileURL];
+    //    [self.navigationController pushViewController:playCon animated:YES];
 }
 
 - (BOOL)prefersStatusBarHidden
