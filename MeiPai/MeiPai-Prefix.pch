@@ -1,0 +1,19 @@
+//
+//  MeiPai-Prefix.pch
+//  MeiPai
+//
+//  Created by xwmedia01 on 16/8/4.
+//  Copyright © 2016年 xwmedia01. All rights reserved.
+//
+
+#ifndef MeiPai_Prefix_pch
+#define MeiPai_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "PublicDefine.h"
+#import "PublicHeader.h"
+#import "PublicNetwork.h"
+
+#endif /* MeiPai_Prefix_pch */
