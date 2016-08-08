@@ -72,6 +72,8 @@ extern NSString *const kGPUImageYUVVideoRangeConversionForLAFragmentShaderString
 /// These properties determine whether or not the two camera orientations should be mirrored. By default, both are NO.
 @property(readwrite, nonatomic) BOOL horizontallyMirrorFrontFacingCamera, horizontallyMirrorRearFacingCamera;
 
+@property (nonatomic, assign) BOOL isFrontCamera;
+
 @property(nonatomic, assign) id<GPUImageVideoCameraDelegate> delegate;
 
 /// @name Initialization and teardown

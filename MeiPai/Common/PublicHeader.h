@@ -17,6 +17,8 @@
 #pragma mark -- categoryheader
 #import "UIColor+Category.h"
 #import "UIView+Extention.h"
+#import "NSString+Category.h"
+
 
 #pragma mark -- other header
 #import "MPDataSource.h"

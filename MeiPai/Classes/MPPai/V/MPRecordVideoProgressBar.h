@@ -8,12 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    MPRecordVideoProgressBarStyleNormal,
+    MPRecordVideoProgressBarStyleDelete,
+} MPRecordVideoProgressBarStyle;
+
 @interface MPRecordVideoProgressBar : UIView
+
+@property (nonatomic, assign) BOOL hasSubProgress;
 
 - (void)startRecordingAVideo;
 
-- (void)setLastProgressToWidth:(CGFloat)width;
+- (void)updateLastProgressWidth:(CGFloat)width;
+
+- (void)setLastProgressToStyle:(MPRecordVideoProgressBarStyle)style;
 
 - (void)stopRecordingAVideo;
+
+- (void)deleteLastProgress;
+
+- (void)startFlashCursorAnimation;
+
+- (void)stopFlashCursorAnimation;
 
 @end

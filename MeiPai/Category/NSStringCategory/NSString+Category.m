@@ -124,7 +124,7 @@
 /**
  *  视频片段合成后本地文件名字
  */
-- (NSString *)getVideoMergeFilePathString
++ (NSString *)getVideoMergeFilePathString;
 {
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

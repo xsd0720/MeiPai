@@ -68,7 +68,7 @@
     [self addSubview:_shortsView];
 
     
-    _flashingCursor = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 2, CGRectGetMaxY(self.bounds))];
+    _flashingCursor = [[UIImageView alloc] initWithFrame:CGRectMake(0, -2, 2, CGRectGetMaxY(self.bounds)+4)];
     _flashingCursor.image = [UIImage imageNamed:@"record_progressbar_front"];
     [self addSubview:_flashingCursor];
     
@@ -80,6 +80,7 @@
 
 - (void)startFlashCursorAnimation
 {
+    _flashingCursor.hidden = NO;
     [_flashingCursor.layer addAnimation:self.animationTwinkle forKey:@"animationTwinkle"];
 }
 
@@ -89,10 +90,13 @@
 }
 
 
+//视频开始录制了，停止录制闪烁
 - (void)startRecordingAVideo
 {
+    //停止闪烁
     [self stopFlashCursorAnimation];
     
+    //添加一段进度条
     UIView *willAddView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGRectGetMaxY(self.bounds))];
     willAddView.backgroundColor = PINKCOLOR;
     if (_shortsView.subviews.count > 0) {
@@ -103,19 +107,84 @@
     
 }
 
-- (void)setLastProgressToWidth:(CGFloat)width
+//更新进度条宽度
+- (void)updateLastProgressWidth:(CGFloat)width
 {
     UIView *lastProgressView = [_shortsView.subviews lastObject];
     if (!lastProgressView) {
         return;
     }
     lastProgressView.width = width;
-    _flashingCursor.originX = CGRectGetMaxX(lastProgressView.frame)+1;
+    [self refreshIndicatorPosition];
+   
 }
 
+
+//视频停止录制了
 - (void)stopRecordingAVideo
 {
-      [self startFlashCursorAnimation];
+    [self startFlashCursorAnimation];
+}
+
+
+- (void)setLastProgressToStyle:(MPRecordVideoProgressBarStyle)style
+{
+    UIView *lastProgressView = [_shortsView.subviews lastObject];
+    if (!lastProgressView) {
+        return;
+    }
+    
+    switch (style) {
+        case MPRecordVideoProgressBarStyleDelete:
+        {
+            lastProgressView.backgroundColor = [UIColor redColor];
+            [self stopFlashCursorAnimation];
+            _flashingCursor.hidden = YES;
+        }
+            break;
+        case MPRecordVideoProgressBarStyleNormal:
+        {
+            lastProgressView.backgroundColor = PINKCOLOR;
+            [self startFlashCursorAnimation];
+            _flashingCursor.hidden = NO;
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)deleteLastProgress
+{
+    UIView *lastProgressView = [_shortsView.subviews lastObject];
+    if (!lastProgressView) {
+        return;
+    }
+    
+    [lastProgressView removeFromSuperview];
+    
+    [self refreshIndicatorPosition];
+}
+
+
+//刷新光标位置
+- (void)refreshIndicatorPosition
+{
+    UIView *lastProgressView = [_shortsView.subviews lastObject];
+    if (!lastProgressView) {
+        _flashingCursor.originX = 0;
+    }else
+    {
+        //更新闪烁指针位置
+        _flashingCursor.originX = CGRectGetMaxX(lastProgressView.frame)+1;
+    }
+   
+}
+
+
+- (BOOL)hasSubProgress
+{
+    return _shortsView.subviews.count > 0;
 }
 
 @end

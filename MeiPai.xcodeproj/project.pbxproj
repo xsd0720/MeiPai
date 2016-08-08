@@ -285,8 +285,11 @@
 		0C668EA41D532497000FC15A /* TabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C668EA31D532497000FC15A /* TabBarItem.m */; };
 		0C668EA71D5324E1000FC15A /* MPDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C668EA61D5324E1000FC15A /* MPDataSource.m */; };
 		0C668EAA1D533242000FC15A /* LaunchImage-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C668EA91D533242000FC15A /* LaunchImage-568h@2x.png */; };
+		0C69D7B01D582384007801B2 /* MPVideoCutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7AF1D582384007801B2 /* MPVideoCutViewController.m */; };
+		0C69D7B71D58345E007801B2 /* MPNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7B61D58345E007801B2 /* MPNavigationBar.m */; };
+		0C69D7BB1D583842007801B2 /* MPVideoProcessing.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */; };
+		0C69D7C01D588C46007801B2 /* DeleteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7BF1D588C46007801B2 /* DeleteButton.m */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
-		0C8352DC1D5482860064489F /* ProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352DB1D5482860064489F /* ProgressBar.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
 /* End PBXBuildFile section */
 
@@ -790,10 +793,16 @@
 		0C668EA51D5324E1000FC15A /* MPDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDataSource.h; sourceTree = "<group>"; };
 		0C668EA61D5324E1000FC15A /* MPDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDataSource.m; sourceTree = "<group>"; };
 		0C668EA91D533242000FC15A /* LaunchImage-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchImage-568h@2x.png"; sourceTree = "<group>"; };
+		0C69D7AE1D582384007801B2 /* MPVideoCutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVideoCutViewController.h; sourceTree = "<group>"; };
+		0C69D7AF1D582384007801B2 /* MPVideoCutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideoCutViewController.m; sourceTree = "<group>"; };
+		0C69D7B51D58345E007801B2 /* MPNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNavigationBar.h; sourceTree = "<group>"; };
+		0C69D7B61D58345E007801B2 /* MPNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNavigationBar.m; sourceTree = "<group>"; };
+		0C69D7B91D583842007801B2 /* MPVideoProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVideoProcessing.h; sourceTree = "<group>"; };
+		0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideoProcessing.m; sourceTree = "<group>"; };
+		0C69D7BE1D588C46007801B2 /* DeleteButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteButton.h; sourceTree = "<group>"; };
+		0C69D7BF1D588C46007801B2 /* DeleteButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteButton.m; sourceTree = "<group>"; };
 		0C8352CD1D5432C80064489F /* MPCameraManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCameraManager.h; sourceTree = "<group>"; };
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
-		0C8352DA1D5482860064489F /* ProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
-		0C8352DB1D5482860064489F /* ProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBar.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
 		0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRecordVideoProgressBar.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -836,6 +845,8 @@
 		0C668B6B1D531902000FC15A /* MeiPai */ = {
 			isa = PBXGroup;
 			children = (
+				0C69D7B81D583820007801B2 /* Tools */,
+				0C69D7B11D583441007801B2 /* Public */,
 				0C8352CC1D5432C00064489F /* Manageres */,
 				0C668EA81D533242000FC15A /* LaunchImages */,
 				0C668E6E1D531E15000FC15A /* MPAppDelegate.h */,
@@ -1548,6 +1559,48 @@
 			path = LaunchImages;
 			sourceTree = "<group>";
 		};
+		0C69D7B11D583441007801B2 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				0C69D7B21D583441007801B2 /* C */,
+				0C69D7B31D583441007801B2 /* M */,
+				0C69D7B41D583441007801B2 /* V */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		0C69D7B21D583441007801B2 /* C */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
+		0C69D7B31D583441007801B2 /* M */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = M;
+			sourceTree = "<group>";
+		};
+		0C69D7B41D583441007801B2 /* V */ = {
+			isa = PBXGroup;
+			children = (
+				0C69D7B51D58345E007801B2 /* MPNavigationBar.h */,
+				0C69D7B61D58345E007801B2 /* MPNavigationBar.m */,
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
+		0C69D7B81D583820007801B2 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				0C69D7B91D583842007801B2 /* MPVideoProcessing.h */,
+				0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 		0C8352CC1D5432C00064489F /* Manageres */ = {
 			isa = PBXGroup;
 			children = (
@@ -1570,6 +1623,8 @@
 		0C8352D71D5482760064489F /* C */ = {
 			isa = PBXGroup;
 			children = (
+				0C69D7AE1D582384007801B2 /* MPVideoCutViewController.h */,
+				0C69D7AF1D582384007801B2 /* MPVideoCutViewController.m */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1584,8 +1639,8 @@
 		0C8352D91D5482760064489F /* V */ = {
 			isa = PBXGroup;
 			children = (
-				0C8352DA1D5482860064489F /* ProgressBar.h */,
-				0C8352DB1D5482860064489F /* ProgressBar.m */,
+				0C69D7BE1D588C46007801B2 /* DeleteButton.h */,
+				0C69D7BF1D588C46007801B2 /* DeleteButton.m */,
 				0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */,
 				0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */,
 			);
@@ -1721,7 +1776,6 @@
 				0C668E0B1D531D0A000FC15A /* GPUImageLineGenerator.m in Sources */,
 				0C668E321D531D0A000FC15A /* GPUImageRGBErosionFilter.m in Sources */,
 				0C668E211D531D0A000FC15A /* GPUImageOpeningFilter.m in Sources */,
-				0C8352DC1D5482860064489F /* ProgressBar.m in Sources */,
 				0C668DBC1D531D0A000FC15A /* GPUImageWaveFilter.m in Sources */,
 				0C668E491D531D0A000FC15A /* GPUImageTextureOutput.m in Sources */,
 				0C668E341D531D0A000FC15A /* GPUImageRGBOpeningFilter.m in Sources */,
@@ -1740,6 +1794,7 @@
 				0C668DF11D531D0A000FC15A /* GPUImageGaussianBlurFilter.m in Sources */,
 				0C668E1D1D531D0A000FC15A /* GPUImageNobleCornerDetectionFilter.m in Sources */,
 				0C668E4F1D531D0A000FC15A /* GPUImageToneCurveFilter.m in Sources */,
+				0C69D7BB1D583842007801B2 /* MPVideoProcessing.m in Sources */,
 				0C668DD31D531D0A000FC15A /* GPUImageClosingFilter.m in Sources */,
 				0C668E621D531D0A000FC15A /* GPUImagePicture+TextureSubimage.m in Sources */,
 				0C668E0C1D531D0A000FC15A /* GPUImageLocalBinaryPatternFilter.m in Sources */,
@@ -1781,6 +1836,7 @@
 				0C668E281D531D0A000FC15A /* GPUImagePixellatePositionFilter.m in Sources */,
 				0C668DBB1D531D0A000FC15A /* GPUImageVignetteFilterEx.m in Sources */,
 				0C668E1F1D531D0A000FC15A /* GPUImageNormalBlendFilter.m in Sources */,
+				0C69D7B01D582384007801B2 /* MPVideoCutViewController.m in Sources */,
 				0C668DC51D531D0A000FC15A /* GPUImageAlphaBlendFilter.m in Sources */,
 				0C668E371D531D0A000FC15A /* GPUImageScreenBlendFilter.m in Sources */,
 				0C668D701D531D0A000FC15A /* NSTimer+CycleScrollView.m in Sources */,
@@ -1827,6 +1883,7 @@
 				0C668E171D531D0A000FC15A /* GPUImageMosaicFilter.m in Sources */,
 				0C668E501D531D0A000FC15A /* GPUImageToonFilter.m in Sources */,
 				0C668E331D531D0A000FC15A /* GPUImageRGBFilter.m in Sources */,
+				0C69D7C01D588C46007801B2 /* DeleteButton.m in Sources */,
 				0C668DF41D531D0A000FC15A /* GPUImageGlassSphereFilter.m in Sources */,
 				0C668DE51D531D0A000FC15A /* GPUImageEmbossFilter.m in Sources */,
 				0C668D721D531D0A000FC15A /* ALAssetsLibrary+WJ.m in Sources */,
@@ -1840,6 +1897,7 @@
 				0C668E481D531D0A000FC15A /* GPUImageTextureInput.m in Sources */,
 				0C668DF51D531D0A000FC15A /* GPUImageGrayscaleFilter.m in Sources */,
 				0C668E8F1D532364000FC15A /* MPBaseViewController.m in Sources */,
+				0C69D7B71D58345E007801B2 /* MPNavigationBar.m in Sources */,
 				0C668E591D531D0A000FC15A /* GPUImageVignetteFilter.m in Sources */,
 				0C668E2E1D531D0A000FC15A /* GPUImageRawDataInput.m in Sources */,
 				0C668E221D531D0A000FC15A /* GPUImageOutput.m in Sources */,

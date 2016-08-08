@@ -428,12 +428,7 @@ NSString *const kGPUImageYUVVideoRangeConversionForLAFragmentShaderString = SHAD
 {
     capturePaused = NO;
 }
-- (void)abc
-{
-    [self.inputCamera lockForConfiguration:nil];
-    [self.inputCamera setFlashMode:AVCaptureFlashModeOn];
-    [self.inputCamera unlockForConfiguration];
-}
+
 - (void)rotateCamera
 {
 	if (self.frontFacingCameraPresent == NO)
@@ -443,9 +438,11 @@ NSString *const kGPUImageYUVVideoRangeConversionForLAFragmentShaderString = SHAD
     AVCaptureDeviceInput *newVideoInput;
     AVCaptureDevicePosition currentCameraPosition = [[videoInput device] position];
     
+    self.isFrontCamera = NO;
     if (currentCameraPosition == AVCaptureDevicePositionBack)
     {
         currentCameraPosition = AVCaptureDevicePositionFront;
+        self.isFrontCamera = YES;
     }
     else
     {

@@ -10,7 +10,9 @@
 #import "GPUImage.h"
 #import "MPCameraManager.h"
 #import "MPRecordVideoProgressBar.h"
-@interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate>
+#import "MPVideoCutViewController.h"
+#import "DeleteButton.h"
+@interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate, UIViewControllerTransitioningDelegate, UIAlertViewDelegate>
 {
     GPUImageStillCamera *videoCamera;
 }
@@ -25,6 +27,18 @@
 @property (nonatomic, strong) MPCameraManager *cameraManager;
 
 @property (nonatomic, strong) MPRecordVideoProgressBar *mpRecordVideoProgressBar;
+
+//照片电影
+@property (nonatomic, strong) UIButton *photoMovieButton;
+//导入视频
+@property (nonatomic, strong) UIButton *importMovieButton;
+//删除最后一个录制的视频
+@property (nonatomic, strong) DeleteButton *delLastRecordMovieButton;
+//确定
+@property (nonatomic, strong) UIButton *rightButton;
+//开始录制按钮
+@property (nonatomic, strong) UIButton *beginButton;
+
 @end
 
 @implementation MPPaiViewController
@@ -93,47 +107,93 @@
     [self.cameraManager startCamera];
 }
 
+
+- (UIButton *)photoMovieButton
+{
+    if (!_photoMovieButton) {
+        _photoMovieButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _photoMovieButton.frame = CGRectMake(20, SCREEN_HEIGHT-60-60, 60, 60);
+        [_photoMovieButton setImage:[UIImage imageNamed:@"icon_choose_photo_a"] forState:UIControlStateNormal];
+        [_photoMovieButton setImage:[UIImage imageNamed:@"icon_choose_photo_b"] forState:UIControlStateHighlighted];
+        [_photoMovieButton setTitleEdgeInsets:UIEdgeInsetsMake(60, -50, 0, 0)];
+        _photoMovieButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_photoMovieButton setTitle:@"照片电影" forState:UIControlStateNormal];
+        [_photoMovieButton setTitleColor:PINKCOLOR forState:UIControlStateHighlighted];
+        [_photoMovieButton addTarget:self action:@selector(photoMovieButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_photoMovieButton];
+    }
+    return _photoMovieButton;
+}
+
+- (UIButton *)importMovieButton
+{
+    if (!_importMovieButton) {
+        _importMovieButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _importMovieButton.frame = CGRectMake(SCREEN_WIDTH-60-20, SCREEN_HEIGHT-60-60, 60, 60);
+        [_importMovieButton setImage:[UIImage imageNamed:@"icon_photo_library_a"] forState:UIControlStateNormal];
+        [_importMovieButton setImage:[UIImage imageNamed:@"icon_photo_library_b"] forState:UIControlStateHighlighted];
+        [_importMovieButton setTitleEdgeInsets:UIEdgeInsetsMake(60, -50, 0, 0)];
+        [_importMovieButton setTitle:@"导入视频" forState:UIControlStateNormal];
+        _importMovieButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_importMovieButton setTitleColor:PINKCOLOR forState:UIControlStateHighlighted];
+        [_importMovieButton addTarget:self action:@selector(importMoiveButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _importMovieButton;
+    
+}
+
+- (UIButton *)beginButton
+{
+    if (!_beginButton) {
+        _beginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _beginButton.frame = CGRectMake((SCREEN_WIDTH-80)/2, SCREEN_HEIGHT-44-80, 80, 80);
+        [_beginButton setImage:[UIImage imageNamed:@"begin"] forState:UIControlStateNormal];
+        [_beginButton addTarget:self action:@selector(beginButtonTouchDown) forControlEvents:UIControlEventTouchDown];
+        [_beginButton addTarget:self action:@selector(beginButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [_beginButton addTarget:self action:@selector(beginButtonTouchUpInside) forControlEvents:UIControlEventTouchUpOutside];
+        [_beginButton setExclusiveTouch:YES];
+    }
+    return _beginButton;
+}
+
+- (DeleteButton *)delLastRecordMovieButton
+{
+    if (!_delLastRecordMovieButton) {
+        _delLastRecordMovieButton = [DeleteButton buttonWithType:UIButtonTypeCustom];
+        _delLastRecordMovieButton.frame = CGRectMake(20, SCREEN_HEIGHT-60-60, 60, 60);
+        [_delLastRecordMovieButton setExclusiveTouch:YES];
+        _delLastRecordMovieButton.hidden = YES;
+        [_delLastRecordMovieButton addTarget:self action:@selector(delLastRecordMovieButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    return _delLastRecordMovieButton;
+}
+
+- (UIButton *)rightButton
+{
+    if (!_rightButton) {
+        _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _rightButton.frame = CGRectMake(SCREEN_WIDTH-60-20, SCREEN_HEIGHT-60-60, 60, 60);
+        [_rightButton setImage:[UIImage imageNamed:@"btn_camera_done_c"] forState:UIControlStateNormal];
+        [_rightButton setExclusiveTouch:YES];
+        [_rightButton addTarget:self action:@selector(rightButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        _rightButton.hidden = YES;
+    }
+    return _rightButton;
+}
+
 - (void)configOtherUI
 {
-//    icon_photo_library_a
     
-    UIButton *photoMovieButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    photoMovieButton.frame = CGRectMake(20, SCREEN_HEIGHT-60-60, 60, 60);
-    [photoMovieButton setImage:[UIImage imageNamed:@"icon_choose_photo_a"] forState:UIControlStateNormal];
-    [photoMovieButton setImage:[UIImage imageNamed:@"icon_choose_photo_b"] forState:UIControlStateHighlighted];
-    [photoMovieButton setTitleEdgeInsets:UIEdgeInsetsMake(60, -50, 0, 0)];
-    photoMovieButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    [photoMovieButton setTitle:@"照片电影" forState:UIControlStateNormal];
-    [photoMovieButton setTitleColor:PINKCOLOR forState:UIControlStateHighlighted];
-    [photoMovieButton addTarget:self action:@selector(photoMovieButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:photoMovieButton];
-
-    UIButton *importMovieButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    importMovieButton.frame = CGRectMake(SCREEN_WIDTH-60-20, photoMovieButton.originY, 60, 60);
-    [importMovieButton setImage:[UIImage imageNamed:@"icon_photo_library_a"] forState:UIControlStateNormal];
-    [importMovieButton setImage:[UIImage imageNamed:@"icon_photo_library_b"] forState:UIControlStateHighlighted];
-    [importMovieButton setTitleEdgeInsets:UIEdgeInsetsMake(60, -50, 0, 0)];
-    [importMovieButton setTitle:@"导入视频" forState:UIControlStateNormal];
-    importMovieButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    [importMovieButton setTitleColor:PINKCOLOR forState:UIControlStateHighlighted];
-    [importMovieButton addTarget:self action:@selector(importMoiveButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:importMovieButton];
+    [self.view addSubview:self.delLastRecordMovieButton];
+    [self.view addSubview:self.photoMovieButton];
     
-    UIButton *beginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    beginButton.frame = CGRectMake((SCREEN_WIDTH-80)/2, SCREEN_HEIGHT-44-80, 80, 80);
-    [beginButton setImage:[UIImage imageNamed:@"begin"] forState:UIControlStateNormal];
-//    [beginButton addTarget:self action:@selector(beginButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [beginButton addTarget:self action:@selector(beginButtonTouchDown) forControlEvents:UIControlEventTouchDown];
-    [beginButton addTarget:self action:@selector(beginButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    [beginButton addTarget:self action:@selector(beginButtonTouchUpInside) forControlEvents:UIControlEventTouchUpOutside];
-
-    [self.view addSubview:beginButton];
+    [self.view addSubview:self.beginButton];
+    
+    [self.view addSubview:self.rightButton];
+    [self.view addSubview:self.importMovieButton];
     
     
-//    self.progressBar = [ProgressBar getInstance];
-//    [SBCaptureToolKit setView:_progressBar toOriginY:DEVICE_SIZE.width];
-//    [self.view insertSubview:_progressBar belowSubview:_maskView];
-//    [_progressBar startShining];
     self.mpRecordVideoProgressBar = [[MPRecordVideoProgressBar alloc] initWithFrame:CGRectMake(0, 44+SCREEN_WIDTH, SCREEN_WIDTH, 7)];
     [self.view addSubview:self.mpRecordVideoProgressBar];
     
@@ -142,30 +202,77 @@
 
 - (void)closeButtonClick
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if ([self.cameraManager getVideoCount] > 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"确定放弃这段视频吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [alert show];
+    }else
+    {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+
+    
+
 }
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [self.cameraManager clearAllClips];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 
 - (void)flashButtonClick:(UIButton *)button
 {
     button.selected = !button.selected;
     
-    [self.cameraManager rotateFlashLight:button.selected];
+    self.cameraManager.isFlashLight = button.selected;
 
 }
 
 - (void)meiButtonClick:(UIButton *)button
 {
     button.selected = !button.selected;
-    [self.cameraManager rotateMeiYan:button.selected];
+    self.cameraManager.isMeiYan = button.selected;
 }
 
 
-- (void)fanButtonClick:(UIButton *)button;
+- (void)fanButtonClick:(UIButton *)button
 {
     [self.cameraManager rotateCamera];
-    _meiButton.hidden = self.cameraManager.isFrontCamera;
+
+    _flashButton.hidden = self.cameraManager.isFrontCamera;
+
 }
 
+
+#pragma mark --
+#pragma mark ----------  other button event
+
+- (void)delLastRecordMovieButtonClick:(DeleteButton *)button
+{
+    if (button.style == DeleteButtonStyleNormal) {//第一次按下删除按钮
+        [_mpRecordVideoProgressBar setLastProgressToStyle:MPRecordVideoProgressBarStyleDelete];
+        [button setButtonStyle:DeleteButtonStyleDelete];
+    } else if (button.style == DeleteButtonStyleDelete) {//第二次按下删除按钮
+        [self.cameraManager deleteLastVideo];
+        [_mpRecordVideoProgressBar deleteLastProgress];
+        
+        if ([self.cameraManager getVideoCount] > 0) {
+            [button setButtonStyle:DeleteButtonStyleNormal];
+        } else {
+            [button setButtonStyle:DeleteButtonStyleDisable];
+        }
+    }
+
+}
+
+
+- (void)rightButtonClick
+{
+    [self.cameraManager mergeVideoFiles];
+}
 
 - (void)beginButtonClick
 {
@@ -176,16 +283,19 @@
     }];
 }
 
-
 - (void)beginButtonTouchDown
 {
     NSLog(@"开始录");
-    [self.cameraManager startRecord:@""];
+    [self.delLastRecordMovieButton setButtonStyle:DeleteButtonStyleDisable];
+    [self.mpRecordVideoProgressBar setLastProgressToStyle:MPRecordVideoProgressBarStyleNormal];
+    
+    [self.cameraManager startRecord:[NSString getVideoSaveFilePathString]];
 }
 
 - (void)beginButtonTouchUpInside
 {
     NSLog(@"停止录");
+    
     [self.cameraManager stopRecord];
 }
 
@@ -306,26 +416,29 @@
 }
 - (void)photoMovieButtonClick
 {
-    
+
 }
 
 
 #pragma mark - MPCameraManagerRecorderDelegate
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didStartRecordingToOutPutFileAtURL:(NSURL *)fileURL
 {
+    NSLog(@"正在录制视频: %@", fileURL);
+    [self.mpRecordVideoProgressBar startRecordingAVideo];
     
+    self.photoMovieButton.hidden = YES;
+    self.delLastRecordMovieButton.hidden = NO;
     
-        [self.mpRecordVideoProgressBar startRecordingAVideo];
-    //    NSLog(@"正在录制视频: %@", fileURL);
-    //
-    //    [self.progressBar addProgressView];
-    //    [_progressBar stopShining];
-    //
-    //    [_deleteButton setButtonStyle:DeleteButtonStyleNormal];
+    self.rightButton.hidden = NO;
+    self.importMovieButton.hidden = YES;
+
 }
 
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishRecordingToOutPutFileAtURL:(NSURL *)outputFileURL duration:(CGFloat)videoDuration totalDur:(CGFloat)totalDur error:(NSError *)error
 {
+    
+    
+    
     //    if (error) {
     //        NSLog(@"录制视频错误:%@", error);
     //    } else {
@@ -337,43 +450,59 @@
     //        [self pressOKButton];
     //    }
     
+    [self.delLastRecordMovieButton setButtonStyle:DeleteButtonStyleNormal];
+    
     [_mpRecordVideoProgressBar stopRecordingAVideo];
+
+
+ 
 }
 
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didRemoveVideoFileAtURL:(NSURL *)fileURL totalDur:(CGFloat)totalDur error:(NSError *)error
 {
-    //    if (error) {
-    //        NSLog(@"删除视频错误: %@", error);
-    //    } else {
-    //        NSLog(@"删除了视频: %@", fileURL);
-    //        NSLog(@"现在视频长度: %f", totalDur);
-    //    }
-    //
-    //    if ([_recorder getVideoCount] > 0) {
-    //        [_deleteButton setStyle:DeleteButtonStyleNormal];
-    //    } else {
-    //        [_deleteButton setStyle:DeleteButtonStyleDisable];
-    //    }
-    //
-    //    _okButton.enabled = (totalDur >= MIN_VIDEO_DUR);
+    if (error) {
+        NSLog(@"删除视频错误: %@", error);
+    } else {
+        NSLog(@"删除了视频: %@", fileURL);
+        NSLog(@"现在视频长度: %f", totalDur);
+    }
+
+    if ([self.cameraManager getVideoCount] > 0) {
+        [_delLastRecordMovieButton setStyle:DeleteButtonStyleNormal];
+    } else {
+        self.photoMovieButton.hidden = NO;
+        self.delLastRecordMovieButton.hidden = YES;
+        
+        self.rightButton.hidden = YES;
+        self.importMovieButton.hidden = NO;
+    }
+    [self.mpRecordVideoProgressBar startFlashCursorAnimation];
+    
 }
 
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didRecordingToOutPutFileAtURL:(NSURL *)outputFileURL duration:(CGFloat)videoDuration recordedVideosTotalDur:(CGFloat)totalDur
 {
     
     //    NSLog(@"%f", videoDuration);
-        [_mpRecordVideoProgressBar setLastProgressToWidth:videoDuration / 10 * _mpRecordVideoProgressBar.frame.size.width];
+        [_mpRecordVideoProgressBar updateLastProgressWidth:videoDuration / MAX_VIDEO_DUR * _mpRecordVideoProgressBar.frame.size.width];
     //
     //    _okButton.enabled = (videoDuration + totalDur >= MIN_VIDEO_DUR);
 }
 
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishMergingVideosToOutPutFileAtURL:(NSURL *)outputFileURL
 {
-    //    [_hud hide:YES];
-    //    self.isProcessingData = NO;
-    //    PlayViewController *playCon = [[PlayViewController alloc] initWithNibName:@"PlayViewController" bundle:nil withVideoFileURL:outputFileURL];
-    //    [self.navigationController pushViewController:playCon animated:YES];
+    MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
+    [self presentViewController:videoCutVC animated:YES completion:nil];
 }
+
+//
+//-(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+//{
+//    
+//    return uinav;
+//}
+
+
 
 - (BOOL)prefersStatusBarHidden
 {

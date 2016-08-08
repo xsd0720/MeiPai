@@ -39,6 +39,15 @@
 
 @property (nonatomic, assign)  AVCaptureTorchMode torchMode;
 
+//是否开启美颜
+@property (nonatomic, assign) BOOL isMeiYan;
+
+//是否打开闪光灯
+@property (nonatomic, assign) BOOL isFlashLight;
+
+//是否正在录制
+@property (nonatomic, assign) BOOL isRecording;
+
 @property (nonatomic, assign) id <MPCameraManagerRecorderDelegate> delegate;
 
 
@@ -58,11 +67,6 @@
 - (void)snapshotSuccess:(void(^)(UIImage *image))success
         snapshotFailure:(void (^)(void))failure;
 
-//是否美颜
-- (void)rotateMeiYan:(BOOL)isMeiYan;
-
-//是否打开闪光灯
-- (void)rotateFlashLight:(BOOL)isFlashLight;
 
 //前后摄像头来回切换
 - (void)rotateCamera;
@@ -73,5 +77,12 @@
 //停止录像
 - (void)stopRecord;
 
+- (NSInteger)getVideoCount;
 
+- (void)deleteLastVideo;
+
+
+- (void)clearAllClips;
+
+- (void)mergeVideoFiles;
 @end
