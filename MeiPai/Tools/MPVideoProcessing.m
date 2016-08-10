@@ -122,7 +122,7 @@
 }
 
 
-- (void)mergeAndExportVideos:(NSArray*)videosPathArray completionHandler:(CompletionHandler)completionHandler{
+- (void)mergeAndExportVideos:(NSArray*)videosPathArray bgMusicURL:(NSURL *)bgMusicURL isG:(BOOL)isG completionHandler:(CompletionHandler)completionHandler{
     if (videosPathArray.count == 0) {
         return;
     }
@@ -163,9 +163,8 @@
         AVURLAsset *audioAsset =[[AVURLAsset alloc]initWithURL:audioAssetURL options:nil];
         NSError *erroraudio = nil;
         
-//        AVAssetTrack *assetAudioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
         //合成录音
-        AVAssetTrack *assetAudioTrack = [[audioAsset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        AVAssetTrack *assetAudioTrack = [[isG?asset:audioAsset tracksWithMediaType:AVMediaTypeAudio] firstObject];
         
         [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)
                                       ofTrack:assetAudioTrack
@@ -240,11 +239,21 @@
     videoComposition.renderSize =  videoTrack.naturalSize;
     
     
+    AVMutableAudioMix *audioMix = nil;
+    if (bgMusicURL) {
+        audioMix = [AVMutableAudioMix audioMix];
+        audioMix.inputParameters = [self addBGMMusicPath:bgMusicURL composition:mixComposition totalDuration:totalDuration];
+    }
+    
+
     
 
     NSURL *mergeFileURL = [NSURL fileURLWithPath:[NSString getVideoMergeFilePathString]];
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition
                                                                       presetName:AVAssetExportPresetMediumQuality];
+    if (audioMix) {
+       exporter.audioMix = audioMix;
+    }
     exporter.videoComposition = videoComposition;
     exporter.outputURL = mergeFileURL;
     exporter.outputFileType = AVFileTypeMPEG4;
@@ -259,8 +268,45 @@
 }
 
 
+#pragma 添加背景音乐
+- (NSMutableArray *)addBGMMusicPath:(NSURL *)bgMusicURL composition:(AVMutableComposition *)mixComposition totalDuration:(CMTime)totalDuration
+{
+    //所有需要添加的音频都放这个数组里<格式统一 AVAudioMixInputParameters>
+    NSMutableArray<AVAudioMixInputParameters *> *audioMixInputParametersArray = [NSMutableArray array];
+    
+    //读取背景音乐文件
+    
+    AVURLAsset *songAsset = [AVURLAsset URLAssetWithURL:bgMusicURL options:nil];
+    AVAssetTrack *songAssetTrack = [[songAsset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+    
+    //创建背景音乐音频输入轨道(此时为一个画面轨道，两个音频轨道)
+    AVMutableCompositionTrack *songAssetCompositionTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio
+                                                                                       preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    //背景音乐写入背景音乐音轨（从第0秒写到视频最后一秒，注意不可是歌曲的最后一秒， 会报错）
+    [songAssetCompositionTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, totalDuration)
+                                       ofTrack:songAssetTrack
+                                        atTime:kCMTimeZero
+                                         error:nil];
+    //创建背景音乐音轨输入参数
+    AVMutableAudioMixInputParameters *songAudioInputParameters = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:songAssetCompositionTrack];
+    [songAudioInputParameters setVolume:0.05f atTime:CMTimeMakeWithSeconds(0, 1)];
+    
+    //添加到数组
+    [audioMixInputParametersArray addObject:songAudioInputParameters];
 
+    
+    //获取视频本身的声音
+    AVMutableCompositionTrack *originalAudioTrack = [[mixComposition tracksWithMediaType:AVMediaTypeAudio] firstObject];
+    //创建原始声音的可变音频输入
+    AVMutableAudioMixInputParameters *originalAudioInputParameters = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:originalAudioTrack];
+    [originalAudioInputParameters setVolume:1.0f atTime:CMTimeMakeWithSeconds(0, 1)];
+    //添加到数组
+    [audioMixInputParametersArray addObject:originalAudioInputParameters];
+    
 
+    return audioMixInputParametersArray;
+}
 
 
 
