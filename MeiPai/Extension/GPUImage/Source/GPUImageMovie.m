@@ -369,6 +369,9 @@
                 
                 previousFrameTime = currentSampleTime;
                 previousActualFrameTime = CFAbsoluteTimeGetCurrent();
+            }else
+            {
+                //这里判断另外一个movie是否准备，没准备就等一下(自己加的)
             }
 
             __unsafe_unretained GPUImageMovie *weakSelf = self;

@@ -13,7 +13,7 @@
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
-
+#import <AssetsLibrary/AssetsLibrary.h>
 #pragma mark -- categoryheader
 #import "UIColor+Category.h"
 #import "UIView+Extention.h"

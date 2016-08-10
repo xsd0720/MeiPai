@@ -9,6 +9,8 @@
 #import "MPCameraManager.h"
 #import "GPUImage.h"
 #import "MPVideoProcessing.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
 @interface MPCameraManager ()<GPUImageMovieWriterDelegate>
 
 //摄像机
@@ -85,8 +87,8 @@
 {
     return [NSDictionary dictionaryWithObjectsAndKeys:
                 AVVideoCodecH264, AVVideoCodecKey,
-                [NSNumber numberWithInteger:200], AVVideoWidthKey,
-                [NSNumber numberWithInteger:200], AVVideoHeightKey,
+                [NSNumber numberWithInteger:640.0], AVVideoWidthKey,
+                [NSNumber numberWithInteger:640.0], AVVideoHeightKey,
                 nil];
     
 }
@@ -139,10 +141,33 @@
 
 #pragma mark -- initWithFrame ------
 
+
+/**
+ *  取得录音文件的设置
+ *
+ *  @return 录音设置
+ */
+-(NSDictionary *)getAudioSettion
+{
+    NSMutableDictionary * dicM = [NSMutableDictionary dictionary];
+    //设置录音格式
+    [dicM setObject:@(kAudioFormatLinearPCM) forKey:AVFormatIDKey];
+    //设置录音采样率，8000是电话采样率，对于一般的录音已经够了
+    [dicM setObject:@(8000) forKey:AVSampleRateKey];
+    //设置通道，这里采用单声道
+    [dicM setObject:@(1) forKey:AVNumberOfChannelsKey];
+    //每个采样点位数，分为8，16，24，32
+    [dicM setObject:@(8) forKey:AVLinearPCMBitDepthKey];
+    //是否使用浮点数采样
+    [dicM setObject:@(YES) forKey:AVLinearPCMIsFloatKey];
+    //。。。。是他设置
+    return dicM;
+}
+
 - (id)initWithFrame:(CGRect)frame superview:(UIView *)superview {
     self = [super init];
     if (self) {
-        
+
         
         //创建摄像头
         _camera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480
@@ -150,6 +175,8 @@
         //输出图像旋转方式
         _camera.outputImageOrientation = UIInterfaceOrientationPortrait;
         _camera.horizontallyMirrorFrontFacingCamera = YES;
+        //防止录制第一针黑屏，必须初始化时添加
+        [_camera addAudioInputsAndOutputs];
         
         //创建摄像头显示视图
         _cameraScreen = [[GPUImageView alloc] initWithFrame:frame];
@@ -162,7 +189,7 @@
         //摄像头显示视图添加到父视图
         [superview addSubview:_cameraScreen];
         
-        self.isMeiYan = YES;
+        self.isMeiYan = NO;
         
     }
     return self;
@@ -172,11 +199,34 @@
 #pragma mark 启用预览
 - (void)startCamera{
     [self.camera startCameraCapture];
+    
+    if ([self.camera.inputCamera isFocusPointOfInterestSupported] && [self.camera.inputCamera isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+        NSError *error;
+        if ([self.camera.inputCamera lockForConfiguration:&error]) {
+            [self.camera.inputCamera setFocusPointOfInterest:CGPointMake(0.5, 0.5)];
+            
+            [self.camera.inputCamera setFocusMode:AVCaptureFocusModeAutoFocus];
+            
+            if([self.camera.inputCamera isExposurePointOfInterestSupported] && [self.camera.inputCamera isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure])
+            {
+                [self.camera.inputCamera setExposurePointOfInterest:CGPointMake(0.5, 0.5)];
+                [self.camera.inputCamera setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
+            }
+            
+            [self.camera.inputCamera unlockForConfiguration];
+            
+        } else {
+            NSLog(@"ERROR = %@", error);
+        }
+    }
 }
 
 #pragma mark 关闭预览
 - (void)stopCamera{
     [self.camera stopCameraCapture];
+    
+
+    
 }
 
 
@@ -292,6 +342,33 @@
     }
 }
 
+//- (void)focusAtPoint:(CGPoint)touchPoint
+//{
+//    [self layerAnimationWithPoint:touchPoint];
+//    touchPoint = CGPointMake(touchPoint.x / tap.view.bounds.size.width, touchPoint.y / tap.view.bounds.size.height);
+//    
+//    if ([self.camera.inputCamera isFocusPointOfInterestSupported] && [self.camera.inputCamera isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+//        NSError *error;
+//        if ([self.camera.inputCamera lockForConfiguration:&error]) {
+//            [self.camera.inputCamera setFocusPointOfInterest:touchPoint];
+//            
+//            [self.camera.inputCamera setFocusMode:AVCaptureFocusModeAutoFocus];
+//            
+//            if([self.camera.inputCamera isExposurePointOfInterestSupported] && [self.camera.inputCamera isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure])
+//            {
+//                [self.camera.inputCamera setExposurePointOfInterest:touchPoint];
+//                [self.camera.inputCamera setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
+//            }
+//            
+//            [self.camera.inputCamera unlockForConfiguration];
+//            
+//        } else {
+//            NSLog(@"ERROR = %@", error);
+//        }
+//    }
+//
+//}
+
 #pragma mark 对焦动画
 - (void)layerAnimationWithPoint:(CGPoint)point {
     if (_focusImageView) {
@@ -360,25 +437,25 @@
     
 //    GPUImageFilter *ddd = [[GPUImageFilter alloc] init];
     
-    [self.camera capturePhotoAsImageProcessedUpToFilter:self.currentFilter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
-        
-        if (!processedImage){
-            failure();
-        }else {
-
-            //处理裁剪到指定分辨率
-            CGFloat prop = processedImage.size.width/_cameraScreen.size.width;
-            CGFloat newHeight = _cameraScreen.size.height * prop;
-            CGFloat cutY = (processedImage.size.height-newHeight)/2;
-            
-            CGImageRef newimageRef = CGImageCreateWithImageInRect([processedImage CGImage], CGRectMake(0, cutY, processedImage.size.width, newHeight));
-            UIImage *newImage = [UIImage imageWithCGImage:newimageRef];
-            
-            success(newImage);
-        }
-
-    }];
-
+//    [self.camera capturePhotoAsImageProcessedUpToFilter:self.currentFilter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+//        
+//        if (!processedImage){
+//            failure();
+//        }else {
+//
+//            //处理裁剪到指定分辨率
+//            CGFloat prop = processedImage.size.width/_cameraScreen.size.width;
+//            CGFloat newHeight = _cameraScreen.size.height * prop;
+//            CGFloat cutY = (processedImage.size.height-newHeight)/2;
+//            
+//            CGImageRef newimageRef = CGImageCreateWithImageInRect([processedImage CGImage], CGRectMake(0, cutY, processedImage.size.width, newHeight));
+//            UIImage *newImage = [UIImage imageWithCGImage:newimageRef];
+//            
+//            success(newImage);
+//        }
+//
+//    }];
+//
 }
 
 
@@ -426,24 +503,92 @@
 #pragma  mark --
 #pragma  mark ---------- video record --------
 
+/**
+ *  设置音频会话
+ *
+ */
+
+-(void)setAudioSession
+{
+    AVAudioSession * audioSession = [AVAudioSession sharedInstance];
+    //设置为播放和录制状态，以便在录制完成之后播放录音
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [audioSession setActive:YES error:nil];
+}
+- (NSURL *)getSavaPath
+
+{
+    NSString *urlStr = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    urlStr = [urlStr stringByAppendingPathComponent:@"aaaa.caf"];
+    NSURL *url = [NSURL fileURLWithPath:urlStr];
+    return url;
+}
 - (void)startRecord:(NSString *)savePath
 {
     self.isRecording = YES;
     
+    //开始记录当前录制时长
+    [self startCountDurTimer];
+    
+    //响应开始录制代理方法
+    if ([_delegate respondsToSelector:@selector(videoRecorder:didStartRecordingToOutPutFileAtURL:)]) {
+        [_delegate videoRecorder:self didStartRecordingToOutPutFileAtURL:[NSURL new]];
+    }
+    
     //配置录制器
     NSURL *willSaveURL = [NSURL fileURLWithPath:savePath];
+    
+    [self setAudioSession];
+    //创建录音文件保存路径
+
+    
+    
+    if ([[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0) {
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+                if (granted) {
+                    NSLog(@"ok");
+                } else {
+                    NSLog(@"no");
+                }
+            }];
+        }
+    }
+    
+    NSURL *audiorecordURL = [NSURL fileURLWithPath:[savePath stringByReplacingOccurrencesOfString:@"mp4" withString:@"caf"]];
+    
+    //创建录音格式设置
+    NSDictionary * setting = [self getAudioSettion];
+    //创建录音机
+    NSError * error = nil;
+    _audioRecorder = [[AVAudioRecorder alloc] initWithURL:audiorecordURL settings:setting error:&error];
+//    _audioRecorder.delegate = self;
+    _audioRecorder.meteringEnabled = YES;
+    [_audioRecorder prepareToRecord];
+
+    
     _movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:willSaveURL size:CGSizeMake(640.0, 640.0)];
     
-    //开启声音采集
-    _movieWriter.hasAudioTrack = YES;
-    [self.camera addAudioInputsAndOutputs];
-    self.camera.audioEncodingTarget = _movieWriter;
+//    [_movieWriter setHasAudioTrack:YES audioSettings:self.audioSettings];
+    
+////    开启声音采集
+//    _movieWriter.encodingLiveVideo = YES;
+//    _movieWriter.shouldPassthroughAudio = YES;
+//    _movieWriter.hasAudioTrack=YES;
+
     
     //设置录制视频滤镜
     [self.currentFilter addTarget:_movieWriter];
     
+//    //设置声音解析对象
+//    self.camera.audioEncodingTarget = _movieWriter;
+    
+    [_audioRecorder record];
     //开始录制
     [_movieWriter startRecording];
+
+  
     
     //录制完毕回调
     __weak MPCameraManager *weakSelf = self;
@@ -457,15 +602,22 @@
         if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishRecordingToOutPutFileAtURL:duration:totalDur:error:)]) {
             [_delegate videoRecorder:self didFinishRecordingToOutPutFileAtURL:nil duration:_currentVideoDur totalDur:_totalVideoDur error:nil];
         }
+        
+        
+//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+//        [library writeVideoAtPathToSavedPhotosAlbum:willSaveURL
+//                                    completionBlock:^(NSURL *assetURL, NSError *error) {
+//                                        if (error) {
+//                                            NSLog(@"Save video fail:%@",error);
+//                                        } else {
+//                                            NSLog(@"Save video succeed.");
+//                                        }
+//                                    }];
+        
+        
     }];
     
-    //开始记录当前录制时长
-    [self startCountDurTimer];
     
-    //响应开始录制代理方法
-    if ([_delegate respondsToSelector:@selector(videoRecorder:didStartRecordingToOutPutFileAtURL:)]) {
-        [_delegate videoRecorder:self didStartRecordingToOutPutFileAtURL:willSaveURL];
-    }
 }
 
 
@@ -512,6 +664,7 @@
 
     [self.currentFilter removeTarget:_movieWriter];
     
+    [_audioRecorder stop];
     [_movieWriter finishRecording];
     
 
@@ -543,111 +696,21 @@
     NSMutableArray *fileURLArray = [[NSMutableArray alloc] init];
     NSArray *clips = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ClipsDictionaryPath error:nil];
     [clips enumerateObjectsUsingBlock:^(NSString *fileName, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *filePath = [ClipsDictionaryPath stringByAppendingPathComponent:fileName];
-        NSURL *filePathURL = [NSURL fileURLWithPath:filePath];
-        [fileURLArray addObject:filePathURL];
         
-    }];
-    [self mergeAndExportVideosAtFileURLs:fileURLArray];
-}
-
-- (void)mergeAndExportVideosAtFileURLs:(NSArray *)fileURLArray
-{
-    NSError *error = nil;
-    
-    CGSize renderSize = CGSizeMake(0, 0);
-    
-    NSMutableArray *layerInstructionArray = [[NSMutableArray alloc] init];
-    
-    AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
-    
-    CMTime totalDuration = kCMTimeZero;
-    
-    //先去assetTrack 也为了取renderSize
-    NSMutableArray *assetTrackArray = [[NSMutableArray alloc] init];
-    NSMutableArray *assetArray = [[NSMutableArray alloc] init];
-    for (NSURL *fileURL in fileURLArray) {
-        AVAsset *asset = [AVAsset assetWithURL:fileURL];
-        
-        if (!asset) {
-            continue;
+        if ([fileName containsString:@".mp4"]) {
+            NSString *filePath = [ClipsDictionaryPath stringByAppendingPathComponent:fileName];
+            NSURL *filePathURL = [NSURL fileURLWithPath:filePath];
+            [fileURLArray addObject:filePathURL];
         }
-        
-        [assetArray addObject:asset];
-        
-        AVAssetTrack *assetTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-        [assetTrackArray addObject:assetTrack];
-        
-        renderSize.width = MAX(renderSize.width, assetTrack.naturalSize.height);
-        renderSize.height = MAX(renderSize.height, assetTrack.naturalSize.width);
-    }
+      
+    }];
     
-    CGFloat renderW = MIN(renderSize.width, renderSize.height);
-    
-    for (int i = 0; i < [assetArray count] && i < [assetTrackArray count]; i++) {
-        
-        AVAsset *asset = [assetArray objectAtIndex:i];
-        AVAssetTrack *assetTrack = [assetTrackArray objectAtIndex:i];
-        
-        AVMutableCompositionTrack *audioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-        [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)
-                            ofTrack:[[asset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
-                             atTime:totalDuration
-                              error:nil];
-        
-        AVMutableCompositionTrack *videoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-        
-        [videoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)
-                            ofTrack:assetTrack
-                             atTime:totalDuration
-                              error:&error];
-        
-        //fix orientationissue
-        AVMutableVideoCompositionLayerInstruction *layerInstruciton = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
-        
-        totalDuration = CMTimeAdd(totalDuration, asset.duration);
-        
-        CGFloat rate;
-        rate = renderW / MIN(assetTrack.naturalSize.width, assetTrack.naturalSize.height);
-        
-        CGAffineTransform layerTransform = CGAffineTransformMake(assetTrack.preferredTransform.a, assetTrack.preferredTransform.b, assetTrack.preferredTransform.c, assetTrack.preferredTransform.d, assetTrack.preferredTransform.tx * rate, assetTrack.preferredTransform.ty * rate);
-//        layerTransform = CGAffineTransformConcat(layerTransform, CGAffineTransformMake(1, 0, 0, 1, 0, -(assetTrack.naturalSize.width - assetTrack.naturalSize.height) / 2.0));//向上移动取中部影响
-//        layerTransform = CGAffineTransformScale(layerTransform, rate, rate);//放缩，解决前后摄像结果大小不对称
-        
-        [layerInstruciton setTransform:layerTransform atTime:kCMTimeZero];
-        [layerInstruciton setOpacity:0.0 atTime:totalDuration];
-        
-        //data
-        [layerInstructionArray addObject:layerInstruciton];
-    }
-    
-    //get save path
-    NSURL *mergeFileURL = [NSURL fileURLWithPath:[NSString getVideoMergeFilePathString]];
-    
-    //export
-    AVMutableVideoCompositionInstruction *mainInstruciton = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    mainInstruciton.timeRange = CMTimeRangeMake(kCMTimeZero, totalDuration);
-    mainInstruciton.layerInstructions = layerInstructionArray;
-    AVMutableVideoComposition *mainCompositionInst = [AVMutableVideoComposition videoComposition];
-    mainCompositionInst.instructions = @[mainInstruciton];
-    mainCompositionInst.frameDuration = CMTimeMake(1, 30);
-    mainCompositionInst.renderSize = CGSizeMake(renderW, renderW);
-    
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetMediumQuality];
-    exporter.videoComposition = mainCompositionInst;
-    exporter.outputURL = mergeFileURL;
-    exporter.outputFileType = AVFileTypeMPEG4;
-    exporter.shouldOptimizeForNetworkUse = YES;
-    [exporter exportAsynchronouslyWithCompletionHandler:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-                if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishMergingVideosToOutPutFileAtURL:)]) {
-                    [_delegate videoRecorder:self didFinishMergingVideosToOutPutFileAtURL:mergeFileURL];
-                }
-        });
+    [[MPVideoProcessing shareInstance] mergeAndExportVideos:fileURLArray completionHandler:^(NSURL *mergeFileURL) {
+        if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishMergingVideosToOutPutFileAtURL:)]) {
+            [_delegate videoRecorder:self didFinishMergingVideosToOutPutFileAtURL:mergeFileURL];
+        }
     }];
 }
-
-
 
 - (void)deleteLastVideo
 {

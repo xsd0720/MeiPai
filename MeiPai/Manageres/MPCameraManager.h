@@ -51,6 +51,8 @@
 @property (nonatomic, assign) id <MPCameraManagerRecorderDelegate> delegate;
 
 
+@property (nonatomic, strong) AVAudioRecorder * audioRecorder;//音频录音机
+
 //初始化
 - (id)initWithFrame:(CGRect)frame superview:(UIView *)superview;
 

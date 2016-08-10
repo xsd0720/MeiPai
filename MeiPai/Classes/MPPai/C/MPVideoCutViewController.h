@@ -10,4 +10,6 @@
 
 @interface MPVideoCutViewController : UIViewController
 
+@property (nonatomic, strong) NSURL *palyUrl;
+
 @end

@@ -52,6 +52,7 @@
     [self configCamera];
     
     [self configOtherUI];
+
 }
 
 
@@ -217,6 +218,8 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
+        [self.cameraManager stopCamera];
+        
         [self.cameraManager clearAllClips];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
@@ -416,7 +419,9 @@
 }
 - (void)photoMovieButtonClick
 {
-
+    MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
+    //    videoCutVC.palyUrl = outputFileURL;
+    [self presentViewController:videoCutVC animated:YES completion:nil];
 }
 
 
@@ -492,6 +497,7 @@
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishMergingVideosToOutPutFileAtURL:(NSURL *)outputFileURL
 {
     MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
+    videoCutVC.palyUrl = outputFileURL;
     [self presentViewController:videoCutVC animated:YES completion:nil];
 }
 
@@ -503,6 +509,10 @@
 //}
 
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
 
 - (BOOL)prefersStatusBarHidden
 {

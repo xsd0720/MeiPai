@@ -116,10 +116,9 @@
 //    }
     
     NSArray *files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:MergeDictionaryPath error:nil];
-    
+    NSArray *files2 = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ClipsDictionaryPath error:nil];
     NSString *filPath = [files lastObject];
-    
-    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:[MergeDictionaryPath stringByAppendingPathComponent:filPath]] options:nil];
+    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.palyUrl options:nil];
     self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];

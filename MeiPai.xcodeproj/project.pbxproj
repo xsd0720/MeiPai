@@ -289,6 +289,8 @@
 		0C69D7B71D58345E007801B2 /* MPNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7B61D58345E007801B2 /* MPNavigationBar.m */; };
 		0C69D7BB1D583842007801B2 /* MPVideoProcessing.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */; };
 		0C69D7C01D588C46007801B2 /* DeleteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7BF1D588C46007801B2 /* DeleteButton.m */; };
+		0C6F06341D5975FE00C5D126 /* CDPVideoEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6F06331D5975FE00C5D126 /* CDPVideoEditor.m */; };
+		0C6F06471D59BFF900C5D126 /* 16754.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C6F06461D59BFF900C5D126 /* 16754.png */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
 /* End PBXBuildFile section */
@@ -801,6 +803,9 @@
 		0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideoProcessing.m; sourceTree = "<group>"; };
 		0C69D7BE1D588C46007801B2 /* DeleteButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteButton.h; sourceTree = "<group>"; };
 		0C69D7BF1D588C46007801B2 /* DeleteButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteButton.m; sourceTree = "<group>"; };
+		0C6F06321D5975FE00C5D126 /* CDPVideoEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDPVideoEditor.h; sourceTree = "<group>"; };
+		0C6F06331D5975FE00C5D126 /* CDPVideoEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDPVideoEditor.m; sourceTree = "<group>"; };
+		0C6F06461D59BFF900C5D126 /* 16754.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 16754.png; sourceTree = "<group>"; };
 		0C8352CD1D5432C80064489F /* MPCameraManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCameraManager.h; sourceTree = "<group>"; };
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
@@ -879,6 +884,7 @@
 				0C668BB81D531D09000FC15A /* UINavigationItem */,
 				0C668BBB1D531D09000FC15A /* UIViewCategory */,
 				0C668BC61D531D09000FC15A /* UIWindow+Motion.h */,
+				0C6F06461D59BFF900C5D126 /* 16754.png */,
 				0C668BC71D531D09000FC15A /* UIWindow+Motion.m */,
 			);
 			path = Category;
@@ -1595,6 +1601,8 @@
 		0C69D7B81D583820007801B2 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				0C6F06321D5975FE00C5D126 /* CDPVideoEditor.h */,
+				0C6F06331D5975FE00C5D126 /* CDPVideoEditor.m */,
 				0C69D7B91D583842007801B2 /* MPVideoProcessing.h */,
 				0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */,
 			);
@@ -1759,6 +1767,7 @@
 				0C668D8B1D531D0A000FC15A /* lookup_colt.png in Resources */,
 				0C668D901D531D0A000FC15A /* lookup_fade.png in Resources */,
 				0C668D881D531D0A000FC15A /* lookup_burst.png in Resources */,
+				0C6F06471D59BFF900C5D126 /* 16754.png in Resources */,
 				0C668D871D531D0A000FC15A /* lookup_bandit.png in Resources */,
 				0C668B7C1D531902000FC15A /* LaunchScreen.storyboard in Resources */,
 				0C668B791D531902000FC15A /* Assets.xcassets in Resources */,
@@ -1920,6 +1929,7 @@
 				0C668E231D531D0A000FC15A /* GPUImageOverlayBlendFilter.m in Sources */,
 				0C668DED1D531D0A000FC15A /* GPUImageFilterPipeline.m in Sources */,
 				0C668D761D531D0A000FC15A /* UIColor+Category.m in Sources */,
+				0C6F06341D5975FE00C5D126 /* CDPVideoEditor.m in Sources */,
 				0C668D771D531D0A000FC15A /* UIImage+Antialiase.m in Sources */,
 				0C668DEB1D531D0A000FC15A /* GPUImageFilter.m in Sources */,
 				0C668D7C1D531D0A000FC15A /* UIImage+type.m in Sources */,
