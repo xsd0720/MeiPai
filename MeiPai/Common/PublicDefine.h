@@ -102,6 +102,7 @@
 #define ClipsDictionaryPath     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Clips"]
 #define MergeDictionaryPath     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Merge"]
 
-
+#define MB_TEXTSIZE(text, font) [text length] > 0 ? [text \
+sizeWithAttributes:@{NSFontAttributeName:font}] : CGSizeZero;
 
 #endif

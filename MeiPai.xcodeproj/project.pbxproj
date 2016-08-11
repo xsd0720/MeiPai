@@ -293,6 +293,7 @@
 		0C6F06471D59BFF900C5D126 /* 16754.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C6F06461D59BFF900C5D126 /* 16754.png */; };
 		0C7058811D5B413600EEBB30 /* KT Mix.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0C7058801D5B413600EEBB30 /* KT Mix.mp3 */; };
 		0C7058831D5B42F600EEBB30 /* Bass.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0C7058821D5B42C000EEBB30 /* Bass.caf */; };
+		0C7457021D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
 /* End PBXBuildFile section */
@@ -810,6 +811,8 @@
 		0C6F06461D59BFF900C5D126 /* 16754.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 16754.png; sourceTree = "<group>"; };
 		0C7058801D5B413600EEBB30 /* KT Mix.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "KT Mix.mp3"; sourceTree = "<group>"; };
 		0C7058821D5B42C000EEBB30 /* Bass.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bass.caf; sourceTree = "<group>"; };
+		0C7457001D5C6BCD00A81169 /* MPPaiChooseMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPaiChooseMusicViewController.h; sourceTree = "<group>"; };
+		0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPaiChooseMusicViewController.m; sourceTree = "<group>"; };
 		0C8352CD1D5432C80064489F /* MPCameraManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCameraManager.h; sourceTree = "<group>"; };
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
@@ -1639,6 +1642,8 @@
 			children = (
 				0C69D7AE1D582384007801B2 /* MPVideoCutViewController.h */,
 				0C69D7AF1D582384007801B2 /* MPVideoCutViewController.m */,
+				0C7457001D5C6BCD00A81169 /* MPPaiChooseMusicViewController.h */,
+				0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1792,6 +1797,7 @@
 				0C668E301D531D0A000FC15A /* GPUImageRGBClosingFilter.m in Sources */,
 				0C668E0B1D531D0A000FC15A /* GPUImageLineGenerator.m in Sources */,
 				0C668E321D531D0A000FC15A /* GPUImageRGBErosionFilter.m in Sources */,
+				0C7457021D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m in Sources */,
 				0C668E211D531D0A000FC15A /* GPUImageOpeningFilter.m in Sources */,
 				0C668DBC1D531D0A000FC15A /* GPUImageWaveFilter.m in Sources */,
 				0C668E491D531D0A000FC15A /* GPUImageTextureOutput.m in Sources */,

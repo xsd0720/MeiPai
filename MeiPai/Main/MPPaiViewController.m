@@ -12,6 +12,7 @@
 #import "MPRecordVideoProgressBar.h"
 #import "MPVideoCutViewController.h"
 #import "DeleteButton.h"
+#import "MPPaiChooseMusicViewController.h"
 @interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate, UIViewControllerTransitioningDelegate, UIAlertViewDelegate>
 {
     GPUImageStillCamera *videoCamera;
@@ -28,6 +29,8 @@
 
 @property (nonatomic, strong) MPRecordVideoProgressBar *mpRecordVideoProgressBar;
 
+//选择音乐
+@property (nonatomic, strong) UIButton *chooseMusicButton;
 //照片电影
 @property (nonatomic, strong) UIButton *photoMovieButton;
 //导入视频
@@ -106,6 +109,23 @@
     self.cameraManager.delegate = self;
     [self.cameraManager setFocusImageName:@"camera_focus_bg"];
     [self.cameraManager startCamera];
+    
+    
+
+    _chooseMusicButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_chooseMusicButton setImage:[UIImage imageNamed:@"icon_choose_music_a"] forState:UIControlStateNormal];
+    _chooseMusicButton.frame = CGRectMake(0, 0, 30, 30);
+    _chooseMusicButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+    _chooseMusicButton.layer.borderColor = [[[UIColor whiteColor] colorWithAlphaComponent:0.5] CGColor];
+    _chooseMusicButton.layer.cornerRadius = 15;
+    _chooseMusicButton.layer.borderWidth = 1;
+    _chooseMusicButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [_chooseMusicButton setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8] forState:UIControlStateNormal];
+    _chooseMusicButton.frame = CGRectMake(SCREEN_WIDTH-35, SCREEN_WIDTH, 30, 30);
+    [_chooseMusicButton addTarget:self action:@selector(chooseMusicButtonClic) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_chooseMusicButton];
+ 
+    
 }
 
 
@@ -223,6 +243,33 @@
         [self.cameraManager clearAllClips];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+//选择音乐
+- (void)chooseMusicButtonClic
+{
+    MPPaiChooseMusicViewController *paiChooseMusicVC = [[MPPaiChooseMusicViewController alloc] init];
+    paiChooseMusicVC.chooseMusicBlock = ^(NSString *fileName){
+        if ([fileName isEqualToString:@"无音乐"]) {
+            [self.chooseMusicButton setTitle:@"" forState:UIControlStateNormal];
+            self.chooseMusicButton.width = 30;
+            self.chooseMusicButton.originX = SCREEN_WIDTH-self.chooseMusicButton.width-10;
+            self.cameraManager.musicFilePath = nil;
+        }else
+        {
+    
+            CGSize s = MB_TEXTSIZE(fileName, self.chooseMusicButton.titleLabel.font);
+            
+            self.chooseMusicButton.width = s.width+30;
+            self.chooseMusicButton.originX = SCREEN_WIDTH-self.chooseMusicButton.width-10;
+            [self.chooseMusicButton setTitle:fileName forState:UIControlStateNormal];
+            
+             NSString *musicFilePath = [[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:fileName];
+            self.cameraManager.musicFilePath = musicFilePath;
+        }
+        
+    };
+    [self presentViewController:paiChooseMusicVC animated:YES completion:nil];
 }
 
 

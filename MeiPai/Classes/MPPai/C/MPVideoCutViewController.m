@@ -118,6 +118,33 @@
     NSArray *files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:MergeDictionaryPath error:nil];
     NSArray *files2 = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ClipsDictionaryPath error:nil];
     NSString *filPath = [files lastObject];
+    
+    
+    NSURL *url = self.palyUrl;
+    
+    AVURLAsset *asset=[[AVURLAsset alloc] initWithURL:url options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.appliesPreferredTrackTransform=TRUE;
+
+    CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
+    
+    AVAssetImageGeneratorCompletionHandler handler =
+    ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
+        if (result != AVAssetImageGeneratorSucceeded) {       }//没成功
+        
+        UIImage *thumbImg = [UIImage imageWithCGImage:im];
+
+        NSLog(@"======");
+    };
+    
+    generator.maximumSize = self.view.frame.size;
+    [generator generateCGImagesAsynchronouslyForTimes:
+     [NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
+    
+    
+    
+    
+    
     AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.palyUrl options:nil];
     self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];

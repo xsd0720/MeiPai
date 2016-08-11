@@ -50,6 +50,9 @@
 
 @property (nonatomic, assign) id <MPCameraManagerRecorderDelegate> delegate;
 
+//背景音乐文件
+@property (nonatomic, strong) NSString *musicFilePath;
+
 
 @property (nonatomic, strong) AVAudioRecorder * audioRecorder;//音频录音机
 

@@ -188,6 +188,7 @@
             nil];
 }
 
+
 - (id)initWithFrame:(CGRect)frame superview:(UIView *)superview {
     self = [super init];
     if (self) {
@@ -210,6 +211,7 @@
         _cameraScreen.clipsToBounds = YES;
         [_cameraScreen.layer setMasksToBounds:YES];
         
+
         //摄像头显示视图添加到父视图
         [superview addSubview:_cameraScreen];
         
@@ -742,8 +744,8 @@
       
     }];
     
-    NSURL *bgSongURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"KT Mix" ofType:@"mp3"]];
-    [[MPVideoProcessing shareInstance] mergeAndExportVideos:fileURLArray bgMusicURL:nil isG:NO completionHandler:^(NSURL *mergeFileURL) {
+
+    [[MPVideoProcessing shareInstance] mergeAndExportVideos:fileURLArray bgMusicURL:self.musicFilePath?[NSURL fileURLWithPath:self.musicFilePath]:nil isG:NO completionHandler:^(NSURL *mergeFileURL) {
         if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishMergingVideosToOutPutFileAtURL:)]) {
             [_delegate videoRecorder:self didFinishMergingVideosToOutPutFileAtURL:mergeFileURL];
         }
