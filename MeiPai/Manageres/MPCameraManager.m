@@ -149,36 +149,43 @@
  */
 -(NSDictionary *)getAudioSettion
 {
+//    AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
+//    double preferredHardwareSampleRate;
+//    
+//    if ([sharedAudioSession respondsToSelector:@selector(sampleRate)])
+//    {
+//        preferredHardwareSampleRate = [sharedAudioSession sampleRate];
+//    }
+//    else
+//    {
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//        preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
+//#pragma clang diagnostic pop
+//    }
+//
+//    
+//    
+//    AudioChannelLayout acl;
+//    bzero( &acl, sizeof(acl));
+//    acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
+//    
+//    return [NSDictionary dictionaryWithObjectsAndKeys:
+//                           [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+//                           [ NSNumber numberWithInt: 1 ], AVNumberOfChannelsKey,
+//                           [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
+//                           [ NSData dataWithBytes: &acl length: sizeof( acl ) ], AVChannelLayoutKey,
+//                           //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
+//                           [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
+//                           nil];
     
-    AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
-    double preferredHardwareSampleRate;
     
-    if ([sharedAudioSession respondsToSelector:@selector(sampleRate)])
-    {
-        preferredHardwareSampleRate = [sharedAudioSession sampleRate];
-    }
-    else
-    {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
-#pragma clang diagnostic pop
-    }
-
-    
-    
-    AudioChannelLayout acl;
-    bzero( &acl, sizeof(acl));
-    acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
     
     return [NSDictionary dictionaryWithObjectsAndKeys:
-                           [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
-                           [ NSNumber numberWithInt: 1 ], AVNumberOfChannelsKey,
-                           [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
-                           [ NSData dataWithBytes: &acl length: sizeof( acl ) ], AVChannelLayoutKey,
-                           //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
-                           [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
-                           nil];
+            [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+            [ NSNumber numberWithInt: 2 ], AVNumberOfChannelsKey,
+            [ NSNumber numberWithFloat: 44100.0 ], AVSampleRateKey,
+            nil];
 }
 
 - (id)initWithFrame:(CGRect)frame superview:(UIView *)superview {

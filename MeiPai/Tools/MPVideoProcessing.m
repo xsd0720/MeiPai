@@ -184,21 +184,62 @@
         
     }
     
+    //视频画面处理
+    AVMutableVideoComposition *videoComposition = nil;
+    if (TRUE) {
+       videoComposition = [self addVideoWaterMaskLayerVideoTrack:videoTrack totalDuration:totalDuration];
+    }
+    
+    //视频声音处理
+    AVMutableAudioMix *audioMix = nil;
+    if (bgMusicURL) {
+        audioMix = [AVMutableAudioMix audioMix];
+        audioMix.inputParameters = [self addBGMMusicPath:bgMusicURL composition:mixComposition totalDuration:totalDuration];
+    }
+    
+
+    
+
+    NSURL *mergeFileURL = [NSURL fileURLWithPath:[NSString getVideoMergeFilePathString]];
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition
+                                                                      presetName:AVAssetExportPresetMediumQuality];
+    if (audioMix) {
+       exporter.audioMix = audioMix;
+    }
+   
+    if (videoComposition) {
+        exporter.videoComposition = videoComposition;
+    }
+    exporter.outputURL = mergeFileURL;
+    exporter.outputFileType = AVFileTypeMPEG4;
+    exporter.shouldOptimizeForNetworkUse = YES;
+    [exporter exportAsynchronouslyWithCompletionHandler:^{
+        
+        NSLog(@"error = %@", exporter.error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(mergeFileURL);
+        });
+    }];
+}
+#pragma mark --
+#pragma mark -- 添加视频水印logo(美拍)
+- (AVMutableVideoComposition *)addVideoWaterMaskLayerVideoTrack:(AVMutableCompositionTrack *)videoTrack totalDuration:(CMTime)totalDuration
+{
     // 4. Effects
     CALayer *parentLayer = [CALayer layer];
     CALayer *videoLayer = [CALayer layer];
     parentLayer.frame = CGRectMake(0, 0, videoTrack.naturalSize.width, videoTrack.naturalSize.height);
     videoLayer.frame = CGRectMake(0, 0, videoTrack.naturalSize.width, videoTrack.naturalSize.height);
     [parentLayer addSublayer:videoLayer];
- 
+    
     //添加美拍水印
     UIImage *waterLogoImage = [UIImage imageNamed:@"icon_app_logo"];
     UIImageView *logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake((parentLayer.bounds.size.width-waterLogoImage.size.width)/2, (parentLayer.bounds.size.height-waterLogoImage.size.height)/2, waterLogoImage.size.width, waterLogoImage.size.height)];
     logoImageView.image = waterLogoImage;
-   
     
     
-   //添加美拍背景
+    
+    //添加美拍背景
     UIImage *waterbgImage = [UIImage imageNamed:@"Watermark_Large"];
     UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:parentLayer.bounds];
     bgImageView.image = waterbgImage;
@@ -221,7 +262,7 @@
     
     
     [parentLayer addSublayer:logoBaseLayer];
-
+    
     
     
     // Make a "pass through video track" video composition.
@@ -238,35 +279,9 @@
     videoComposition.frameDuration = CMTimeMake(1, 30); // 30 fps
     videoComposition.renderSize =  videoTrack.naturalSize;
     
-    
-    AVMutableAudioMix *audioMix = nil;
-    if (bgMusicURL) {
-        audioMix = [AVMutableAudioMix audioMix];
-        audioMix.inputParameters = [self addBGMMusicPath:bgMusicURL composition:mixComposition totalDuration:totalDuration];
-    }
-    
+    return videoComposition;
 
-    
-
-    NSURL *mergeFileURL = [NSURL fileURLWithPath:[NSString getVideoMergeFilePathString]];
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition
-                                                                      presetName:AVAssetExportPresetMediumQuality];
-    if (audioMix) {
-       exporter.audioMix = audioMix;
-    }
-    exporter.videoComposition = videoComposition;
-    exporter.outputURL = mergeFileURL;
-    exporter.outputFileType = AVFileTypeMPEG4;
-    exporter.shouldOptimizeForNetworkUse = YES;
-    [exporter exportAsynchronouslyWithCompletionHandler:^{
-        
-        NSLog(@"error = %@", exporter.error);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(mergeFileURL);
-        });
-    }];
 }
-
 
 #pragma 添加背景音乐
 - (NSMutableArray *)addBGMMusicPath:(NSURL *)bgMusicURL composition:(AVMutableComposition *)mixComposition totalDuration:(CMTime)totalDuration
