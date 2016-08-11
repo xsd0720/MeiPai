@@ -31,7 +31,7 @@ typedef void(^CompletionHandler)(NSURL *mergeFileURL);
 //+ (void)mergeAndExportVideosAtFileURLs:(NSArray *)fileURLArray;
 
 
-- (void)mergeAndExportVideos:(NSArray*)videosPathArray completionHandler:(CompletionHandler)completionHandler;
+- (void)mergeAndExportVideos:(NSArray*)videosPathArray bgMusicURL:(NSURL *)bgMusicURL isG:(BOOL)isG completionHandler:(CompletionHandler)completionHandler;
 
 +(MPVideoProcessing *)shareInstance;
 @property (retain, nonatomic) AVAssetExportSession *exportSession;

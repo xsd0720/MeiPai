@@ -149,19 +149,36 @@
  */
 -(NSDictionary *)getAudioSettion
 {
-    NSMutableDictionary * dicM = [NSMutableDictionary dictionary];
-    //设置录音格式
-    [dicM setObject:@(kAudioFormatLinearPCM) forKey:AVFormatIDKey];
-    //设置录音采样率，8000是电话采样率，对于一般的录音已经够了
-    [dicM setObject:@(8000) forKey:AVSampleRateKey];
-    //设置通道，这里采用单声道
-    [dicM setObject:@(1) forKey:AVNumberOfChannelsKey];
-    //每个采样点位数，分为8，16，24，32
-    [dicM setObject:@(8) forKey:AVLinearPCMBitDepthKey];
-    //是否使用浮点数采样
-    [dicM setObject:@(YES) forKey:AVLinearPCMIsFloatKey];
-    //。。。。是他设置
-    return dicM;
+    
+    AVAudioSession *sharedAudioSession = [AVAudioSession sharedInstance];
+    double preferredHardwareSampleRate;
+    
+    if ([sharedAudioSession respondsToSelector:@selector(sampleRate)])
+    {
+        preferredHardwareSampleRate = [sharedAudioSession sampleRate];
+    }
+    else
+    {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        preferredHardwareSampleRate = [[AVAudioSession sharedInstance] currentHardwareSampleRate];
+#pragma clang diagnostic pop
+    }
+
+    
+    
+    AudioChannelLayout acl;
+    bzero( &acl, sizeof(acl));
+    acl.mChannelLayoutTag = kAudioChannelLayoutTag_Mono;
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+                           [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+                           [ NSNumber numberWithInt: 1 ], AVNumberOfChannelsKey,
+                           [ NSNumber numberWithFloat: preferredHardwareSampleRate ], AVSampleRateKey,
+                           [ NSData dataWithBytes: &acl length: sizeof( acl ) ], AVChannelLayoutKey,
+                           //[ NSNumber numberWithInt:AVAudioQualityLow], AVEncoderAudioQualityKey,
+                           [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
+                           nil];
 }
 
 - (id)initWithFrame:(CGRect)frame superview:(UIView *)superview {
@@ -500,6 +517,21 @@
 }
 
 
+- (void)setIsFlashLight:(BOOL)isFlashLight
+{
+    _isFlashLight = isFlashLight;
+    if (isFlashLight) {
+        [self.camera.inputCamera lockForConfiguration:nil];
+        [self.camera.inputCamera setTorchMode:AVCaptureTorchModeOn];
+        [self.camera.inputCamera unlockForConfiguration];
+    }else
+    {
+        [self.camera.inputCamera lockForConfiguration:nil];
+        [self.camera.inputCamera setTorchMode:AVCaptureTorchModeOff];
+        [self.camera.inputCamera unlockForConfiguration];
+    }
+}
+
 #pragma  mark --
 #pragma  mark ---------- video record --------
 
@@ -538,33 +570,31 @@
     //配置录制器
     NSURL *willSaveURL = [NSURL fileURLWithPath:savePath];
     
-    [self setAudioSession];
-    //创建录音文件保存路径
-
-    
-    
-    if ([[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0) {
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
-            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
-                if (granted) {
-                    NSLog(@"ok");
-                } else {
-                    NSLog(@"no");
-                }
-            }];
-        }
-    }
+//    [self setAudioSession];
+//    //创建录音文件保存路径
+//
+//    
+//    
+//    if ([[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0) {
+//        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+//        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+//            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+//                if (granted) {
+//                    NSLog(@"ok");
+//                } else {
+//                    NSLog(@"no");
+//                }
+//            }];
+//        }
+//    }
     
     NSURL *audiorecordURL = [NSURL fileURLWithPath:[savePath stringByReplacingOccurrencesOfString:@"mp4" withString:@"caf"]];
-    
-    //创建录音格式设置
-    NSDictionary * setting = [self getAudioSettion];
+
     //创建录音机
     NSError * error = nil;
-    _audioRecorder = [[AVAudioRecorder alloc] initWithURL:audiorecordURL settings:setting error:&error];
+    _audioRecorder = [[AVAudioRecorder alloc] initWithURL:audiorecordURL settings:[self getAudioSettion] error:&error];
 //    _audioRecorder.delegate = self;
-    _audioRecorder.meteringEnabled = YES;
+//    _audioRecorder.meteringEnabled = YES;
     [_audioRecorder prepareToRecord];
 
     
@@ -705,7 +735,8 @@
       
     }];
     
-    [[MPVideoProcessing shareInstance] mergeAndExportVideos:fileURLArray completionHandler:^(NSURL *mergeFileURL) {
+    NSURL *bgSongURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"KT Mix" ofType:@"mp3"]];
+    [[MPVideoProcessing shareInstance] mergeAndExportVideos:fileURLArray bgMusicURL:nil isG:NO completionHandler:^(NSURL *mergeFileURL) {
         if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishMergingVideosToOutPutFileAtURL:)]) {
             [_delegate videoRecorder:self didFinishMergingVideosToOutPutFileAtURL:mergeFileURL];
         }
