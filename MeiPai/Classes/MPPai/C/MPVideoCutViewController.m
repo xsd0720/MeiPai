@@ -118,32 +118,10 @@
     NSArray *files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:MergeDictionaryPath error:nil];
     NSArray *files2 = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ClipsDictionaryPath error:nil];
     NSString *filPath = [files lastObject];
-    
-    
-    NSURL *url = self.palyUrl;
-    
-    AVURLAsset *asset=[[AVURLAsset alloc] initWithURL:url options:nil];
-    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    generator.appliesPreferredTrackTransform=TRUE;
 
-    CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
-    
-    AVAssetImageGeneratorCompletionHandler handler =
-    ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-        if (result != AVAssetImageGeneratorSucceeded) {       }//没成功
-        
-        UIImage *thumbImg = [UIImage imageWithCGImage:im];
-
-        NSLog(@"======");
-    };
-    
-    generator.maximumSize = self.view.frame.size;
-    [generator generateCGImagesAsynchronouslyForTimes:
-     [NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
     
     
-    
-    
+    [self generateListOfImage];
     
     AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.palyUrl options:nil];
     self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
@@ -161,6 +139,75 @@
     
     
 }
+
+-(void)generateListOfImage{
+    
+    //Create image Image Generator
+    AVAsset *asset = [AVAsset assetWithURL:self.palyUrl];
+    
+    //Create AVVideoComposition
+    AVVideoComposition *videoComposition = [AVVideoComposition videoCompositionWithPropertiesOfAsset:asset];
+    
+    //Retrive video's properties
+    NSTimeInterval duration         = CMTimeGetSeconds(asset.duration);
+    NSTimeInterval frameDuration    = CMTimeGetSeconds(videoComposition.frameDuration);
+    CGSize renderSize = videoComposition.renderSize;
+    CGFloat totalFrames = round(duration/frameDuration);
+    
+    //Create an array to store all time values at which the images captured from the video
+    NSMutableArray *times = [NSMutableArray arrayWithCapacity:totalFrames];
+    NSLog(@"Total Number of frames %d", (int)totalFrames);
+    for (int i = 0; i < totalFrames/6; i++) {
+        
+        NSValue *time = [NSValue valueWithCMTime:CMTimeMakeWithSeconds(i*frameDuration, videoComposition.frameDuration.timescale)];
+        [times addObject:time];
+    }
+    
+    // Launching the process...
+    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc]initWithAsset:asset];
+    imageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
+    imageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
+    imageGenerator.maximumSize = renderSize;
+    imageGenerator.appliesPreferredTrackTransform=TRUE;
+    
+    __block unsigned int i = 0;
+    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
+        i++;
+        
+        CGImageRetain(im);
+        if(result == AVAssetImageGeneratorSucceeded){
+            
+            NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+                
+                
+                UIImage *image = [UIImage imageWithCGImage:im];
+
+                NSLog(@"========");
+//            
+//    
+//                
+//                if(![UIImagePNGRepresentation(image) writeToFile:videoOutputPath options:NSDataWritingFileProtectionNone error:&error]){
+//                    NSLog(@"Failed to save image at path %@", videoOutputPath);
+//                    i--;
+//                }
+//                else
+////                    [self.savedImageArray addObject:[NSString stringWithFormat:@"VideoFrames%i.png", i]];
+//                CGImageRelease(im);
+            }];
+//            [self.imageWritingQueue addOperation:operation];
+            
+        }else if (result == AVAssetImageGeneratorFailed){
+            NSLog(@"Failed:     Image %d is failed to generate", i);
+            NSLog(@"Error: %@", [error localizedDescription]);
+        }else if (result == AVAssetImageGeneratorCancelled){
+            NSLog(@"Cancelled:  Image %d is cancelled to generate", i);
+            NSLog(@"Error: %@", [error localizedDescription]);
+        }
+    };
+    
+    [imageGenerator generateCGImagesAsynchronouslyForTimes:times completionHandler:handler];
+}
+
 
 - (void)pressPlayButton:(UIButton *)button
 {
