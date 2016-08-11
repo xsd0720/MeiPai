@@ -291,6 +291,8 @@
 		0C69D7C01D588C46007801B2 /* DeleteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C69D7BF1D588C46007801B2 /* DeleteButton.m */; };
 		0C6F06341D5975FE00C5D126 /* CDPVideoEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6F06331D5975FE00C5D126 /* CDPVideoEditor.m */; };
 		0C6F06471D59BFF900C5D126 /* 16754.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C6F06461D59BFF900C5D126 /* 16754.png */; };
+		0C7058811D5B413600EEBB30 /* KT Mix.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0C7058801D5B413600EEBB30 /* KT Mix.mp3 */; };
+		0C7058831D5B42F600EEBB30 /* Bass.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0C7058821D5B42C000EEBB30 /* Bass.caf */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
 /* End PBXBuildFile section */
@@ -806,6 +808,8 @@
 		0C6F06321D5975FE00C5D126 /* CDPVideoEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDPVideoEditor.h; sourceTree = "<group>"; };
 		0C6F06331D5975FE00C5D126 /* CDPVideoEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDPVideoEditor.m; sourceTree = "<group>"; };
 		0C6F06461D59BFF900C5D126 /* 16754.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 16754.png; sourceTree = "<group>"; };
+		0C7058801D5B413600EEBB30 /* KT Mix.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "KT Mix.mp3"; sourceTree = "<group>"; };
+		0C7058821D5B42C000EEBB30 /* Bass.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bass.caf; sourceTree = "<group>"; };
 		0C8352CD1D5432C80064489F /* MPCameraManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCameraManager.h; sourceTree = "<group>"; };
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
@@ -850,6 +854,8 @@
 		0C668B6B1D531902000FC15A /* MeiPai */ = {
 			isa = PBXGroup;
 			children = (
+				0C7058821D5B42C000EEBB30 /* Bass.caf */,
+				0C7058801D5B413600EEBB30 /* KT Mix.mp3 */,
 				0C69D7B81D583820007801B2 /* Tools */,
 				0C69D7B11D583441007801B2 /* Public */,
 				0C8352CC1D5432C00064489F /* Manageres */,
@@ -1713,8 +1719,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C7058831D5B42F600EEBB30 /* Bass.caf in Resources */,
 				0C668D9E1D531D0A000FC15A /* lookup_mason.png in Resources */,
 				0C668D981D531D0A000FC15A /* lookup_kings.png in Resources */,
+				0C7058811D5B413600EEBB30 /* KT Mix.mp3 in Resources */,
 				0C668DAD1D531D0A000FC15A /* lookup_super.png in Resources */,
 				0C668D991D531D0A000FC15A /* lookup_kudzu.png in Resources */,
 				0C668DA41D531D0A000FC15A /* lookup_pear.png in Resources */,
