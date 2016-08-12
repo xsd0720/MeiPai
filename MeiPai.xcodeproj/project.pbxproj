@@ -293,6 +293,8 @@
 		0C6F06471D59BFF900C5D126 /* 16754.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C6F06461D59BFF900C5D126 /* 16754.png */; };
 		0C7058811D5B413600EEBB30 /* KT Mix.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0C7058801D5B413600EEBB30 /* KT Mix.mp3 */; };
 		0C7058831D5B42F600EEBB30 /* Bass.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0C7058821D5B42C000EEBB30 /* Bass.caf */; };
+		0C70FFF11D5D93EB00B3776E /* MPVideFramePreViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C70FFF01D5D93EB00B3776E /* MPVideFramePreViewCell.m */; };
+		0C70FFF41D5DA3BD00B3776E /* MPVideoClipControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C70FFF31D5DA3BD00B3776E /* MPVideoClipControl.m */; };
 		0C7457021D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
@@ -811,6 +813,10 @@
 		0C6F06461D59BFF900C5D126 /* 16754.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 16754.png; sourceTree = "<group>"; };
 		0C7058801D5B413600EEBB30 /* KT Mix.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "KT Mix.mp3"; sourceTree = "<group>"; };
 		0C7058821D5B42C000EEBB30 /* Bass.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bass.caf; sourceTree = "<group>"; };
+		0C70FFEF1D5D93EB00B3776E /* MPVideFramePreViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVideFramePreViewCell.h; sourceTree = "<group>"; };
+		0C70FFF01D5D93EB00B3776E /* MPVideFramePreViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideFramePreViewCell.m; sourceTree = "<group>"; };
+		0C70FFF21D5DA3BD00B3776E /* MPVideoClipControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVideoClipControl.h; sourceTree = "<group>"; };
+		0C70FFF31D5DA3BD00B3776E /* MPVideoClipControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideoClipControl.m; sourceTree = "<group>"; };
 		0C7457001D5C6BCD00A81169 /* MPPaiChooseMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPaiChooseMusicViewController.h; sourceTree = "<group>"; };
 		0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPaiChooseMusicViewController.m; sourceTree = "<group>"; };
 		0C8352CD1D5432C80064489F /* MPCameraManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCameraManager.h; sourceTree = "<group>"; };
@@ -1662,6 +1668,10 @@
 				0C69D7BF1D588C46007801B2 /* DeleteButton.m */,
 				0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */,
 				0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */,
+				0C70FFEF1D5D93EB00B3776E /* MPVideFramePreViewCell.h */,
+				0C70FFF01D5D93EB00B3776E /* MPVideFramePreViewCell.m */,
+				0C70FFF21D5DA3BD00B3776E /* MPVideoClipControl.h */,
+				0C70FFF31D5DA3BD00B3776E /* MPVideoClipControl.m */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1843,6 +1853,7 @@
 				0C668DE81D531D0A000FC15A /* GPUImageExposureFilter.m in Sources */,
 				0C668DCB1D531D0A000FC15A /* GPUImageBoxBlurFilter.m in Sources */,
 				0C668E3E1D531D0A000FC15A /* GPUImageSobelEdgeDetectionFilter.m in Sources */,
+				0C70FFF11D5D93EB00B3776E /* MPVideFramePreViewCell.m in Sources */,
 				0C668E181D531D0A000FC15A /* GPUImageMotionBlurFilter.m in Sources */,
 				0C668EA41D532497000FC15A /* TabBarItem.m in Sources */,
 				0C668E5B1D531D0A000FC15A /* GPUImageWeakPixelInclusionFilter.m in Sources */,
@@ -1853,6 +1864,7 @@
 				0C668DDB1D531D0A000FC15A /* GPUImageCropFilter.m in Sources */,
 				0C668DBA1D531D0A000FC15A /* GPUImageVideoCameraEx.m in Sources */,
 				0C668E3D1D531D0A000FC15A /* GPUImageSmoothToonFilter.m in Sources */,
+				0C70FFF41D5DA3BD00B3776E /* MPVideoClipControl.m in Sources */,
 				0C668DD41D531D0A000FC15A /* GPUImageColorBlendFilter.m in Sources */,
 				0C668DCC1D531D0A000FC15A /* GPUImageBrightnessFilter.m in Sources */,
 				0C668D7B1D531D0A000FC15A /* UIImage+MostColor.m in Sources */,

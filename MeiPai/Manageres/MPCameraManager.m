@@ -47,6 +47,9 @@
 //所有视频录制片段总时长
 @property (assign ,nonatomic) CGFloat totalVideoDur;
 
+//当前录制视频URL
+@property (strong, nonatomic) NSURL *currentFileURL;
+
 @end
 
 
@@ -566,14 +569,18 @@
 }
 - (void)startRecord:(NSString *)savePath
 {
+    self.currentVideoDur = 0.0f;
+    
     self.isRecording = YES;
     
     //开始记录当前录制时长
     [self startCountDurTimer];
     
+    self.currentFileURL  = [NSURL fileURLWithPath:savePath];
+    
     //响应开始录制代理方法
     if ([_delegate respondsToSelector:@selector(videoRecorder:didStartRecordingToOutPutFileAtURL:)]) {
-        [_delegate videoRecorder:self didStartRecordingToOutPutFileAtURL:[NSURL new]];
+        [_delegate videoRecorder:self didStartRecordingToOutPutFileAtURL:_currentFileURL];
     }
     
     //配置录制器
@@ -634,12 +641,12 @@
     [weakSelf.movieWriter setCompletionBlock:^{
         NSLog(@"录制成功");
         
-        self.totalVideoDur += _currentVideoDur;
-        NSLog(@"本段视频长度: %f", _currentVideoDur);
-        NSLog(@"现在的视频总长度: %f", _totalVideoDur);
+        self.totalVideoDur += self.currentVideoDur;
+        NSLog(@"本段视频长度: %f", self.currentVideoDur);
+        NSLog(@"现在的视频总长度: %f", self.totalVideoDur);
         
         if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishRecordingToOutPutFileAtURL:duration:totalDur:error:)]) {
-            [_delegate videoRecorder:self didFinishRecordingToOutPutFileAtURL:nil duration:_currentVideoDur totalDur:_totalVideoDur error:nil];
+            [_delegate videoRecorder:self didFinishRecordingToOutPutFileAtURL:_currentFileURL duration:_currentVideoDur totalDur:_totalVideoDur error:nil];
         }
         
         
@@ -676,6 +683,7 @@
     
     if (_totalVideoDur + _currentVideoDur >= MAX_VIDEO_DUR) {
         [self stopCurrentVideoRecording];
+        
     }
     
 }
@@ -699,26 +707,11 @@
     self.isRecording = NO;
     
     [self stopCountDurTimer];
-    self.currentVideoDur = 0.0f;
 
     [self.currentFilter removeTarget:_movieWriter];
     
     [_audioRecorder stop];
     [_movieWriter finishRecording];
-    
-
-    
-//    if (!error) {
-//        SBVideoData *data = [[SBVideoData alloc] init];
-//        data.duration = _currentVideoDur;
-//        data.fileURL = outputFileURL;
-//        
-//        [_videoFileDataArray addObject:data];
-//    }
-    
-//    if ([_delegate respondsToSelector:@selector(videoRecorder:didFinishRecordingToOutPutFileAtURL:duration:totalDur:error:)]) {
-//        [_delegate videoRecorder:self didFinishRecordingToOutPutFileAtURL:outputFileURL duration:_currentVideoDur totalDur:_totalVideoDur error:error];
-//    }
     
 }
 
@@ -759,6 +752,9 @@
     if (clips.count <= 0) {
         return;
     }
+    
+    
+    _totalVideoDur -= _currentVideoDur;
     
     //delete
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

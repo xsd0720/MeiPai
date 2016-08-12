@@ -7,8 +7,14 @@
 //
 
 #import "MPVideoCutViewController.h"
+#import "MPVideoProcessing.h"
+#import "MPVideFramePreViewCell.h"
+#import "MPVideoClipControl.h"
+#define FramePreviewItemSize   40
 
-@interface MPVideoCutViewController ()
+#define FRAMEPREVIEWCELLIDENTITIFER @"FRAMEPREVIEWCELLIDENTITIFER"
+
+@interface MPVideoCutViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) NSURL *videoFileURL;
@@ -16,6 +22,12 @@
 @property (strong, nonatomic) AVPlayerLayer *playerLayer;
 @property (strong, nonatomic) UIButton *playButton;
 @property (strong, nonatomic) AVPlayerItem *playerItem;
+
+@property (strong, nonatomic) UIButton *promptButton;
+
+@property (strong, nonatomic) MPVideoClipControl *videoClipControl;
+
+@property (strong, nonatomic) NSMutableArray *framePreviewsArray;
 
 
 @end
@@ -30,16 +42,8 @@
     
     [self configAVPlayer];
     
-//    self.view.backgroundColor = [UIColor colorWithRed:16 / 255.0f green:16 / 255.0f blue:16 / 255.0f alpha:1.0f];
-//    
-//    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-//    [_backButton setImage:[UIImage imageNamed:@"vedio_nav_btn_back_nor.png"] forState:UIControlStateNormal];
-//    [_backButton setImage:[UIImage imageNamed:@"vedio_nav_btn_back_pre.png"] forState:UIControlStateHighlighted];
-//    [_backButton addTarget:self action:@selector(pressBackButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:self.backButton];
-//    
-//    [self initPlayLayer];
-//    
+    //加载帧预览
+    [self configAboutFramePreview];
 
 }
 
@@ -51,6 +55,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(avPlayerItemDidPlayToEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+}
+#pragma mark --
+#pragma mark -- config Nav -------
 
 - (void)configNav
 {
@@ -80,55 +92,46 @@
     
     
     //下一步
-    UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextButton setImage:[UIImage imageNamed:@"btn_bar_next_a"] forState:UIControlStateNormal];
-    [nextButton setImage:[UIImage imageNamed:@"btn_bar_next_b"] forState:UIControlStateHighlighted];
-    [nextButton setTitle:@"下一步" forState:UIControlStateNormal];
-    [nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [nextButton setTitleColor:RGB(141, 141, 142) forState:UIControlStateHighlighted];
-    nextButton.frame = CGRectMake(SCREEN_WIDTH-80, 0, 80, 44);
-    nextButton.titleEdgeInsets = UIEdgeInsetsMake(0, -40, 0, 0);
-    nextButton.imageEdgeInsets = UIEdgeInsetsMake(0, 50, 0, 0);
-    nextButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [nextButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:nextButton];
+    UIButton *overButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [overButton setImage:[UIImage imageNamed:@"btn_save_draft_c"] forState:UIControlStateNormal];
+    [overButton setImage:[UIImage imageNamed:@"btn_save_draft_c"] forState:UIControlStateHighlighted];
+    [overButton setTitle:@"完成" forState:UIControlStateNormal];
+    [overButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [overButton setTitleColor:RGB(141, 141, 142) forState:UIControlStateHighlighted];
+    overButton.frame = CGRectMake(SCREEN_WIDTH-80, 0, 80, 44);
+//    overButton.titleEdgeInsets = UIEdgeInsetsMake(0, -40, 0, 0);
+//    overButton.imageEdgeInsets = UIEdgeInsetsMake(0, 50, 0, 0);
+    overButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [overButton addTarget:self action:@selector(overButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:overButton];
 }
-
 
 - (void)backButtonClick
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)overButtonClick
 {
-    [super viewDidDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    NSLog(@"完成");
 }
 
+
+#pragma mark --
+#pragma mark -- config AVPlayer -------
 - (void)configAVPlayer
 {
-//    if (![NSString getVideoMergeFilePathString]) {
-//        NSLog(@"not video can play");
-//        
-//        return;
-//    }
+    if (!self.editVideoURL) {
+        NSLog(@"editVideoURL is empty");
+        return;
+    }
     
-    NSArray *files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:MergeDictionaryPath error:nil];
-    NSArray *files2 = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ClipsDictionaryPath error:nil];
-    NSString *filPath = [files lastObject];
-
-    
-    
-    [self generateListOfImage];
-    
-    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.palyUrl options:nil];
+    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.editVideoURL options:nil];
     self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
     _playerLayer.frame = CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH);
-    _playerLayer.backgroundColor = [[UIColor cyanColor] CGColor];
+    _playerLayer.backgroundColor = [[UIColor blackColor] CGColor];
     _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
     [self.view.layer addSublayer:_playerLayer];
     
@@ -139,76 +142,6 @@
     
     
 }
-
--(void)generateListOfImage{
-    
-    //Create image Image Generator
-    AVAsset *asset = [AVAsset assetWithURL:self.palyUrl];
-    
-    //Create AVVideoComposition
-    AVVideoComposition *videoComposition = [AVVideoComposition videoCompositionWithPropertiesOfAsset:asset];
-    
-    //Retrive video's properties
-    NSTimeInterval duration         = CMTimeGetSeconds(asset.duration);
-    NSTimeInterval frameDuration    = CMTimeGetSeconds(videoComposition.frameDuration);
-    CGSize renderSize = videoComposition.renderSize;
-    CGFloat totalFrames = round(duration/frameDuration);
-    
-    //Create an array to store all time values at which the images captured from the video
-    NSMutableArray *times = [NSMutableArray arrayWithCapacity:totalFrames];
-    NSLog(@"Total Number of frames %d", (int)totalFrames);
-    for (int i = 0; i < totalFrames/6; i++) {
-        
-        NSValue *time = [NSValue valueWithCMTime:CMTimeMakeWithSeconds(i*frameDuration, videoComposition.frameDuration.timescale)];
-        [times addObject:time];
-    }
-    
-    // Launching the process...
-    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc]initWithAsset:asset];
-    imageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
-    imageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
-    imageGenerator.maximumSize = renderSize;
-    imageGenerator.appliesPreferredTrackTransform=TRUE;
-    
-    __block unsigned int i = 0;
-    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-        i++;
-        
-        CGImageRetain(im);
-        if(result == AVAssetImageGeneratorSucceeded){
-            
-            NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-                
-                
-                UIImage *image = [UIImage imageWithCGImage:im];
-
-                NSLog(@"========");
-//            
-//    
-//                
-//                if(![UIImagePNGRepresentation(image) writeToFile:videoOutputPath options:NSDataWritingFileProtectionNone error:&error]){
-//                    NSLog(@"Failed to save image at path %@", videoOutputPath);
-//                    i--;
-//                }
-//                else
-////                    [self.savedImageArray addObject:[NSString stringWithFormat:@"VideoFrames%i.png", i]];
-//                CGImageRelease(im);
-            }];
-//            [self.imageWritingQueue addOperation:operation];
-            
-        }else if (result == AVAssetImageGeneratorFailed){
-            NSLog(@"Failed:     Image %d is failed to generate", i);
-            NSLog(@"Error: %@", [error localizedDescription]);
-        }else if (result == AVAssetImageGeneratorCancelled){
-            NSLog(@"Cancelled:  Image %d is cancelled to generate", i);
-            NSLog(@"Error: %@", [error localizedDescription]);
-        }
-    };
-    
-    [imageGenerator generateCGImagesAsynchronouslyForTimes:times completionHandler:handler];
-}
-
-
 - (void)pressPlayButton:(UIButton *)button
 {
     [_playerItem seekToTime:kCMTimeZero];
@@ -216,16 +149,48 @@
     _playButton.alpha = 0.0f;
 }
 
-- (void)pressBackButton:(UIButton *)button
+
+#pragma mark --
+#pragma mark -- config AboutFramePreview -------
+
+
+- (void)configAboutFramePreview
 {
-    if (self.navigationController) {
-        [self.navigationController popViewControllerAnimated:YES];
-        return;
-    }
     
-    if (self.presentingViewController) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    _promptButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_promptButton setImage:[UIImage imageNamed:@"icon_guide_arrow"] forState:UIControlStateNormal];
+    [_promptButton setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8] forState:UIControlStateNormal];
+    [_promptButton setTitle:@"拖动选择你要裁剪的片段" forState:UIControlStateNormal];
+    _promptButton.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0);
+    _promptButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    _promptButton.frame = CGRectMake(0, CGRectGetMaxY(self.playerLayer.frame) + 25, SCREEN_WIDTH, 15);
+    [self.view addSubview:_promptButton];
+    
+    
+    
+    _videoClipControl = [[MPVideoClipControl alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_promptButton.frame)+15, SCREEN_WIDTH, 70)];
+    [_videoClipControl addTarget:self action:@selector(videoClipCoverViewValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:_videoClipControl];
+    
+    
+    [[MPVideoProcessing shareInstance] framePreviewsFromVideoURL:self.editVideoURL parseImagesArray:self.videoClipControl.framePreviewsArray completionHandle:^(NSArray *fpImages) {
+       dispatch_async(dispatch_get_main_queue(), ^{
+            [self.videoClipControl.framePreviewsCollectionView reloadData];
+       });
+      
+    } failureHandle:^(NSError *error) {
+        NSLog(@"%@", [error description]);
+    }];
+}
+
+
+- (void)videoClipCoverViewValueChanged:(MPVideoClipControl *)videoClipCover
+{
+    
+    float seekTime = videoClipCover.value*CMTimeGetSeconds(self.player.currentItem.duration);
+    CMTime cmTime = CMTimeMakeWithSeconds(seekTime, self.player.currentItem.duration.timescale);
+    [self.player seekToTime:cmTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+
 }
 
 - (void)didReceiveMemoryWarning

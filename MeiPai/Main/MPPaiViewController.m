@@ -13,6 +13,10 @@
 #import "MPVideoCutViewController.h"
 #import "DeleteButton.h"
 #import "MPPaiChooseMusicViewController.h"
+#import "MPVideoProcessing.h"
+
+#define MinRecordDuration     3.0
+
 @interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate, UIViewControllerTransitioningDelegate, UIAlertViewDelegate>
 {
     GPUImageStillCamera *videoCamera;
@@ -355,7 +359,7 @@
     picker.delegate = self;
     picker.allowsEditing = YES;
     
-    picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
         // Only movie
@@ -377,7 +381,7 @@
     
     // 2.
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-    if(![mediaType isEqualToString:@"public.movie"])
+    if([mediaType isEqualToString:@"public.movie"])
     {
         NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
         
@@ -387,65 +391,19 @@
             return;
         }
         
-        //        if ([self getVideoDuration:url] > kMaxRecordDuration)
-        //        {
-        //            NSString *ok = NSLocalizedString(@"ok", nil);
-        //            NSString *error = NSLocalizedString(@"error", nil);
-        //            NSString *fileLenHint = NSLocalizedString(@"fileLenHint", nil);
-        //            NSString *seconds = NSLocalizedString(@"seconds", nil);
-        //            NSString *hint = [fileLenHint stringByAppendingFormat:@" %d ", kMaxRecordDuration];
-        //            hint = [hint stringByAppendingString:seconds];
-        //            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:error
-        //                                                            message:hint
-        //                                                           delegate:nil
-        //                                                  cancelButtonTitle:ok
-        //                                                  otherButtonTitles: nil];
-        //            [alert show];
-        //            [alert release];
-        //
-        //            return;
-        //        }
-        
-//        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
-//        {
-//            self.fromSystemCamera = TRUE;
-//        }
-//        else if(picker.sourceType == UIImagePickerControllerSourceTypeSavedPhotosAlbum)
-//        {
-//            self.fromSystemCamera = FALSE;
-//        }
-//        else
-//        {
-//            self.fromSystemCamera = FALSE;
-//        }
-        
-//        // Remove last file
-//        if (self.videoPickURL && [self.videoPickURL isFileURL])
-//        {
-//            
-//            
-//            
-//            if ([[NSFileManager defaultManager] removeItemAtURL:self.videoPickURL error:nil])
-//            {
-//                NSLog(@"Success for delete old pick file: %@", self.videoPickURL);
-//            }
-//            else
-//            {
-//                NSLog(@"Failed for delete old pick file: %@", self.videoPickURL);
-//            }
-//        }
-//        
-//        NSURL *sampleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"150511_JiveBike" ofType:@"mov"]];
-//        
-//        self.videoPickURL = sampleURL;
-//        self.mp4OutputPath = [self getOutputFilePath];
-//        self.hasVideo = YES;
-//        
-//        [self showVideoPlayView:FALSE];
-//        
-//        self.toggleEffects.enabled = TRUE;
-//        self.frameScrollView.hidden = FALSE;
-//        [self getPreviewImage:url];
+        if ([[MPVideoProcessing shareInstance] getVideoDuration:url] < MinRecordDuration) {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"错误"
+                                                            message:@"视频时长必须大于3秒"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"知道了"
+                                                  otherButtonTitles: nil];
+            [alert show];
+            return;
+        }
+
+        MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
+        videoCutVC.editVideoURL = url;
+        [self presentViewController:videoCutVC animated:YES completion:nil];
     }
     else
     {
@@ -454,16 +412,8 @@
     }
 }
 
-- (CGFloat)getVideoDuration:(NSURL*)URL
-{
-    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:URL options:opts];
-    float second = 0;
-    second = urlAsset.duration.value/urlAsset.duration.timescale;
-    
-    return second;
-}
+
+
 - (void)photoMovieButtonClick
 {
     MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
@@ -489,25 +439,20 @@
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishRecordingToOutPutFileAtURL:(NSURL *)outputFileURL duration:(CGFloat)videoDuration totalDur:(CGFloat)totalDur error:(NSError *)error
 {
     
+    if (error) {
+        NSLog(@"录制视频错误:%@", error);
+    } else {
+        NSLog(@"录制视频完成: %@", outputFileURL);
+    }
     
-    
-    //    if (error) {
-    //        NSLog(@"录制视频错误:%@", error);
-    //    } else {
-    //        NSLog(@"录制视频完成: %@", outputFileURL);
-    //    }
-    //
-    //
-    //    if (totalDur >= MAX_VIDEO_DUR) {
-    //        [self pressOKButton];
-    //    }
+    if (totalDur >= MAX_VIDEO_DUR) {
+        [self rightButtonClick];
+    }
     
     [self.delLastRecordMovieButton setButtonStyle:DeleteButtonStyleNormal];
     
     [_mpRecordVideoProgressBar stopRecordingAVideo];
 
-
- 
 }
 
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didRemoveVideoFileAtURL:(NSURL *)fileURL totalDur:(CGFloat)totalDur error:(NSError *)error
@@ -544,7 +489,7 @@
 - (void)videoRecorder:(MPCameraManager *)videoRecorder didFinishMergingVideosToOutPutFileAtURL:(NSURL *)outputFileURL
 {
     MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
-    videoCutVC.palyUrl = outputFileURL;
+    videoCutVC.editVideoURL = outputFileURL;
     [self presentViewController:videoCutVC animated:YES completion:nil];
 }
 
@@ -570,6 +515,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 /*
 #pragma mark - Navigation

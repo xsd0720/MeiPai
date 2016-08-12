@@ -9,11 +9,24 @@
 #import <Foundation/Foundation.h>
 
 
-typedef void(^CompletionHandler)(NSURL *mergeFileURL);
+typedef void(^MergeCompletionHandler)(NSURL *mergeFileURL);
+typedef void(^FramePreviewsParseFinished)(NSArray *fpImages);
+typedef void(^FailureHandle)(NSError *error);
 
 @interface MPVideoProcessing : NSObject
 
-@property (nonatomic) CompletionHandler completionHandler;
+@property (retain, nonatomic) AVAssetExportSession *exportSession;
+
+@property (nonatomic) MergeCompletionHandler mergeCompletionHandler;
+
+@property (nonatomic) FramePreviewsParseFinished framePreviewsParseFinished;
+
++(MPVideoProcessing *)shareInstance;
+
+
+//获取视频时长
+- (CGFloat)getVideoDuration:(NSURL*)URL;
+
 
 ////必须是fileURL
 ////截取将会是视频的中间部分
@@ -31,12 +44,13 @@ typedef void(^CompletionHandler)(NSURL *mergeFileURL);
 //+ (void)mergeAndExportVideosAtFileURLs:(NSArray *)fileURLArray;
 
 
-- (void)mergeAndExportVideos:(NSArray*)videosPathArray bgMusicURL:(NSURL *)bgMusicURL isG:(BOOL)isG completionHandler:(CompletionHandler)completionHandler;
+- (void)mergeAndExportVideos:(NSArray*)videosPathArray bgMusicURL:(NSURL *)bgMusicURL isG:(BOOL)isG completionHandler:(MergeCompletionHandler)completionHandler;
 
 //制作照片电影
-- (void)saveMovieToLibrary;
+- (void)makePhotoMovieFromPhotos:(NSArray *)photos;
 
-+(MPVideoProcessing *)shareInstance;
-@property (retain, nonatomic) AVAssetExportSession *exportSession;
+//解析出视频帧预览图片集合
+- (void)framePreviewsFromVideoURL:(NSURL *)videoURL parseImagesArray:(NSMutableArray *)parseImagesArray completionHandle:(FramePreviewsParseFinished)completionHandler failureHandle:(FailureHandle)failureHandle;
+
 
 @end
