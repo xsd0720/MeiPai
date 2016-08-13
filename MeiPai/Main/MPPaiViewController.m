@@ -112,7 +112,7 @@
     self.cameraManager = [[MPCameraManager alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH) superview:self.view];
     self.cameraManager.delegate = self;
     [self.cameraManager setFocusImageName:@"camera_focus_bg"];
-    [self.cameraManager startCamera];
+//    [self.cameraManager startCamera];
     
     
 

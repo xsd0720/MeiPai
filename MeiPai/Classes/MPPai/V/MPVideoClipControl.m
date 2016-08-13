@@ -8,7 +8,7 @@
 
 #import "MPVideoClipControl.h"
 #import "MPVideFramePreViewCell.h"
-
+#define MAXMARGIN   100
 static NSString *FRAMEPREVIEWCELLIDENTITIFER = @"FRAMEPREVIEWCELLIDENTITIFER";
 
 @interface MPVideoClipControl()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -135,19 +135,21 @@ static NSString *FRAMEPREVIEWCELLIDENTITIFER = @"FRAMEPREVIEWCELLIDENTITIFER";
 }
 
 
-//
+//获取value
 - (CGFloat)value
 {
     
     CGFloat collectionViewWidth = self.framePreviewsCollectionView.contentSize.width;
+    CGFloat OffsetX = self.framePreviewsCollectionView.contentOffset.x;
     if (self.leftCursorButton.isTouchInside) {
-        return self.leftCursorButton.centerX/collectionViewWidth;
+        return (self.leftCursorButton.centerX+OffsetX)/collectionViewWidth;
     }
-    else  if (self.rightCursorButton.isTouchInside) {
-        return self.rightCursorButton.centerX/collectionViewWidth;
+    else  if (self.rightCursorButton.isTouchInside)
+    {
+        return (self.rightCursorButton.centerX+OffsetX) /collectionViewWidth;
     }
     else  if (self.framePreviewsCollectionView.isDragging) {
-        CGFloat OffsetX = self.framePreviewsCollectionView.contentOffset.x;
+        
         return (OffsetX+self.leftCursorButton.centerX)/collectionViewWidth;
     }
     return 0;
@@ -173,43 +175,16 @@ static NSString *FRAMEPREVIEWCELLIDENTITIFER = @"FRAMEPREVIEWCELLIDENTITIFER";
 
     if (sender == self.leftCursorButton)
     {
-        
-        self.leftCoverView.width = newCenterX;
-        sender.centerX = newCenterX;
-        
-  
-        
-//        //判断是否可以继续拖动
-//        if ((_rightCursorButton.centerX-_leftCursorButton.centerX) >= 100) {
-//            self.leftCoverView.width = newCenterX;
-//            sender.centerX = newCenterX;
-//            
-//            
-//            
-//        }
-//        else
-//        {
-//            newCenterX = SCREEN_WIDTH-_rightCoverView.width-100;
-//            self.leftCoverView.width = newCenterX;
-//            sender.centerX = newCenterX;
-//        }
-        
+        sender.centerX = MIN(newCenterX, _rightCursorButton.centerX-100);
+        _leftCoverView.width = sender.centerX;
     }
     else
     {
-//        //判断是否可以继续拖动
-//        if ((_rightCursorButton.centerX-_leftCursorButton.centerX) <= 100) {
-//            if ((newCenterX-sender.centerX)<0) {
-//                return;
-//            }
-//        }
-//        
-        CGFloat newWidth = SCREEN_WIDTH-newCenterX;
-        self.rightCoverView.frame = CGRectMake(SCREEN_WIDTH-newWidth, 0, newWidth, CoverHeight);
-        sender.centerX = newCenterX;
+        sender.centerX = MAX(newCenterX, _leftCursorButton.centerX+MAXMARGIN);
+        _rightCoverView.frame = CGRectMake(sender.centerX, 0, SCREEN_WIDTH-sender.centerX, CoverHeight);
     }
     [self sendActionsForControlEvents:UIControlEventValueChanged];
-    self.centerCoverView.frame = CGRectMake(self.leftCursorButton.centerX, 0, self.rightCursorButton.centerX-self.leftCursorButton.centerX, CoverHeight);
+//    self.centerCoverView.frame = CGRectMake(self.leftCursorButton.centerX, 0, self.rightCursorButton.centerX-self.leftCursorButton.centerX, CoverHeight);
 }
 
 
