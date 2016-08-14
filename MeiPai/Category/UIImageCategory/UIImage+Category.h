@@ -11,6 +11,7 @@
 @interface UIImage (Category)
 
 - (CGSize)limitMaxWidthHeight:(CGFloat)maxW maxH:(CGFloat)maxH;
+//- (CGSize)equalScalllToAsepSize:(CGSize)size min
 
 + (UIImage *)drawDashLineRect:(CGRect)rect;
 

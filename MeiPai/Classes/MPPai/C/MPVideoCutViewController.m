@@ -14,14 +14,18 @@
 
 #define FRAMEPREVIEWCELLIDENTITIFER @"FRAMEPREVIEWCELLIDENTITIFER"
 
-@interface MPVideoCutViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface MPVideoCutViewController ()
 
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) NSURL *videoFileURL;
 @property (strong, nonatomic) AVPlayer *player;
+@property (strong, nonatomic) UIScrollView *playerLayerScroll;
 @property (strong, nonatomic) AVPlayerLayer *playerLayer;
 @property (strong, nonatomic) UIButton *playButton;
 @property (strong, nonatomic) AVPlayerItem *playerItem;
+
+@property (assign, nonatomic) CGSize videoSize;
+
 
 @property (strong, nonatomic) UIButton *promptButton;
 
@@ -29,6 +33,9 @@
 
 @property (strong, nonatomic) NSMutableArray *framePreviewsArray;
 
+
+//视频比例切换
+@property (strong, nonatomic) UIButton *biliButton;
 
 @end
 
@@ -119,6 +126,27 @@
 
 #pragma mark --
 #pragma mark -- config AVPlayer -------
+
+- (void)setVideoSize:(CGSize)videoSize
+{
+    CGFloat p = videoSize.width/videoSize.height;
+    if (videoSize.width > videoSize.height) {
+        CGFloat nH = self.playerLayerScroll.frame.size.height;
+        CGFloat nW = p * nH;
+        _videoSize = CGSizeMake(nW, nH);
+    }
+    else if(videoSize.height > videoSize.width)
+    {
+        CGFloat nW = self.playerLayerScroll.frame.size.width;
+        CGFloat nH = nW/p;
+        _videoSize = CGSizeMake(nW, nH);
+    }
+    else
+    {
+        _videoSize = self.playerLayer.bounds.size;
+    }
+}
+
 - (void)configAVPlayer
 {
     if (!self.editVideoURL) {
@@ -126,20 +154,36 @@
         return;
     }
     
+
+    _playerLayerScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH)];
+    _playerLayerScroll.bounces = NO;
+    _playerLayerScroll.showsVerticalScrollIndicator = NO;
+    _playerLayerScroll.showsHorizontalScrollIndicator = NO;
+    _playerLayerScroll.scrollEnabled = NO;
+    [self.view addSubview:_playerLayerScroll];
+    
     AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.editVideoURL options:nil];
+    
+    AVAssetTrack *assetTrack = [[movieAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    self.videoSize = assetTrack.naturalSize;
+    
+    _playerLayerScroll.contentSize = self.videoSize;
+//    [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0)];
+    
+    
     self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
-    _playerLayer.frame = CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH);
+    _playerLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH);
     _playerLayer.backgroundColor = [[UIColor blackColor] CGColor];
     _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    [self.view.layer addSublayer:_playerLayer];
+    _playerLayer.masksToBounds = YES;
+    [_playerLayerScroll.layer addSublayer:_playerLayer];
     
-    self.playButton = [[UIButton alloc] initWithFrame:_playerLayer.frame];
+    self.playButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 44, 40, 40)];
     [_playButton setImage:[UIImage imageNamed:@"btn_play_bg_a"] forState:UIControlStateNormal];
     [_playButton addTarget:self action:@selector(pressPlayButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_playButton];
-    
     
 }
 - (void)pressPlayButton:(UIButton *)button
@@ -163,7 +207,7 @@
     [_promptButton setTitle:@"拖动选择你要裁剪的片段" forState:UIControlStateNormal];
     _promptButton.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0);
     _promptButton.titleLabel.font = [UIFont systemFontOfSize:13];
-    _promptButton.frame = CGRectMake(0, CGRectGetMaxY(self.playerLayer.frame) + 25, SCREEN_WIDTH, 15);
+    _promptButton.frame = CGRectMake(0, CGRectGetMaxY(self.playerLayerScroll.frame) + 25, SCREEN_WIDTH, 15);
     [self.view addSubview:_promptButton];
     
     
@@ -181,11 +225,28 @@
     } failureHandle:^(NSError *error) {
         NSLog(@"%@", [error description]);
     }];
+    
+    
+    //视频比例转化
+    _biliButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_biliButton setTitle:@"1:1" forState:UIControlStateNormal];
+    _biliButton.titleLabel.font = [UIFont boldSystemFontOfSize:10];
+    [_biliButton setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5] forState:UIControlStateNormal];
+    [_biliButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    _biliButton.frame = CGRectMake(SCREEN_WIDTH-30-25, CGRectGetMaxY(_videoClipControl.frame)+15, 25, 25);
+    _biliButton.layer.cornerRadius = 6;
+    _biliButton.layer.borderColor = [[UIColor whiteColor] CGColor];
+    _biliButton.layer.borderWidth = 2;
+    [_biliButton addTarget:self action:@selector(biliButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_biliButton];
 }
+
+
 
 
 - (void)videoClipCoverViewValueChanged:(MPVideoClipControl *)videoClipCover
 {
+    [self.player pause];
     
     float seekTime = videoClipCover.value*CMTimeGetSeconds(self.player.currentItem.duration);
     CMTime cmTime = CMTimeMakeWithSeconds(seekTime, self.player.currentItem.duration.timescale);
@@ -193,11 +254,47 @@
 
 }
 
-- (void)didReceiveMemoryWarning
+- (void)biliButtonClick:(UIButton *)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    sender.selected = !sender.selected;
+    
+    NSLog(@"%@", NSStringFromCGRect(self.playerLayer.videoRect));
+    
+    if (sender.selected) {
+        
+         self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            _playerLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH+(self.videoSize.width-SCREEN_WIDTH), SCREEN_WIDTH);
+            [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0) animated:NO];
+            
+            _playerLayerScroll.scrollEnabled = YES;
+        });
+        
+//        [UIView animateWithDuration:5 animations:^{
+//            
+//            self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//        } completion:^(BOOL finished) {
+//            
+//           
+//        }];
+
+        
+        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+   
+        
+    }else
+    {
+        
+        _playerLayerScroll.scrollEnabled = NO;
+        
+        [UIView animateWithDuration:0.1 animations:^{
+            self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+//            [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0)];
+            _playerLayer.frame = CGRectMake((self.videoSize.width-SCREEN_WIDTH)/2, 0, SCREEN_WIDTH, SCREEN_WIDTH);
+        }];
+    }
 }
+
 
 - (BOOL)prefersStatusBarHidden
 {

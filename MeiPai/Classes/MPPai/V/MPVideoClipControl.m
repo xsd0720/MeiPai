@@ -138,7 +138,6 @@ static NSString *FRAMEPREVIEWCELLIDENTITIFER = @"FRAMEPREVIEWCELLIDENTITIFER";
 //获取value
 - (CGFloat)value
 {
-    
     CGFloat collectionViewWidth = self.framePreviewsCollectionView.contentSize.width;
     CGFloat OffsetX = self.framePreviewsCollectionView.contentOffset.x;
     if (self.leftCursorButton.isTouchInside) {
