@@ -59,6 +59,7 @@
     [self configCamera];
     
     [self configOtherUI];
+//    com.meitu.mtmv
 
 }
 

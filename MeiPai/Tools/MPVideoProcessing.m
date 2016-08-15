@@ -9,6 +9,15 @@
 #import "MPVideoProcessing.h"
 #import "GPUImage.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+
+@interface MPVideoProcessing()
+
+@property (nonatomic, strong) GPUImageMovie *exportFileImageMovie;
+
+@property (nonatomic, strong) GPUImageMovieWriter *exportImageMovieWriter;
+
+@end
+
 @implementation MPVideoProcessing
 
 +(MPVideoProcessing *)shareInstance{
@@ -533,6 +542,111 @@
     };
     
     [imageGenerator generateCGImagesAsynchronouslyForTimes:times completionHandler:handler];
+}
+
+
+
+- (NSURL *)exportVideoURLWithFilter:(GPUImageOutput<GPUImageInput> *)filter inputVideoURL:(NSURL *)inputVideoURL
+{
+    //创建滤镜处理视频载体(GPUImageMovie)
+    _exportFileImageMovie = [[GPUImageMovie alloc] initWithURL:inputVideoURL];
+    
+    //runBenchmark--控制台打印current frame，就是视频处理到哪一秒了，只是一个控制台输出，YES就输出，NO就不输出
+    _exportFileImageMovie.runBenchmark = NO;
+    
+    //控制GPUImageView预览视频时的速度是否要保持真实的速度。如果设为NO，则会将视频的所有帧无间隔渲染，导致速度非常快。设为YES，则会根据视频本身时长计算出每帧的时间间隔，然后每渲染一帧，就sleep一个时间间隔，从而达到正常的播放速度。
+    _exportFileImageMovie.playAtActualSpeed = NO;
+    
+    //控制视频是否循环播放。当你不想预览，而是想将处理过的结果输出到文件时，步骤也类似，只是不再需要创建GPUImageView，而是需要一个GPUImageMovieWriter：
+    
+    _exportFileImageMovie.shouldRepeat = NO;
+    
+
+    //添加滤镜
+    if (filter) {
+       [_exportFileImageMovie addTarget:filter];
+    }
+    
+    
+    //有了载体就要开始输出了使用 （GPUImageMovieWriter）  outputMovieURL 为最终输出的url
+    NSString *pathToTempMov = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tempMovie.mov"];
+    NSLog(@"%@", pathToTempMov);
+    //unlink 是C语言中函数，简单的说就是如果本地存在改路径指定的文件，就会删除重置文件中的内容
+    unlink([pathToTempMov UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
+    
+    NSURL *outputTempMovieURL = [NSURL fileURLWithPath:pathToTempMov];
+    
+    _exportImageMovieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:outputTempMovieURL size:[self getVideoSize:inputVideoURL]];
+    
+    //判断是否存在滤镜 filter
+    if ((NSNull*)filter != [NSNull null] && filter != nil)
+    {
+        //滤镜上添加写入者（GPUImageMovieWriter）
+        [filter addTarget:_exportImageMovieWriter];
+    }
+    else
+    {
+        //视频处理器(GPUImageMovie) 上添加写入者（GPUImageMovieWriter）
+        [_exportFileImageMovie addTarget:_exportImageMovieWriter];
+        
+    }
+    //是否允许视频声音通过
+    _exportImageMovieWriter.shouldPassthroughAudio = YES;
+    //如果允许视频声音通过，设置声音源
+    _exportFileImageMovie.audioEncodingTarget = _exportImageMovieWriter;
+    //保存所有的视频帧和音频样本
+    
+    [_exportFileImageMovie enableSynchronizedEncodingUsingMovieWriter:_exportImageMovieWriter];
+    
+    //写入者开始录制
+    [_exportImageMovieWriter startRecording];
+    //视频载体开始处理(可以理解为开始播放，就是写入者开始录制，视频载体本身开始播放，这样就把每一帧都拍下来了)
+    
+    [_exportFileImageMovie startProcessing];
+    
+    
+    __weak MPVideoProcessing *ws = self;
+    [ws.exportImageMovieWriter setCompletionBlock:^{
+        //
+        if ((NSNull*)filter != [NSNull null] && filter != nil)
+        {
+            //移除写入者从滤镜中
+            [filter removeTarget:_exportImageMovieWriter];
+        }
+        else
+        {
+            //移除写入者从视频载体中(主要是为了节省资源吧)
+            [_exportFileImageMovie removeTarget:_exportImageMovieWriter];
+        }
+        
+        //录制完毕要关闭录制动作
+        [ws.exportImageMovieWriter finishRecordingWithCompletionHandler:^{
+//            录制完成，最终视频保存在outputMovieURL，进一步处理就可以了
+            NSLog(@"chenggong ");
+            [self save:outputTempMovieURL];
+            
+        }];
+    }];
+
+
+    [_exportImageMovieWriter setFailureBlock:^(NSError *error) {
+        NSLog(@"%@", [error description]);
+        
+    }];
+    return nil;
+}
+
+
+- (void)save:(NSURL *)url{
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    [library writeVideoAtPathToSavedPhotosAlbum:url
+                                completionBlock:^(NSURL *assetURL, NSError *error) {
+                                    if (error) {
+                                        NSLog(@"Save video fail:%@",error);
+                                    } else {
+                                        NSLog(@"Save video succeed.");
+                                    }
+                                }];
 }
 
 @end

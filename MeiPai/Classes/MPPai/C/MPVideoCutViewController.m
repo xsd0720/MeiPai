@@ -10,11 +10,12 @@
 #import "MPVideoProcessing.h"
 #import "MPVideFramePreViewCell.h"
 #import "MPVideoClipControl.h"
+#import "MPVideoEditViewController.h"
 #define FramePreviewItemSize   40
 
 #define FRAMEPREVIEWCELLIDENTITIFER @"FRAMEPREVIEWCELLIDENTITIFER"
 
-@interface MPVideoCutViewController ()
+@interface MPVideoCutViewController ()<UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) NSURL *videoFileURL;
@@ -120,7 +121,9 @@
 
 - (void)overButtonClick
 {
-    NSLog(@"完成");
+    MPVideoEditViewController *videoEditVC = [[MPVideoEditViewController alloc] init];
+    videoEditVC.editVideoURL = self.editVideoURL;
+    [self presentViewController:videoEditVC animated:YES completion:nil];
 }
 
 
@@ -157,27 +160,31 @@
 
     _playerLayerScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH)];
     _playerLayerScroll.bounces = NO;
-    _playerLayerScroll.showsVerticalScrollIndicator = NO;
-    _playerLayerScroll.showsHorizontalScrollIndicator = NO;
+    _playerLayerScroll.delegate = self;
     _playerLayerScroll.scrollEnabled = NO;
+//    _playerLayerScroll.showsVerticalScrollIndicator = NO;
+//    _playerLayerScroll.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:_playerLayerScroll];
     
-    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.editVideoURL options:nil];
     
+    
+    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.editVideoURL options:nil];
     AVAssetTrack *assetTrack = [[movieAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     self.videoSize = assetTrack.naturalSize;
     
     _playerLayerScroll.contentSize = self.videoSize;
-//    [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0)];
+    [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0)];
+    
     
     
     self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
-    _playerLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH);
+
+    _playerLayer.frame = CGRectMake((self.videoSize.width-SCREEN_WIDTH)/2, 0, SCREEN_WIDTH, SCREEN_WIDTH);
     _playerLayer.backgroundColor = [[UIColor blackColor] CGColor];
     _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    _playerLayer.masksToBounds = YES;
+
     [_playerLayerScroll.layer addSublayer:_playerLayer];
     
     self.playButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 44, 40, 40)];
@@ -197,7 +204,10 @@
 #pragma mark --
 #pragma mark -- config AboutFramePreview -------
 
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSLog(@"%f", scrollView.contentOffset.x);
+}
 - (void)configAboutFramePreview
 {
     
@@ -254,6 +264,7 @@
 
 }
 
+
 - (void)biliButtonClick:(UIButton *)sender
 {
     sender.selected = !sender.selected;
@@ -261,37 +272,13 @@
     NSLog(@"%@", NSStringFromCGRect(self.playerLayer.videoRect));
     
     if (sender.selected) {
-        
-         self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            _playerLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH+(self.videoSize.width-SCREEN_WIDTH), SCREEN_WIDTH);
-            [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0) animated:NO];
-            
-            _playerLayerScroll.scrollEnabled = YES;
-        });
-        
-//        [UIView animateWithDuration:5 animations:^{
-//            
-//            self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-//        } completion:^(BOOL finished) {
-//            
-//           
-//        }];
-
-        
-        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-   
-        
-    }else
+        _playerLayerScroll.scrollEnabled = YES;
+        _playerLayer.frame = CGRectMake(0, 0, self.videoSize.width, SCREEN_WIDTH);
+    }
+    else
     {
-        
         _playerLayerScroll.scrollEnabled = NO;
-        
-        [UIView animateWithDuration:0.1 animations:^{
-            self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-//            [_playerLayerScroll setContentOffset:CGPointMake((self.videoSize.width-SCREEN_WIDTH)/2, 0)];
-            _playerLayer.frame = CGRectMake((self.videoSize.width-SCREEN_WIDTH)/2, 0, SCREEN_WIDTH, SCREEN_WIDTH);
-        }];
+        _playerLayer.frame = CGRectMake(_playerLayerScroll.contentOffset.x, 0, SCREEN_WIDTH, SCREEN_WIDTH);
     }
 }
 

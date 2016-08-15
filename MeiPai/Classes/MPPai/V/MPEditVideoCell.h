@@ -10,4 +10,10 @@
 
 @interface MPEditVideoCell : UICollectionViewCell
 
+@property (nonatomic, strong) UIImageView *iconImageView;
+
+@property (nonatomic, strong) UILabel *iconPromptLabel;
+
+@property (nonatomic, strong) NSDictionary *datasource;
+
 @end

@@ -10,4 +10,12 @@
 
 @interface MPEditVideoSwitch : UIControl
 
+@property (strong, nonatomic) UIButton *lvJingButton;
+@property (strong, nonatomic) UIButton *mvButton;
+
+@property (strong, nonatomic) UIView *cursorLineView;
+
+@property (assign, nonatomic) int selectedIndex;
+
+
 @end

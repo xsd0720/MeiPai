@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "GPUImage.h"
 
 typedef void(^MergeCompletionHandler)(NSURL *mergeFileURL);
 typedef void(^FramePreviewsParseFinished)(NSArray *fpImages);
@@ -52,5 +52,6 @@ typedef void(^FailureHandle)(NSError *error);
 //解析出视频帧预览图片集合
 - (void)framePreviewsFromVideoURL:(NSURL *)videoURL parseImagesArray:(NSMutableArray *)parseImagesArray completionHandle:(FramePreviewsParseFinished)completionHandler failureHandle:(FailureHandle)failureHandle;
 
+- (NSURL *)exportVideoURLWithFilter:(GPUImageOutput<GPUImageInput> *)filter inputVideoURL:(NSURL *)inputVideoURL;
 
 @end

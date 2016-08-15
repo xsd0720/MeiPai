@@ -10,4 +10,6 @@
 
 @interface MPVideoEditViewController : UIViewController
 
+@property (nonatomic, strong) NSURL *editVideoURL;
+
 @end

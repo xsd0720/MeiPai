@@ -90,7 +90,7 @@ static NSString *FRAMEPREVIEWCELLIDENTITIFER = @"FRAMEPREVIEWCELLIDENTITIFER";
 
 
 /**
- *  加载 tableView 视图
+ *  加载 collection 视图
  */
 - (UICollectionView *)framePreviewsCollectionView{
     if (!_framePreviewsCollectionView) {
