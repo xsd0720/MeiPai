@@ -298,6 +298,9 @@
 		0C7457021D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
+		0CA447D31D616ABE00E77FD4 /* MPVideoEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */; };
+		0CA447D61D6173E400E77FD4 /* MPEditVideoSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */; };
+		0CA447D91D6173FF00E77FD4 /* MPEditVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -823,6 +826,13 @@
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
 		0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRecordVideoProgressBar.m; sourceTree = "<group>"; };
+		0CA447D11D616ABE00E77FD4 /* MPVideoEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVideoEditViewController.h; sourceTree = "<group>"; };
+		0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideoEditViewController.m; sourceTree = "<group>"; };
+		0CA447D41D6173E400E77FD4 /* MPEditVideoSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEditVideoSwitch.h; sourceTree = "<group>"; };
+		0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoSwitch.m; sourceTree = "<group>"; };
+		0CA447D71D6173FF00E77FD4 /* MPEditVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEditVideoCell.h; sourceTree = "<group>"; };
+		0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoCell.m; sourceTree = "<group>"; };
+		0CA447DA1D6197AF00E77FD4 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -863,6 +873,7 @@
 		0C668B6B1D531902000FC15A /* MeiPai */ = {
 			isa = PBXGroup;
 			children = (
+				0CA447DA1D6197AF00E77FD4 /* Reveal.framework */,
 				0C7058821D5B42C000EEBB30 /* Bass.caf */,
 				0C7058801D5B413600EEBB30 /* KT Mix.mp3 */,
 				0C69D7B81D583820007801B2 /* Tools */,
@@ -1650,6 +1661,8 @@
 				0C69D7AF1D582384007801B2 /* MPVideoCutViewController.m */,
 				0C7457001D5C6BCD00A81169 /* MPPaiChooseMusicViewController.h */,
 				0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */,
+				0CA447D11D616ABE00E77FD4 /* MPVideoEditViewController.h */,
+				0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1672,6 +1685,10 @@
 				0C70FFF01D5D93EB00B3776E /* MPVideFramePreViewCell.m */,
 				0C70FFF21D5DA3BD00B3776E /* MPVideoClipControl.h */,
 				0C70FFF31D5DA3BD00B3776E /* MPVideoClipControl.m */,
+				0CA447D41D6173E400E77FD4 /* MPEditVideoSwitch.h */,
+				0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */,
+				0CA447D71D6173FF00E77FD4 /* MPEditVideoCell.h */,
+				0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -1886,6 +1903,7 @@
 				0C668DEA1D531D0A000FC15A /* GPUImageFASTCornerDetectionFilter.m in Sources */,
 				0C668D6E1D531D0A000FC15A /* NSString+Time.m in Sources */,
 				0C668DFB1D531D0A000FC15A /* GPUImageHighPassFilter.m in Sources */,
+				0CA447D61D6173E400E77FD4 /* MPEditVideoSwitch.m in Sources */,
 				0C668DDE1D531D0A000FC15A /* GPUImageDarkenBlendFilter.m in Sources */,
 				0C668DF01D531D0A000FC15A /* GPUImageGammaFilter.m in Sources */,
 				0C668DC31D531D0A000FC15A /* GPUImageAdaptiveThresholdFilter.m in Sources */,
@@ -1981,6 +1999,7 @@
 				0C668D801D531D0A000FC15A /* UIView+Toast.m in Sources */,
 				0C668DBF1D531D0A000FC15A /* UIImage+Additions.m in Sources */,
 				0C668E0D1D531D0A000FC15A /* GPUImageLookupFilter.m in Sources */,
+				0CA447D91D6173FF00E77FD4 /* MPEditVideoCell.m in Sources */,
 				0C668DDC1D531D0A000FC15A /* GPUImageCrosshairGenerator.m in Sources */,
 				0C668DFD1D531D0A000FC15A /* GPUImageHistogramGenerator.m in Sources */,
 				0C668E4D1D531D0A000FC15A /* GPUImageThresholdSketchFilter.m in Sources */,
@@ -2011,6 +2030,7 @@
 				0C668DC61D531D0A000FC15A /* GPUImageAmatorkaFilter.m in Sources */,
 				0C668E1B1D531D0A000FC15A /* GPUImageMovieComposition.m in Sources */,
 				0C668E091D531D0A000FC15A /* GPUImageLightenBlendFilter.m in Sources */,
+				0CA447D31D616ABE00E77FD4 /* MPVideoEditViewController.m in Sources */,
 				0C668E4E1D531D0A000FC15A /* GPUImageTiltShiftFilter.m in Sources */,
 				0C668E2A1D531D0A000FC15A /* GPUImagePolarPixellateFilter.m in Sources */,
 				0C668DF31D531D0A000FC15A /* GPUImageGaussianSelectiveBlurFilter.m in Sources */,
@@ -2130,10 +2150,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MeiPai",
+				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/MeiPai/MeiPai-Prefix.pch";
 				INFOPLIST_FILE = MeiPai/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lz",
+					"-framework",
+					Reveal,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaowen.MeiPai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2143,10 +2173,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MeiPai",
+				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/MeiPai/MeiPai-Prefix.pch";
 				INFOPLIST_FILE = MeiPai/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lz",
+					"-framework",
+					Reveal,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaowen.MeiPai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
