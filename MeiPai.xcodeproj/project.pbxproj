@@ -832,7 +832,6 @@
 		0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoSwitch.m; sourceTree = "<group>"; };
 		0CA447D71D6173FF00E77FD4 /* MPEditVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEditVideoCell.h; sourceTree = "<group>"; };
 		0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoCell.m; sourceTree = "<group>"; };
-		0CA447DA1D6197AF00E77FD4 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -873,7 +872,6 @@
 		0C668B6B1D531902000FC15A /* MeiPai */ = {
 			isa = PBXGroup;
 			children = (
-				0CA447DA1D6197AF00E77FD4 /* Reveal.framework */,
 				0C7058821D5B42C000EEBB30 /* Bass.caf */,
 				0C7058801D5B413600EEBB30 /* KT Mix.mp3 */,
 				0C69D7B81D583820007801B2 /* Tools */,
