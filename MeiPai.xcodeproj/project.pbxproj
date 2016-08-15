@@ -2156,12 +2156,7 @@
 				INFOPLIST_FILE = MeiPai/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lz",
-					"-framework",
-					Reveal,
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaowen.MeiPai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2179,12 +2174,7 @@
 				INFOPLIST_FILE = MeiPai/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lz",
-					"-framework",
-					Reveal,
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaowen.MeiPai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

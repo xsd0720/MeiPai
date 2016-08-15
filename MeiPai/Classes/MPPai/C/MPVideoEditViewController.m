@@ -170,9 +170,15 @@
 - (void)nextButtonClick
 {
     
-//    [_movieFile cancelProcessing];
-    [_player pause];
-    [[MPVideoProcessing shareInstance] exportVideoURLWithFilter:self.currentFilter inputVideoURL:self.editVideoURL];
+    [_movieFile cancelProcessing];
+    _player = nil;
+//    [_player pause];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      
+        
+        [[MPVideoProcessing shareInstance] exportVideoURLWithFilter:self.currentFilter inputVideoURL:self.editVideoURL];
+    });
+ 
 }
 
 
@@ -214,7 +220,7 @@
     
     _movieFile = [[GPUImageMovie alloc] initWithPlayerItem:_playerItem];
     
-    _movieFile.runBenchmark = YES;
+//    _movieFile.runBenchmark = YES;
     _movieFile.playAtActualSpeed = YES;
     [self.view sendSubviewToBack:self.videoView];
     
@@ -224,7 +230,7 @@
     
     [_movieFile addTarget:self.videoView];
     [_movieFile startProcessing];
-
+    [_player play];
 
 
 
