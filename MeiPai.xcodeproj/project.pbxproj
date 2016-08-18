@@ -298,6 +298,16 @@
 		0C7457021D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
+		0C876E511D655F9D003FC697 /* WHImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E501D655F9D003FC697 /* WHImagePickerController.m */; };
+		0C876E541D655FE2003FC697 /* WHImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E531D655FE2003FC697 /* WHImageManager.m */; };
+		0C876E571D6562E8003FC697 /* WHPhotoPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E561D6562E8003FC697 /* WHPhotoPickerController.m */; };
+		0C876E5A1D65644F003FC697 /* WHPhotoPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E591D65644F003FC697 /* WHPhotoPreviewController.m */; };
+		0C876E5D1D656554003FC697 /* WHAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E5C1D656554003FC697 /* WHAssetModel.m */; };
+		0C876E601D6565EA003FC697 /* WHAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E5F1D6565EA003FC697 /* WHAssetCell.m */; };
+		0C876E631D65719B003FC697 /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E621D65719B003FC697 /* UIView+Layout.m */; };
+		0C876E661D65737F003FC697 /* WHPhotoPreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E651D65737F003FC697 /* WHPhotoPreviewCell.m */; };
+		0C876E691D657465003FC697 /* WHVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E681D657465003FC697 /* WHVideoPlayerController.m */; };
+		0C876E6C1D65A551003FC697 /* WHImagePickerBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E6B1D65A551003FC697 /* WHImagePickerBottomView.m */; };
 		0CA447D31D616ABE00E77FD4 /* MPVideoEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */; };
 		0CA447D61D6173E400E77FD4 /* MPEditVideoSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */; };
 		0CA447D91D6173FF00E77FD4 /* MPEditVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */; };
@@ -826,6 +836,26 @@
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
 		0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRecordVideoProgressBar.m; sourceTree = "<group>"; };
+		0C876E4F1D655F9D003FC697 /* WHImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHImagePickerController.h; sourceTree = "<group>"; };
+		0C876E501D655F9D003FC697 /* WHImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHImagePickerController.m; sourceTree = "<group>"; };
+		0C876E521D655FE2003FC697 /* WHImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHImageManager.h; sourceTree = "<group>"; };
+		0C876E531D655FE2003FC697 /* WHImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHImageManager.m; sourceTree = "<group>"; };
+		0C876E551D6562E8003FC697 /* WHPhotoPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHPhotoPickerController.h; sourceTree = "<group>"; };
+		0C876E561D6562E8003FC697 /* WHPhotoPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHPhotoPickerController.m; sourceTree = "<group>"; };
+		0C876E581D65644F003FC697 /* WHPhotoPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHPhotoPreviewController.h; sourceTree = "<group>"; };
+		0C876E591D65644F003FC697 /* WHPhotoPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHPhotoPreviewController.m; sourceTree = "<group>"; };
+		0C876E5B1D656554003FC697 /* WHAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHAssetModel.h; sourceTree = "<group>"; };
+		0C876E5C1D656554003FC697 /* WHAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHAssetModel.m; sourceTree = "<group>"; };
+		0C876E5E1D6565EA003FC697 /* WHAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHAssetCell.h; sourceTree = "<group>"; };
+		0C876E5F1D6565EA003FC697 /* WHAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHAssetCell.m; sourceTree = "<group>"; };
+		0C876E611D65719B003FC697 /* UIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Layout.h"; sourceTree = "<group>"; };
+		0C876E621D65719B003FC697 /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
+		0C876E641D65737F003FC697 /* WHPhotoPreviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHPhotoPreviewCell.h; sourceTree = "<group>"; };
+		0C876E651D65737F003FC697 /* WHPhotoPreviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHPhotoPreviewCell.m; sourceTree = "<group>"; };
+		0C876E671D657465003FC697 /* WHVideoPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHVideoPlayerController.h; sourceTree = "<group>"; };
+		0C876E681D657465003FC697 /* WHVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHVideoPlayerController.m; sourceTree = "<group>"; };
+		0C876E6A1D65A551003FC697 /* WHImagePickerBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHImagePickerBottomView.h; sourceTree = "<group>"; };
+		0C876E6B1D65A551003FC697 /* WHImagePickerBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHImagePickerBottomView.m; sourceTree = "<group>"; };
 		0CA447D11D616ABE00E77FD4 /* MPVideoEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVideoEditViewController.h; sourceTree = "<group>"; };
 		0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVideoEditViewController.m; sourceTree = "<group>"; };
 		0CA447D41D6173E400E77FD4 /* MPEditVideoSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEditVideoSwitch.h; sourceTree = "<group>"; };
@@ -1056,6 +1086,7 @@
 		0C668BC91D531D09000FC15A /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				0C876E4E1D655442003FC697 /* WHImagePickerController */,
 				0C668BCA1D531D09000FC15A /* GPUImage */,
 			);
 			path = Extension;
@@ -1691,6 +1722,33 @@
 			path = V;
 			sourceTree = "<group>";
 		};
+		0C876E4E1D655442003FC697 /* WHImagePickerController */ = {
+			isa = PBXGroup;
+			children = (
+				0C876E4F1D655F9D003FC697 /* WHImagePickerController.h */,
+				0C876E501D655F9D003FC697 /* WHImagePickerController.m */,
+				0C876E521D655FE2003FC697 /* WHImageManager.h */,
+				0C876E531D655FE2003FC697 /* WHImageManager.m */,
+				0C876E551D6562E8003FC697 /* WHPhotoPickerController.h */,
+				0C876E561D6562E8003FC697 /* WHPhotoPickerController.m */,
+				0C876E581D65644F003FC697 /* WHPhotoPreviewController.h */,
+				0C876E591D65644F003FC697 /* WHPhotoPreviewController.m */,
+				0C876E641D65737F003FC697 /* WHPhotoPreviewCell.h */,
+				0C876E651D65737F003FC697 /* WHPhotoPreviewCell.m */,
+				0C876E5B1D656554003FC697 /* WHAssetModel.h */,
+				0C876E5C1D656554003FC697 /* WHAssetModel.m */,
+				0C876E5E1D6565EA003FC697 /* WHAssetCell.h */,
+				0C876E5F1D6565EA003FC697 /* WHAssetCell.m */,
+				0C876E611D65719B003FC697 /* UIView+Layout.h */,
+				0C876E621D65719B003FC697 /* UIView+Layout.m */,
+				0C876E671D657465003FC697 /* WHVideoPlayerController.h */,
+				0C876E681D657465003FC697 /* WHVideoPlayerController.m */,
+				0C876E6A1D65A551003FC697 /* WHImagePickerBottomView.h */,
+				0C876E6B1D65A551003FC697 /* WHImagePickerBottomView.m */,
+			);
+			path = WHImagePickerController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1841,11 +1899,13 @@
 				0C668D781D531D0A000FC15A /* UIImage+Category.m in Sources */,
 				0C668DF11D531D0A000FC15A /* GPUImageGaussianBlurFilter.m in Sources */,
 				0C668E1D1D531D0A000FC15A /* GPUImageNobleCornerDetectionFilter.m in Sources */,
+				0C876E541D655FE2003FC697 /* WHImageManager.m in Sources */,
 				0C668E4F1D531D0A000FC15A /* GPUImageToneCurveFilter.m in Sources */,
 				0C69D7BB1D583842007801B2 /* MPVideoProcessing.m in Sources */,
 				0C668DD31D531D0A000FC15A /* GPUImageClosingFilter.m in Sources */,
 				0C668E621D531D0A000FC15A /* GPUImagePicture+TextureSubimage.m in Sources */,
 				0C668E0C1D531D0A000FC15A /* GPUImageLocalBinaryPatternFilter.m in Sources */,
+				0C876E661D65737F003FC697 /* WHPhotoPreviewCell.m in Sources */,
 				0C668DF71D531D0A000FC15A /* GPUImageHardLightBlendFilter.m in Sources */,
 				0C668E471D531D0A000FC15A /* GPUImageSwirlFilter.m in Sources */,
 				0C668DB71D531D0A000FC15A /* GPUImageBorderFilter.m in Sources */,
@@ -1859,6 +1919,7 @@
 				0C668E601D531D0A000FC15A /* GPUImageContext.m in Sources */,
 				0C668DC81D531D0A000FC15A /* GPUImageAverageLuminanceThresholdFilter.m in Sources */,
 				0C668DE01D531D0A000FC15A /* GPUImageDilationFilter.m in Sources */,
+				0C876E571D6562E8003FC697 /* WHPhotoPickerController.m in Sources */,
 				0C668DEF1D531D0A000FC15A /* GPUImageFramebufferCache.m in Sources */,
 				0C668DB91D531D0A000FC15A /* GPUImageMovieWriterEx.m in Sources */,
 				0C668D811D531D0A000FC15A /* UIView+SubView.m in Sources */,
@@ -1879,6 +1940,7 @@
 				0C668DDB1D531D0A000FC15A /* GPUImageCropFilter.m in Sources */,
 				0C668DBA1D531D0A000FC15A /* GPUImageVideoCameraEx.m in Sources */,
 				0C668E3D1D531D0A000FC15A /* GPUImageSmoothToonFilter.m in Sources */,
+				0C876E511D655F9D003FC697 /* WHImagePickerController.m in Sources */,
 				0C70FFF41D5DA3BD00B3776E /* MPVideoClipControl.m in Sources */,
 				0C668DD41D531D0A000FC15A /* GPUImageColorBlendFilter.m in Sources */,
 				0C668DCC1D531D0A000FC15A /* GPUImageBrightnessFilter.m in Sources */,
@@ -1889,6 +1951,7 @@
 				0C69D7B01D582384007801B2 /* MPVideoCutViewController.m in Sources */,
 				0C668DC51D531D0A000FC15A /* GPUImageAlphaBlendFilter.m in Sources */,
 				0C668E371D531D0A000FC15A /* GPUImageScreenBlendFilter.m in Sources */,
+				0C876E5D1D656554003FC697 /* WHAssetModel.m in Sources */,
 				0C668D701D531D0A000FC15A /* NSTimer+CycleScrollView.m in Sources */,
 				0C668DFF1D531D0A000FC15A /* GPUImageHSBFilter.m in Sources */,
 				0C668E011D531D0A000FC15A /* GPUImageHueFilter.m in Sources */,
@@ -1936,6 +1999,7 @@
 				0C668E331D531D0A000FC15A /* GPUImageRGBFilter.m in Sources */,
 				0C69D7C01D588C46007801B2 /* DeleteButton.m in Sources */,
 				0C668DF41D531D0A000FC15A /* GPUImageGlassSphereFilter.m in Sources */,
+				0C876E631D65719B003FC697 /* UIView+Layout.m in Sources */,
 				0C668DE51D531D0A000FC15A /* GPUImageEmbossFilter.m in Sources */,
 				0C668D721D531D0A000FC15A /* ALAssetsLibrary+WJ.m in Sources */,
 				0C668E311D531D0A000FC15A /* GPUImageRGBDilationFilter.m in Sources */,
@@ -1959,6 +2023,7 @@
 				0C668E5A1D531D0A000FC15A /* GPUImageVoronoiConsumerFilter.m in Sources */,
 				0C668E111D531D0A000FC15A /* GPUImageLuminosity.m in Sources */,
 				0C668DC21D531D0A000FC15A /* GPUImage3x3TextureSamplingFilter.m in Sources */,
+				0C876E5A1D65644F003FC697 /* WHPhotoPreviewController.m in Sources */,
 				0C668DCE1D531D0A000FC15A /* GPUImageBulgeDistortionFilter.m in Sources */,
 				0C668DC41D531D0A000FC15A /* GPUImageAddBlendFilter.m in Sources */,
 				0C668E561D531D0A000FC15A /* GPUImageUIElement.m in Sources */,
@@ -1982,6 +2047,7 @@
 				0C668E4B1D531D0A000FC15A /* GPUImageThresholdEdgeDetectionFilter.m in Sources */,
 				0C668D671D531D0A000FC15A /* NSArray+YXInfo.m in Sources */,
 				0C668D6B1D531D0A000FC15A /* NSString+EmptyOrNull.m in Sources */,
+				0C876E691D657465003FC697 /* WHVideoPlayerController.m in Sources */,
 				0C668E521D531D0A000FC15A /* GPUImageTwoInputCrossTextureSamplingFilter.m in Sources */,
 				0C668DD91D531D0A000FC15A /* GPUImageColorPackingFilter.m in Sources */,
 				0C668D791D531D0A000FC15A /* UIImage+Color.m in Sources */,
@@ -2028,8 +2094,10 @@
 				0C668DC61D531D0A000FC15A /* GPUImageAmatorkaFilter.m in Sources */,
 				0C668E1B1D531D0A000FC15A /* GPUImageMovieComposition.m in Sources */,
 				0C668E091D531D0A000FC15A /* GPUImageLightenBlendFilter.m in Sources */,
+				0C876E601D6565EA003FC697 /* WHAssetCell.m in Sources */,
 				0CA447D31D616ABE00E77FD4 /* MPVideoEditViewController.m in Sources */,
 				0C668E4E1D531D0A000FC15A /* GPUImageTiltShiftFilter.m in Sources */,
+				0C876E6C1D65A551003FC697 /* WHImagePickerBottomView.m in Sources */,
 				0C668E2A1D531D0A000FC15A /* GPUImagePolarPixellateFilter.m in Sources */,
 				0C668DF31D531D0A000FC15A /* GPUImageGaussianSelectiveBlurFilter.m in Sources */,
 				0C668E641D531D0A000FC15A /* GPUImageView.m in Sources */,
