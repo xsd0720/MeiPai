@@ -36,6 +36,8 @@
 /// 默认为YES，如果设置为NO,用户将不能选择发送视频
 @property (nonatomic, assign) BOOL allowPickingVideo;
 
+@property (nonatomic, assign) BOOL allowShowBigPhoto;
+
 - (void)showAlertWithTitle:(NSString *)title;
 - (void)showProgressHUD;
 - (void)hideProgressHUD;

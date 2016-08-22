@@ -259,7 +259,7 @@
 
 
 /**
- *  加载 tableView 视图
+ *  加载 collectionView 视图
  */
 - (UICollectionView *)editVideoCollectionView{
     if (!_editVideoCollectionView) {

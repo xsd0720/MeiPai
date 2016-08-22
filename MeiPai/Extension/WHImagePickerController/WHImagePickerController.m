@@ -33,6 +33,7 @@
 {
     if (!_bottomView) {
         _bottomView = [[WHImagePickerBottomView alloc] init];
+        _bottomView.tag = 101;
         [self.view addSubview:_bottomView];
         _bottomView.backgroundColor = RGBCOLOR(18, 18, 26);
     }

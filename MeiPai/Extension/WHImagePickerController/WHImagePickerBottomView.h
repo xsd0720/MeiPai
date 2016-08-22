@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "WHAssetModel.h"
 @interface WHImagePickerBottomView : UIView
+
+- (void)addAssetModel:(WHAssetModel *)model;
 
 @end

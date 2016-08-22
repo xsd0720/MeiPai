@@ -181,6 +181,10 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     WHAssetModel *model = _photoArr[indexPath.row];
+   
+    WHImagePickerBottomView *bottomView = [self.navigationController.view viewWithTag:101];
+    [bottomView addAssetModel:model];
+    
 //    if (model.type == WHAssetModelMediaTypeVideo) {
 //        if (_selectedPhotoArr.count > 0) {
 //            WHImagePickerController *imagePickerVc = (WHImagePickerController *)self.navigationController;
