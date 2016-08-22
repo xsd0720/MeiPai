@@ -460,6 +460,87 @@
     }
 }
 
+
+//- (void) writeImages:(NSArray *)imagesArray ToMovieAtPath:(NSString *) path withSize:(CGSize) size
+//          inDuration:(float)duration byFPS:(int32_t)fps{
+//    //Wire the writer:
+//    NSError *error = nil;
+//    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:path]
+//                                                            fileType:AVFileTypeQuickTimeMovie
+//                                                               error:&error];
+//    NSParameterAssert(videoWriter);
+//    
+//    NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                   AVVideoCodecH264, AVVideoCodecKey,
+//                                   [NSNumber numberWithInt:size.width], AVVideoWidthKey,
+//                                   [NSNumber numberWithInt:size.height], AVVideoHeightKey,
+//                                   nil];
+//    
+//    AVAssetWriterInput* videoWriterInput = [AVAssetWriterInput
+//                                             assetWriterInputWithMediaType:AVMediaTypeVideo
+//                                             outputSettings:videoSettings];
+//    
+//    
+//    AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor
+//                                                     assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput
+//                                                     sourcePixelBufferAttributes:nil];
+//    NSParameterAssert(videoWriterInput);
+//    NSParameterAssert([videoWriter canAddInput:videoWriterInput]);
+//    [videoWriter addInput:videoWriterInput];
+//    
+//    //Start a session:
+//    [videoWriter startWriting];
+//    [videoWriter startSessionAtSourceTime:kCMTimeZero];
+//    
+//    //Write some samples:
+//    CVPixelBufferRef buffer = NULL;
+//    
+//    int frameCount = 0;
+//    
+//    int imagesCount = (int)imagesArray.count;
+//    float averageTime = duration/imagesCount;
+//    int averageFrame = (int)(averageTime * fps);
+//    
+//    for(UIImage * img in imagesArray)
+//    {
+//        buffer = [self pixelBufferFromCGImage:[img CGImage] andSize:size];
+//        
+//        BOOL append_ok = NO;
+//        int j = 0;
+//        while (!append_ok && j < 30)
+//        {
+//            if (adaptor.assetWriterInput.readyForMoreMediaData)
+//            {
+//                printf("appending %d attemp %d\n", frameCount, j);
+//                
+//                CMTime frameTime = CMTimeMake(frameCount,(int32_t) fps);
+//                float frameSeconds = CMTimeGetSeconds(frameTime);
+//                NSLog(@"frameCount:%d,kRecordingFPS:%d,frameSeconds:%f",frameCount,fps,frameSeconds);
+//                append_ok = [adaptor appendPixelBuffer:buffer withPresentationTime:frameTime];
+//                
+//                if(buffer)
+//                    [NSThread sleepForTimeInterval:0.05];
+//            }
+//            else
+//            {
+//                printf("adaptor not ready %d, %d\n", frameCount, j);
+//                [NSThread sleepForTimeInterval:0.1];
+//            }
+//            j++;
+//        }
+//        if (!append_ok) {
+//            printf("error appending image %d times %d\n", frameCount, j);
+//        }
+//        
+//        frameCount = frameCount + averageFrame;
+//    }
+//    
+//    //Finish the session:
+//    [videoWriterInput markAsFinished];
+//    [videoWriter finishWriting];
+//    NSLog(@"finishWriting");
+//}
+
 - (void)makePhotoMovieFromPhotos:(NSArray *)photos
 {
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/movie.mp4"]];

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class WHAlbumModel;
 @interface WHPhotoPickerController : UIViewController
-
+@property (nonatomic, strong) WHAlbumModel *model;
 @end

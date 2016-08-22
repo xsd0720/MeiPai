@@ -10,6 +10,11 @@
 #import "WJAsset.h"
 
 typedef void(^WJPhotoCallBack)(WJAsset *_Nullable asset);
+typedef void(^WJPhotoGetAllPhotoCallBack)(NSMutableArray *_Nullable asset);
+
+
 @interface WJPhotoTool : NSObject
 + (void)latestAsset:(WJPhotoCallBack _Nullable)callBack;
+
++ (void)getAllPhoto:(WJPhotoGetAllPhotoCallBack _Nullable)callBack preExportArray:(NSMutableArray *)preExportArray;
 @end

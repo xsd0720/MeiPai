@@ -31,4 +31,25 @@
         }
     }];
 }
+
+- (void)allPhotoAsset:(void (^)(ALAssetsGroup * _Nullable, NSError *_Nullable))block
+{
+    [self enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        if (group) {
+            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+            [group enumerateAssetsWithOptions:NSEnumerationReverse/*遍历方式*/ usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+//                UIImage *image = [UIImage imageWithCGImage:[[result  defaultRepresentation]fullScreenImage]];
+//                NSLog(@"=========");
+            }];
+            *stop = YES;
+        }
+    } failureBlock:^(NSError *error) {
+        if (error) {
+            if (block) {
+                block(nil,error);
+            }
+        }
+    }];
+
+}
 @end

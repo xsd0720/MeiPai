@@ -13,11 +13,12 @@
 #import "MPVideoCutViewController.h"
 #import "DeleteButton.h"
 #import "MPPaiChooseMusicViewController.h"
+#import "WHImagePickerController.h"
 #import "MPVideoProcessing.h"
 
 #define MinRecordDuration     3.0
 
-@interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate, UIViewControllerTransitioningDelegate, UIAlertViewDelegate>
+@interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate, UIViewControllerTransitioningDelegate, UIAlertViewDelegate, WHImagePickerControllerDelegate>
 {
     GPUImageStillCamera *videoCamera;
 }
@@ -417,9 +418,12 @@
 
 - (void)photoMovieButtonClick
 {
-    MPVideoCutViewController *videoCutVC = [[MPVideoCutViewController alloc] init];
-    //    videoCutVC.palyUrl = outputFileURL;
-    [self presentViewController:videoCutVC animated:YES completion:nil];
+    WHImagePickerController *imagePickerController = [[WHImagePickerController alloc] initWithMaxImagesCount:6 delegate:self hasBottomView:YES];
+    imagePickerController.delegate = self;
+    imagePickerController.allowPickingVideo = NO;
+    imagePickerController.allowPickingOriginalPhoto = NO;
+    imagePickerController.view.frame = CGRectMake(0, 0, 100, 100);
+    [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
 

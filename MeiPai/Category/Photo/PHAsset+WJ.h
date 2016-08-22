@@ -13,4 +13,6 @@
  *  获取最新一张图片
  */
 + (PHAsset *)latestAsset;
+
++ (PHFetchResult *)allAsset;
 @end
