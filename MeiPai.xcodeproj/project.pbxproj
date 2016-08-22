@@ -313,6 +313,9 @@
 		0CA447D61D6173E400E77FD4 /* MPEditVideoSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */; };
 		0CA447D91D6173FF00E77FD4 /* MPEditVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */; };
 		0CB694691D6AE95600142DCB /* MPPhotoMovieEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB694681D6AE95600142DCB /* MPPhotoMovieEditViewController.m */; };
+		2EFB915C1D6B2EBE0016E286 /* UIImage+CutImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EFB915B1D6B2EBE0016E286 /* UIImage+CutImage.m */; };
+		2EFB915E1D6B30D70016E286 /* 66666.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EFB915D1D6B30D70016E286 /* 66666.png */; };
+		2EFB916C1D6B3EF10016E286 /* 77777.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EFB916B1D6B3EF10016E286 /* 77777.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -868,6 +871,10 @@
 		0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoCell.m; sourceTree = "<group>"; };
 		0CB694671D6AE95600142DCB /* MPPhotoMovieEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPhotoMovieEditViewController.h; sourceTree = "<group>"; };
 		0CB694681D6AE95600142DCB /* MPPhotoMovieEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPhotoMovieEditViewController.m; sourceTree = "<group>"; };
+		2EFB915A1D6B2EBE0016E286 /* UIImage+CutImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CutImage.h"; sourceTree = "<group>"; };
+		2EFB915B1D6B2EBE0016E286 /* UIImage+CutImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CutImage.m"; sourceTree = "<group>"; };
+		2EFB915D1D6B30D70016E286 /* 66666.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 66666.png; sourceTree = "<group>"; };
+		2EFB916B1D6B3EF10016E286 /* 77777.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 77777.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -908,6 +915,8 @@
 		0C668B6B1D531902000FC15A /* MeiPai */ = {
 			isa = PBXGroup;
 			children = (
+				2EFB916B1D6B3EF10016E286 /* 77777.png */,
+				2EFB915D1D6B30D70016E286 /* 66666.png */,
 				0C7058821D5B42C000EEBB30 /* Bass.caf */,
 				0C7058801D5B413600EEBB30 /* KT Mix.mp3 */,
 				0C69D7B81D583820007801B2 /* Tools */,
@@ -1025,6 +1034,8 @@
 		0C668BAB1D531D09000FC15A /* UIImageCategory */ = {
 			isa = PBXGroup;
 			children = (
+				2EFB915A1D6B2EBE0016E286 /* UIImage+CutImage.h */,
+				2EFB915B1D6B2EBE0016E286 /* UIImage+CutImage.m */,
 				0C668BAC1D531D09000FC15A /* UIImage+Antialiase.h */,
 				0C668BAD1D531D09000FC15A /* UIImage+Antialiase.m */,
 				0C668BAE1D531D09000FC15A /* UIImage+Category.h */,
@@ -1848,11 +1859,13 @@
 				0C668D861D531D0A000FC15A /* lookup_apollo.png in Resources */,
 				0C668DA11D531D0A000FC15A /* lookup_moss.png in Resources */,
 				0C668DA51D531D0A000FC15A /* lookup_plum.png in Resources */,
+				2EFB915E1D6B30D70016E286 /* 66666.png in Resources */,
 				0C668DA81D531D0A000FC15A /* lookup_siren.png in Resources */,
 				0C668DAB1D531D0A000FC15A /* lookup_soft_elegance_1.png in Resources */,
 				0C668DAE1D531D0A000FC15A /* lookup_temp_cold.png in Resources */,
 				0C668DB41D531D0A000FC15A /* lookup_zest.png in Resources */,
 				0C668D931D531D0A000FC15A /* lookup_flint.png in Resources */,
+				2EFB916C1D6B3EF10016E286 /* 77777.png in Resources */,
 				0C668D9D1D531D0A000FC15A /* lookup_marko.png in Resources */,
 				0C668D9F1D531D0A000FC15A /* lookup_milk.png in Resources */,
 				0C668DAA1D531D0A000FC15A /* lookup_smoky.png in Resources */,
@@ -2069,6 +2082,7 @@
 				0C668E031D531D0A000FC15A /* GPUImageJFAVoronoiFilter.m in Sources */,
 				0C668E461D531D0A000FC15A /* GPUImageSubtractBlendFilter.m in Sources */,
 				0C668DBD1D531D0A000FC15A /* GPUImageWBLookupFilterEx.m in Sources */,
+				2EFB915C1D6B2EBE0016E286 /* UIImage+CutImage.m in Sources */,
 				0C668DE61D531D0A000FC15A /* GPUImageErosionFilter.m in Sources */,
 				0C668D7F1D531D0A000FC15A /* UIView+Extention.m in Sources */,
 				0C668D801D531D0A000FC15A /* UIView+Toast.m in Sources */,
