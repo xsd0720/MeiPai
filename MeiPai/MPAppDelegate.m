@@ -22,7 +22,7 @@
     
     [self createFolderIfNotExist:ClipsDictionaryPath];
     [self createFolderIfNotExist:MergeDictionaryPath];
-    
+     [self createFolderIfNotExist:PhotoMovieDictionaryPath];
     
     return YES;
 }

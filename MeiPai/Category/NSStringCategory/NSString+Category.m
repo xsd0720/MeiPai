@@ -152,4 +152,20 @@
     return fileName;
 }
 
+/**
+ *  视频照片电影合成后本地文件名字
+ */
++ (NSString *)getPhotoMovieMergeFilePathString;
+{
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyyMMddHHmmss";
+    NSString *nowTimeStr = [formatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:0]];
+    
+//    NSString *fileName = [[PhotoMovieDictionaryPath stringByAppendingPathComponent:nowTimeStr] stringByAppendingString:@"merge.mp4"];
+    NSString *fileName = [PhotoMovieDictionaryPath stringByAppendingPathComponent:@"merge.mp4"];
+    
+    return fileName;
+}
+
 @end

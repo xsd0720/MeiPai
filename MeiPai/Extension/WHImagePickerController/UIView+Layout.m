@@ -105,9 +105,9 @@
     self.frame = frame;
 }
 
-+ (void)showOscillatoryAnimationWithLayer:(CALayer *)layer type:(TZOscillatoryAnimationType)type{
-    NSNumber *animationScale1 = type == TZOscillatoryAnimationToBigger ? @(1.15) : @(0.5);
-    NSNumber *animationScale2 = type == TZOscillatoryAnimationToBigger ? @(0.92) : @(1.15);
++ (void)showOscillatoryAnimationWithLayer:(CALayer *)layer type:(WHOscillatoryAnimationType)type{
+    NSNumber *animationScale1 = type == WHOscillatoryAnimationToBigger ? @(1.15) : @(0.5);
+    NSNumber *animationScale2 = type == WHOscillatoryAnimationToBigger ? @(0.92) : @(1.15);
     
     [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut animations:^{
         [layer setValue:animationScale1 forKeyPath:@"transform.scale"];

@@ -1,13 +1,13 @@
-
 //
-//  MPVideoEditViewController.m
+//  MPPhotoMovieEditViewController.m
 //  MeiPai
 //
-//  Created by xwmedia01 on 16/8/15.
+//  Created by xwmedia01 on 16/8/22.
 //  Copyright © 2016年 xwmedia01. All rights reserved.
 //
 
-#import "MPVideoEditViewController.h"
+#import "MPPhotoMovieEditViewController.h"
+
 #import "MPEditVideoSwitch.h"
 #import "MPEditVideoCell.h"
 #import "GPUImage.h"
@@ -16,7 +16,7 @@
 #define EDITVIDEOCELLIDENTIFIER @"EDITVIDEOCELLIDENTIFIER"
 
 
-@interface MPVideoEditViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface MPPhotoMovieEditViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 {
     BOOL movieRunning;
 }
@@ -46,36 +46,36 @@
 
 @end
 
-@implementation MPVideoEditViewController
+@implementation MPPhotoMovieEditViewController
 
 - (NSArray *)longEffects
 {
     return @[
-            @{
-                @"imageName" : @"LongEffects4",
-                @"title" : @"晨光"
-                
-            },
-            @{
-                @"imageName" : @"LongEffects8",
-                @"title" : @"流年"
-            },
-            @{
-            
-                @"imageName" : @"LongEffects9",
-                @"title" : @"沙漏"
-            },
-            @{
-                @"imageName" : @"LongEffects10",
-                @"title" : @"Seine"
-            },
-            @{
-            
-                @"imageName" : @"LongEffects11",
-                @"title" : @"绿岛"
-            }
-    
-    ];
+             @{
+                 @"imageName" : @"LongEffects4",
+                 @"title" : @"晨光"
+                 
+                 },
+             @{
+                 @"imageName" : @"LongEffects8",
+                 @"title" : @"流年"
+                 },
+             @{
+                 
+                 @"imageName" : @"LongEffects9",
+                 @"title" : @"沙漏"
+                 },
+             @{
+                 @"imageName" : @"LongEffects10",
+                 @"title" : @"Seine"
+                 },
+             @{
+                 
+                 @"imageName" : @"LongEffects11",
+                 @"title" : @"绿岛"
+                 }
+             
+             ];
 }
 
 - (void)viewDidLoad {
@@ -172,13 +172,13 @@
     
     [_movieFile cancelProcessing];
     _player = nil;
-//    [_player pause];
+    //    [_player pause];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-      
+        
         
         [[MPVideoProcessing shareInstance] exportVideoURLWithFilter:self.currentFilter inputVideoURL:self.editVideoURL];
     });
- 
+    
 }
 
 
@@ -191,12 +191,12 @@
 //        NSLog(@"editVideoURL is empty");
 //        return;
 //    }
-//    
-//    
 //
-//    
+//
+//
+//
 //    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:self.editVideoURL options:nil];
-//    
+//
 //    self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
 //    self.player = [AVPlayer playerWithPlayerItem:_playerItem];
 //    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
@@ -205,35 +205,43 @@
 //    _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
 //    _playerLayer.backgroundColor = [[UIColor cyanColor] CGColor];
 //    [self.view.layer addSublayer:_playerLayer];
-//    
+//
 //    self.playButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 44, 40, 40)];
 //    [_playButton setImage:[UIImage imageNamed:@"btn_play_bg_a"] forState:UIControlStateNormal];
 //    [_playButton addTarget:self action:@selector(pressPlayButton:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.view addSubview:_playButton];
-//    
+//
 //}
 - (void)setupVideo
 {
-
+    
     _playerItem = [[AVPlayerItem alloc]initWithURL:self.editVideoURL];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
+
+    _playerLayer = [[AVPlayerLayer alloc] init];
+    _playerLayer.frame = CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH);
     
-    _movieFile = [[GPUImageMovie alloc] initWithPlayerItem:_playerItem];
-    
-//    _movieFile.runBenchmark = YES;
-    _movieFile.playAtActualSpeed = YES;
-    [self.view sendSubviewToBack:self.videoView];
+    [_playerLayer setPlayer:_player];
+    [self.view.layer addSublayer:_playerLayer];
     
     
-    self.videoView = [[GPUImageView alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH)];
-    [self.view addSubview:self.videoView];
-    
-    [_movieFile addTarget:self.videoView];
-    [_movieFile startProcessing];
+    //
+//    _movieFile = [[GPUImageMovie alloc] initWithPlayerItem:_playerItem];
+//    
+//    //    _movieFile.runBenchmark = YES;
+//    _movieFile.playAtActualSpeed = YES;
+//    [self.view sendSubviewToBack:self.videoView];
+//    
+//    
+//    self.videoView = [[GPUImageView alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH)];
+//    [self.view addSubview:self.videoView];
+//    
+//    [_movieFile addTarget:self.videoView];
+//    [_movieFile startProcessing];
     [_player play];
-
-
-
+    
+    
+    
     self.playButton = [[UIButton alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT-44, 40, 40)];
     self.playButton.backgroundColor = [UIColor redColor];
     [_playButton setImage:[UIImage imageNamed:@"btn_play_bg_a"] forState:UIControlStateNormal];
@@ -249,7 +257,7 @@
         [_player play];
     }else
     {
-         [_player pause];
+        [_player pause];
     }
     
 }
@@ -272,7 +280,7 @@
         
         _editVideoCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, EditVideItemSize.height) collectionViewLayout:layout];
         [self.view addSubview:_editVideoCollectionView];
-//        _editVideoCollectionView.alwaysBounceVertical = YES;
+        //        _editVideoCollectionView.alwaysBounceVertical = YES;
         _editVideoCollectionView.showsHorizontalScrollIndicator = NO;
         _editVideoCollectionView.showsVerticalScrollIndicator = NO;
         _editVideoCollectionView.showsVerticalScrollIndicator = NO;
@@ -316,8 +324,8 @@
     self.editVideoCollectionView.originY = CGRectGetMaxY(_editVideoSwitch.frame)+20;
     [self.editVideoCollectionView reloadData];
     
-
-
+    
+    
 }
 
 - (void)originButtonClick:(UIButton *)sender
@@ -360,17 +368,17 @@
             break;
         case 2:
         {
-             self.currentFilter = [[GPUImageGrayscaleFilter alloc] init];
+            self.currentFilter = [[GPUImageGrayscaleFilter alloc] init];
         }
             break;
         case 3:
         {
-             self.currentFilter = [[GPUImageGammaFilter alloc] init];
+            self.currentFilter = [[GPUImageGammaFilter alloc] init];
         }
             break;
         case 4:
         {
-           
+            
         }
             break;
         default:
@@ -382,7 +390,7 @@
         [_movieFile addTarget:self.currentFilter];
         [self.currentFilter addTarget:self.videoView];
     }
-  
+    
     
 }
 
@@ -397,15 +405,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

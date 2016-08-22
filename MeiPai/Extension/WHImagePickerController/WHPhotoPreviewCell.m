@@ -1,15 +1,15 @@
 //
-//  TZPhotoPreviewCell.m
-//  TZImagePickerController
+//  WHPhotoPreviewCell.h
+//  WHImagePickerController
 //
-//  Created by 谭真 on 15/12/24.
-//  Copyright © 2015年 谭真. All rights reserved.
+//  Created by xwmedia01 on 16/8/18.
+//  Copyright © 2016年 xwmedia01. All rights reserved.
 //
 
 #import "WHPhotoPreviewCell.h"
-#import "TZAssetModel.h"
+#import "WHAssetModel.h"
 #import "UIView+Layout.h"
-#import "TZImageManager.h"
+#import "WHImageManager.h"
 
 @interface WHPhotoPreviewCell ()<UIGestureRecognizerDelegate,UIScrollViewDelegate> {
     CGFloat _aspectRatio;
@@ -60,10 +60,10 @@
     return self;
 }
 
-- (void)setModel:(TZAssetModel *)model {
+- (void)setModel:(WHAssetModel *)model {
     _model = model;
     [_scrollView setZoomScale:1.0 animated:NO];
-    [[TZImageManager manager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info) {
+    [[WHImageManager manager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info) {
         self.imageView.image = photo;
         [self resizeSubviews];
     }];

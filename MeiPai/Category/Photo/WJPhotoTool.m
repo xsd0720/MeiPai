@@ -60,4 +60,47 @@
         }];
     }
 }
+
+
++ (void)getAllPhoto:(WJPhotoGetAllPhotoCallBack)callBack preExportArray:(NSMutableArray *)preExportArray{
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {//判断适配
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            if (status == PHAuthorizationStatusAuthorized) {
+                PHFetchResult<PHAsset *> *assetes = [PHAsset allAsset];
+                // 在资源的集合中获取第一个集合，并获取其中的图片
+                if (assetes) {
+                    NSLog(@"%lu", assetes.count);
+                    [assetes enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [[PHCachingImageManager defaultManager] requestImageDataForAsset:obj options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                            [preExportArray addObject:[UIImage imageWithData:imageData]];
+                        }];
+                    }];
+                    
+                } else {
+                    if (callBack) {
+                        callBack(nil);
+                    }
+                }
+            } else {
+                NSLog(@"status %ld",(long)status);
+                if (callBack) {
+                    callBack(nil);
+                }
+            }
+        }];
+    } else {
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc]init];
+        [library allPhotoAsset:^(ALAssetsGroup * _Nullable asset, NSError * _Nullable error) {
+//            WJAsset *a = nil;
+//            if (asset) {
+//                a = [[WJAsset alloc]initWithALAsset:asset];
+//            } else {
+//                NSLog(@"---- %@",error.localizedDescription);
+//            }
+//            if (callBack) {
+//                callBack(a);
+//            }
+        }];
+    }
+}
 @end

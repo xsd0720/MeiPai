@@ -32,5 +32,8 @@
  */
 + (NSString *)getVideoSaveFilePathString;
 
-
+/**
+ *  视频照片电影合成后本地文件名字
+ */
++ (NSString *)getPhotoMovieMergeFilePathString;
 @end

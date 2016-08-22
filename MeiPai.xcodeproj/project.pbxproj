@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C6212CE1D6B06320032D85C /* HJImagesToVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6212CD1D6B06320032D85C /* HJImagesToVideo.m */; };
 		0C668B791D531902000FC15A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C668B781D531902000FC15A /* Assets.xcassets */; };
 		0C668B7C1D531902000FC15A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C668B7A1D531902000FC15A /* LaunchScreen.storyboard */; };
 		0C668D671D531D0A000FC15A /* NSArray+YXInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C668B871D531D09000FC15A /* NSArray+YXInfo.m */; };
@@ -311,9 +312,12 @@
 		0CA447D31D616ABE00E77FD4 /* MPVideoEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */; };
 		0CA447D61D6173E400E77FD4 /* MPEditVideoSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */; };
 		0CA447D91D6173FF00E77FD4 /* MPEditVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */; };
+		0CB694691D6AE95600142DCB /* MPPhotoMovieEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB694681D6AE95600142DCB /* MPPhotoMovieEditViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C6212CC1D6B06320032D85C /* HJImagesToVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HJImagesToVideo.h; sourceTree = "<group>"; };
+		0C6212CD1D6B06320032D85C /* HJImagesToVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HJImagesToVideo.m; sourceTree = "<group>"; };
 		0C668B691D531901000FC15A /* MeiPai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeiPai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C668B781D531902000FC15A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0C668B7B1D531902000FC15A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -862,6 +866,8 @@
 		0CA447D51D6173E400E77FD4 /* MPEditVideoSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoSwitch.m; sourceTree = "<group>"; };
 		0CA447D71D6173FF00E77FD4 /* MPEditVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEditVideoCell.h; sourceTree = "<group>"; };
 		0CA447D81D6173FF00E77FD4 /* MPEditVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEditVideoCell.m; sourceTree = "<group>"; };
+		0CB694671D6AE95600142DCB /* MPPhotoMovieEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPhotoMovieEditViewController.h; sourceTree = "<group>"; };
+		0CB694681D6AE95600142DCB /* MPPhotoMovieEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPhotoMovieEditViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1660,6 +1666,8 @@
 				0C6F06331D5975FE00C5D126 /* CDPVideoEditor.m */,
 				0C69D7B91D583842007801B2 /* MPVideoProcessing.h */,
 				0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */,
+				0C6212CC1D6B06320032D85C /* HJImagesToVideo.h */,
+				0C6212CD1D6B06320032D85C /* HJImagesToVideo.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -1692,6 +1700,8 @@
 				0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */,
 				0CA447D11D616ABE00E77FD4 /* MPVideoEditViewController.h */,
 				0CA447D21D616ABE00E77FD4 /* MPVideoEditViewController.m */,
+				0CB694671D6AE95600142DCB /* MPPhotoMovieEditViewController.h */,
+				0CB694681D6AE95600142DCB /* MPPhotoMovieEditViewController.m */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -2016,6 +2026,7 @@
 				0C668E591D531D0A000FC15A /* GPUImageVignetteFilter.m in Sources */,
 				0C668E2E1D531D0A000FC15A /* GPUImageRawDataInput.m in Sources */,
 				0C668E221D531D0A000FC15A /* GPUImageOutput.m in Sources */,
+				0CB694691D6AE95600142DCB /* MPPhotoMovieEditViewController.m in Sources */,
 				0C668E721D531E15000FC15A /* MPAppDelegate.m in Sources */,
 				0C668D731D531D0A000FC15A /* PHAsset+WJ.m in Sources */,
 				0C668E0F1D531D0A000FC15A /* GPUImageLuminanceRangeFilter.m in Sources */,
@@ -2068,6 +2079,7 @@
 				0C668DFD1D531D0A000FC15A /* GPUImageHistogramGenerator.m in Sources */,
 				0C668E4D1D531D0A000FC15A /* GPUImageThresholdSketchFilter.m in Sources */,
 				0C668E051D531D0A000FC15A /* GPUImageKuwaharaRadius3Filter.m in Sources */,
+				0C6212CE1D6B06320032D85C /* HJImagesToVideo.m in Sources */,
 				0C668E3B1D531D0A000FC15A /* GPUImageSingleComponentGaussianBlurFilter.m in Sources */,
 				0C668E3C1D531D0A000FC15A /* GPUImageSketchFilter.m in Sources */,
 				0C668DDD1D531D0A000FC15A /* GPUImageCrosshatchFilter.m in Sources */,

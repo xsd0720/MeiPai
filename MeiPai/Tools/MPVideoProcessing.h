@@ -13,6 +13,8 @@ typedef void(^MergeCompletionHandler)(NSURL *mergeFileURL);
 typedef void(^FramePreviewsParseFinished)(NSArray *fpImages);
 typedef void(^FailureHandle)(NSError *error);
 
+typedef void(^PhotoMovieSuccess)();
+
 @interface MPVideoProcessing : NSObject
 
 @property (retain, nonatomic) AVAssetExportSession *exportSession;
@@ -20,6 +22,8 @@ typedef void(^FailureHandle)(NSError *error);
 @property (nonatomic) MergeCompletionHandler mergeCompletionHandler;
 
 @property (nonatomic) FramePreviewsParseFinished framePreviewsParseFinished;
+
+@property (nonatomic) PhotoMovieSuccess photoMovieSuccess;
 
 +(MPVideoProcessing *)shareInstance;
 
@@ -47,7 +51,7 @@ typedef void(^FailureHandle)(NSError *error);
 - (void)mergeAndExportVideos:(NSArray*)videosPathArray bgMusicURL:(NSURL *)bgMusicURL isG:(BOOL)isG completionHandler:(MergeCompletionHandler)completionHandler;
 
 //制作照片电影
-- (void)makePhotoMovieFromPhotos:(NSArray *)photos;
+- (void)makePhotoMovieFromPhotos:(NSArray *)photos photoSuccess:(PhotoMovieSuccess)success;
 
 //解析出视频帧预览图片集合
 - (void)framePreviewsFromVideoURL:(NSURL *)videoURL parseImagesArray:(NSMutableArray *)parseImagesArray completionHandle:(FramePreviewsParseFinished)completionHandler failureHandle:(FailureHandle)failureHandle;

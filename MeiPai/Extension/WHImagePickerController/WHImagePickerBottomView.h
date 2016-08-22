@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "WHAssetModel.h"
 @interface WHImagePickerBottomView : UIView
+
+@property (nonatomic, strong) UIButton *okButton;
+
+- (void)addAssetModel:(WHAssetModel *)model;
+
+- (NSMutableArray *)getAllSelectedImages;
 
 @end

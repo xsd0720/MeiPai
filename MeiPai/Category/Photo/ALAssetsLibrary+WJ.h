@@ -15,4 +15,6 @@
  *  @param block 回调
  */
 - (void)latestAsset:(void(^_Nullable)(ALAsset * _Nullable asset,NSError *_Nullable error)) block;
+
+- (void)allPhotoAsset:(void (^)(ALAssetsGroup * _Nullable, NSError *_Nullable))block;
 @end

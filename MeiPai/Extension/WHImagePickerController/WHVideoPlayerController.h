@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class WHAssetModel;
 @interface WHVideoPlayerController : UIViewController
+
+@property (nonatomic, strong) WHAssetModel *model;
 
 @end
