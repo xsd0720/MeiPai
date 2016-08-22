@@ -33,11 +33,29 @@
 {
     if (!_bottomView) {
         _bottomView = [[WHImagePickerBottomView alloc] init];
+        [_bottomView.okButton addTarget:self action:@selector(okButtonClick) forControlEvents:UIControlEventTouchUpInside];
         _bottomView.tag = 101;
         [self.view addSubview:_bottomView];
         _bottomView.backgroundColor = RGBCOLOR(18, 18, 26);
     }
     return _bottomView;
+}
+
+- (void)okButtonClick
+{
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:[_bottomView getAllSelectedImages]];
+    if ([self.pickerDelegate respondsToSelector:@selector(imagePickerController:didFinishPickingPhotos:sourceAssets:)]) {
+        [self.pickerDelegate imagePickerController:self didFinishPickingPhotos:arr sourceAssets:nil];
+    }
+    if ([self.pickerDelegate respondsToSelector:@selector(imagePickerController:didFinishPickingPhotos:sourceAssets:infos:)]) {
+        [self.pickerDelegate imagePickerController:self didFinishPickingPhotos:arr sourceAssets:nil infos:nil];
+    }
+    if (self.didFinishPickingPhotosHandle) {
+        self.didFinishPickingPhotosHandle(arr,nil);
+    }
+    if (self.didFinishPickingPhotosWithInfosHandle) {
+        self.didFinishPickingPhotosWithInfosHandle(arr,nil,nil);
+    }
 }
 
 - (void)viewDidLoad {

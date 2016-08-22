@@ -101,6 +101,7 @@
 //录制视频片段存储文件夹
 #define ClipsDictionaryPath     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Clips"]
 #define MergeDictionaryPath     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Merge"]
+#define PhotoMovieDictionaryPath     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"PhotoMovie"]
 
 #define MB_TEXTSIZE(text, font) [text length] > 0 ? [text \
 sizeWithAttributes:@{NSFontAttributeName:font}] : CGSizeZero;

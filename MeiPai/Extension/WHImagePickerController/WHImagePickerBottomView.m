@@ -83,7 +83,6 @@
 
 @property (nonatomic, strong) UILabel *promptLabel;
 
-@property (nonatomic, strong) UIButton *okButton;
 
 @property (nonatomic, strong) UICollectionView *mainCollectionView;
 
@@ -131,6 +130,7 @@
         [_okButton setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
         [_okButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_okButton setBackgroundColor:RGB(103, 103, 103)];
+   
         _okButton.enabled = NO;
     }
     return _okButton;
@@ -188,14 +188,7 @@
     [[WHImageManager manager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info) {
         [self.datasourceArray addObject:photo];
         [self.mainCollectionView reloadData];
-        if (self.datasourceArray.count >= 3) {
-            self.okButton.enabled = YES;
-            [self.okButton setBackgroundColor:RGB(80, 176, 140)];
-        }else
-        {
-            self.okButton.enabled = NO;
-            [self.okButton setBackgroundColor:RGB(103, 103, 103)];
-        }
+       [self updateOKButton];
 
     }];
 }
@@ -205,6 +198,11 @@
     [self.datasourceArray removeObjectAtIndex:indexPathRow];
     [self.mainCollectionView reloadData];
     
+    [self updateOKButton];
+}
+
+- (void)updateOKButton
+{
     if (self.datasourceArray.count >= 3) {
         self.okButton.enabled = YES;
         [self.okButton setBackgroundColor:RGB(80, 176, 140)];
@@ -213,6 +211,18 @@
         self.okButton.enabled = NO;
         [self.okButton setBackgroundColor:RGB(103, 103, 103)];
     }
+    if (self.datasourceArray.count > 0) {
+        [_okButton setTitle:[NSString stringWithFormat:@"开始制作(%zd)", self.datasourceArray.count] forState:UIControlStateNormal];
+    }else
+    {
+        [_okButton setTitle:@"开始制作(%zd)" forState:UIControlStateNormal];
+    }
+    
+}
+
+- (NSMutableArray *)getAllSelectedImages
+{
+    return self.datasourceArray;
 }
 
 @end
