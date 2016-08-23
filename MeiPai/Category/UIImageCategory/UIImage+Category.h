@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIImage+Antialiase.h"
+#import "UIImage+CutImage.h"
 @interface UIImage (Category)
 
 - (CGSize)limitMaxWidthHeight:(CGFloat)maxW maxH:(CGFloat)maxH;

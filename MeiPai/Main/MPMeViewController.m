@@ -7,7 +7,7 @@
 //
 
 #import "MPMeViewController.h"
-
+#import "UIImage+CutImage.h"
 @interface MPMeViewController ()
 
 @end
@@ -17,6 +17,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    UIImage *im = [UIImage imageNamed:@"66666"];
+    CGPoint ppp = [UIImage processImage:im];
+    NSLog(@"%@", NSStringFromCGPoint(ppp));
+    double p = im.size.width/im.size.height;
+    CGFloat w = 250;
+    CGFloat h =w/p;
+    
+    
+    UIImageView *imageVIew = [[UIImageView alloc] init];
+    imageVIew.image = im;
+    imageVIew.frame = CGRectMake(0, 100, w, h);
+    [self.view addSubview:imageVIew];
+    
 }
 
 - (void)didReceiveMemoryWarning {
