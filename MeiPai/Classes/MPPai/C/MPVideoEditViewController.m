@@ -245,12 +245,13 @@
 - (void)pressPlayButton:(UIButton *)sender
 {
     sender.selected = !sender.selected;
-    if (sender.selected) {
+//    if (sender.selected) {
+        [_player seekToTime:kCMTimeZero];
         [_player play];
-    }else
-    {
-         [_player pause];
-    }
+//    }else
+//    {
+//         [_player pause];
+//    }
     
 }
 

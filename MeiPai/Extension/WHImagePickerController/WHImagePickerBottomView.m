@@ -208,7 +208,7 @@
         [self.okButton setBackgroundColor:RGB(80, 176, 140)];
     }else
     {
-        self.okButton.enabled = NO;
+        self.okButton.enabled = YES;
         [self.okButton setBackgroundColor:RGB(103, 103, 103)];
     }
     if (self.datasourceArray.count > 0) {

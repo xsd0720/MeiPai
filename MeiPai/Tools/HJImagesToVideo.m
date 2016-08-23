@@ -11,8 +11,8 @@
 CGSize const DefaultFrameSize                             = (CGSize){480, 320};
 
 NSInteger const DefaultFrameRate                          = 1;
-NSInteger const TransitionFrameCount                      = 80;
-NSInteger const FramesToWaitBeforeTransition              = 40;
+NSInteger const TransitionFrameCount                      = 20;
+NSInteger const FramesToWaitBeforeTransition              = 10;
 
 BOOL const DefaultTransitionShouldAnimate = YES;
 
@@ -196,7 +196,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     CVPixelBufferRef buffer;
     CVPixelBufferPoolCreatePixelBuffer(NULL, adaptor.pixelBufferPool, &buffer);
     
-    CMTime presentTime = CMTimeMake(0, fps);
+    CMTime presentTime = CMTimeMake(60, 30);
     
     int i = 0;
     while (1)
@@ -209,7 +209,8 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 			if (i >= [array count]) {
 				buffer = NULL;
 			} else {
-				buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:CGSizeMake(640, 640)];
+                UIImage *im = array[i];
+				buffer = [HJImagesToVideo pixelBufferFromCGImage:[im CGImage] size:CGSizeMake(im.size.width, im.size.height)];
 			}
 			
 			if (buffer) {
@@ -221,36 +222,36 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                             withInput:writerInput];
                 NSAssert(appendSuccess, @"Failed to append");
                 
-//                if (i + 1 < array.count) {
-//
-//                    //Create time each fade frame is displayed
-//                    CMTime fadeTime = CMTimeMake(1, fps*TransitionFrameCount);
-//            
-//                    //Add a delay, causing the base image to have more show time before fade begins.
-//                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
-//                        presentTime = CMTimeAdd(presentTime, fadeTime);
-//                    }
-//                    
-//                    //Adjust fadeFrameCount so that the number and curve of the fade frames and their alpha stay consistant
-//                    NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;
-//                    
-//                    //Apply fade frames
-//                    for (double j = 1; j < framesToFadeCount; j++) {
-//                        
-//                        buffer = [HJImagesToVideo crossFadeImage:[array[i] CGImage]
-//                                                         toImage:[array[i + 1] CGImage]
-//                                                          atSize:CGSizeMake(480, 320)
-//                                                       withAlpha:j/framesToFadeCount];
-//                        
-//                        BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
-//                                                                  pixelBuffer:buffer
-//                                                                       atTime:presentTime
-//                                                                    withInput:writerInput];
-//                        presentTime = CMTimeAdd(presentTime, fadeTime);
-//                        
-//                        NSAssert(appendSuccess, @"Failed to append");
-//                    }
-//                }
+                if (i + 1 < array.count) {
+
+                    //Create time each fade frame is displayed
+                    CMTime fadeTime = CMTimeMake(1, fps*TransitionFrameCount);
+            
+                    //Add a delay, causing the base image to have more show time before fade begins.
+                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
+                        presentTime = CMTimeAdd(presentTime, fadeTime);
+                    }
+                    
+                    //Adjust fadeFrameCount so that the number and curve of the fade frames and their alpha stay consistant
+                    NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;
+                    
+                    //Apply fade frames
+                    for (double j = 1; j < framesToFadeCount; j++) {
+                         UIImage *im = array[i];
+                        buffer = [HJImagesToVideo crossFadeImage:[array[i] CGImage]
+                                                         toImage:[array[i + 1] CGImage]
+                                                          atSize:CGSizeMake(im.size.width, im.size.height)
+                                                       withAlpha:j/framesToFadeCount];
+                        
+                        BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
+                                                                  pixelBuffer:buffer
+                                                                       atTime:presentTime
+                                                                    withInput:writerInput];
+                        presentTime = CMTimeAdd(presentTime, fadeTime);
+                        
+                        NSAssert(appendSuccess, @"Failed to append");
+                    }
+                }
                 
                 i++;
 			} else {
@@ -368,7 +369,81 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     return [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
 }
 
-
+//- (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size andSpeed:(NSString *)v_speed andAngle:(NSString*)v_angle
+//{
+//    //Impact Speed : = %f , Club Angle
+//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+//                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+//                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, nil];
+//    CVPixelBufferRef pxbuffer = NULL;
+//    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, kCVPixelFormatType_32ARGB, (CFDictionaryRef) options, &pxbuffer);
+//    
+//    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+//    
+//    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+//    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+//    NSParameterAssert(pxdata != NULL);
+//    
+//    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+//    CGContextRef context = CGBitmapContextCreate(pxdata, size.width, size.height, 8, 4*size.width, rgbColorSpace, kCGImageAlphaPremultipliedFirst);
+//    NSParameterAssert(context);
+//    CGContextSaveGState(context);
+//    
+//    // 旋转
+//    CGContextRotateCTM(context, -M_PI_2);
+//    CGContextTranslateCTM(context, -size.height, 0);
+//    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),CGImageGetHeight(image)), image);
+//    CGContextRestoreGState(context);
+//    // 添加logo
+//    UIImage *imageLogo = [UIImage imageNamed:@"Watermark.png"];
+//    CGRect rectLogo ;
+//    //  1280 720
+//#if isPad
+//    rectLogo = CGRectMake(size.width-imageLogo.size.width-20.0f, size.height-imageLogo.size.height-170.0f, imageLogo.size.width, imageLogo.size.height);
+//#else
+//    rectLogo = CGRectMake(size.width-imageLogo.size.width-50.0f, size.height-imageLogo.size.height-25.0f, imageLogo.size.width, imageLogo.size.height);
+//#endif
+//    CGContextDrawImage(context, rectLogo, imageLogo.CGImage);
+//    // 球杆挥动的时候才显示数据
+//    if (m_saveMutableDict) {
+//#if isPad
+//        MyDrawText(context , CGPointMake(20.0f, size.height-imageLogo.size.height-150.0f),v_speed);
+//        MyDrawText(context , CGPointMake(20.0f, size.height-imageLogo.size.height-180.0f),v_angle);
+//#else
+//        MyDrawText(context , CGPointMake(70.0f, size.height-30.0f),v_speed);
+//        MyDrawText(context , CGPointMake(70.0f, size.height-53.0f),v_angle);
+//#endif
+//    }
+//    CGColorSpaceRelease(rgbColorSpace);
+//    CGContextRelease(context);
+//    
+//    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+//    
+//    return pxbuffer;
+//}
+//
+//void MyDrawText (CGContextRef myContext, CGPoint point, NSString *v_strContext) {
+//#if isPad
+//    CGContextSelectFont (myContext,
+//                         "Impact",
+//                         20.0f,
+//                         kCGEncodingMacRoman);
+//#else
+//    CGContextSelectFont (myContext,
+//                         "Impact",
+//                         20.0f,
+//                         kCGEncodingMacRoman);
+//#endif
+//    //    CGContextTranslateCTM(myContext, 0, 768);
+//    //    CGContextScaleCTM(myContext, 1, -1);
+//    CGContextSetCharacterSpacing (myContext, 1);
+//    CGContextSetTextDrawingMode (myContext, kCGTextFillStroke);
+//    CGContextSetLineWidth(myContext, 1.0f);
+//    CGContextSetFillColorWithColor(myContext, [UIColor colorWithRed:251.0f/255.0f green:237.0f/255.0f blue:75.0f/255.0f alpha:1.0f].CGColor);
+//    CGContextSetStrokeColorWithColor(myContext, [UIColor blackColor].CGColor) ;
+//    CGContextShowTextAtPoint (myContext, point.x, point.y, v_strContext.UTF8String, strlen(v_strContext.UTF8String)); // 10
+//    //    [v_strContext drawAtPoint:CGPointMake(100  , 100) withFont:[UIFont fontWithName:@"Helvetica" size:20]];
+//}
 
 
 @end

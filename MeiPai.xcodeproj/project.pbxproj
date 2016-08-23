@@ -299,6 +299,7 @@
 		0C7457021D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7457011D5C6BCD00A81169 /* MPPaiChooseMusicViewController.m */; };
 		0C8352CF1D5432C80064489F /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352CE1D5432C80064489F /* MPCameraManager.m */; };
 		0C8352E11D54A27C0064489F /* MPRecordVideoProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */; };
+		0C83B6221D6BF94F00DCF698 /* CameraHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C83B6211D6BF94F00DCF698 /* CameraHelp.m */; };
 		0C876E511D655F9D003FC697 /* WHImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E501D655F9D003FC697 /* WHImagePickerController.m */; };
 		0C876E541D655FE2003FC697 /* WHImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E531D655FE2003FC697 /* WHImageManager.m */; };
 		0C876E571D6562E8003FC697 /* WHPhotoPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C876E561D6562E8003FC697 /* WHPhotoPickerController.m */; };
@@ -840,6 +841,8 @@
 		0C8352CE1D5432C80064489F /* MPCameraManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
 		0C8352DF1D54A27C0064489F /* MPRecordVideoProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPRecordVideoProgressBar.h; sourceTree = "<group>"; };
 		0C8352E01D54A27C0064489F /* MPRecordVideoProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRecordVideoProgressBar.m; sourceTree = "<group>"; };
+		0C83B6201D6BF94F00DCF698 /* CameraHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraHelp.h; sourceTree = "<group>"; };
+		0C83B6211D6BF94F00DCF698 /* CameraHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraHelp.m; sourceTree = "<group>"; };
 		0C876E4F1D655F9D003FC697 /* WHImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHImagePickerController.h; sourceTree = "<group>"; };
 		0C876E501D655F9D003FC697 /* WHImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHImagePickerController.m; sourceTree = "<group>"; };
 		0C876E521D655FE2003FC697 /* WHImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHImageManager.h; sourceTree = "<group>"; };
@@ -1668,6 +1671,8 @@
 				0C69D7BA1D583842007801B2 /* MPVideoProcessing.m */,
 				0C6212CC1D6B06320032D85C /* HJImagesToVideo.h */,
 				0C6212CD1D6B06320032D85C /* HJImagesToVideo.m */,
+				0C83B6201D6BF94F00DCF698 /* CameraHelp.h */,
+				0C83B6211D6BF94F00DCF698 /* CameraHelp.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -1959,6 +1964,7 @@
 				0C668DBB1D531D0A000FC15A /* GPUImageVignetteFilterEx.m in Sources */,
 				0C668E1F1D531D0A000FC15A /* GPUImageNormalBlendFilter.m in Sources */,
 				0C69D7B01D582384007801B2 /* MPVideoCutViewController.m in Sources */,
+				0C83B6221D6BF94F00DCF698 /* CameraHelp.m in Sources */,
 				0C668DC51D531D0A000FC15A /* GPUImageAlphaBlendFilter.m in Sources */,
 				0C668E371D531D0A000FC15A /* GPUImageScreenBlendFilter.m in Sources */,
 				0C876E5D1D656554003FC697 /* WHAssetModel.m in Sources */,

@@ -106,8 +106,10 @@
         _playButton.alpha = 1.0f;
     }];
     
-    [_player seekToTime:kCMTimeZero];
-    [_player play];
+//    [_player seekToTime:kCMTimeZero];
+//    [_player play];
+    
+    NSLog(@"放完了");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -219,6 +221,7 @@
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
 
     _playerLayer = [[AVPlayerLayer alloc] init];
+    _playerLayer.backgroundColor = [[UIColor cyanColor] CGColor];
     _playerLayer.frame = CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_WIDTH);
     
     [_playerLayer setPlayer:_player];
@@ -253,12 +256,13 @@
 - (void)pressPlayButton:(UIButton *)sender
 {
     sender.selected = !sender.selected;
-    if (sender.selected) {
+//    if (sender.selected) {
+        [_player seekToTime:kCMTimeZero];
         [_player play];
-    }else
-    {
-        [_player pause];
-    }
+//    }else
+//    {
+//        [_player pause];
+//    }
     
 }
 
