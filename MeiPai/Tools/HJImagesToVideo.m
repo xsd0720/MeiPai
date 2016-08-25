@@ -12,7 +12,7 @@ CGSize const DefaultFrameSize                             = (CGSize){480, 320};
 
 NSInteger const DefaultFrameRate                          = 1;
 NSInteger const TransitionFrameCount                      = 20;
-NSInteger const FramesToWaitBeforeTransition              = 10;
+NSInteger const FramesToWaitBeforeTransition              = 20;
 
 BOOL const DefaultTransitionShouldAnimate = YES;
 
@@ -196,7 +196,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     CVPixelBufferRef buffer;
     CVPixelBufferPoolCreatePixelBuffer(NULL, adaptor.pixelBufferPool, &buffer);
     
-    CMTime presentTime = CMTimeMake(60, 30);
+    CMTime presentTime = CMTimeMake(0, fps);
     
     int i = 0;
     while (1)
@@ -220,6 +220,8 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                           pixelBuffer:buffer
                                                                atTime:presentTime
                                                             withInput:writerInput];
+
+                
                 NSAssert(appendSuccess, @"Failed to append");
                 
                 if (i + 1 < array.count) {
@@ -231,6 +233,13 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                     for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
                         presentTime = CMTimeAdd(presentTime, fadeTime);
                     }
+       
+//                    presentTime = CMTimeMake(i, fps);
+                    
+//                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
+//                        presentTime = CMTimeAdd(presentTime, fadeTime);
+//                    }
+//
                     
                     //Adjust fadeFrameCount so that the number and curve of the fade frames and their alpha stay consistant
                     NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;
@@ -251,6 +260,10 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                         
                         NSAssert(appendSuccess, @"Failed to append");
                     }
+                    
+                    
+                    
+                    
                 }
                 
                 i++;
@@ -342,7 +355,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                  CGImageGetWidth(baseImage),
                                  CGImageGetHeight(baseImage));
     
-    CGContextDrawImage(context, drawRect, baseImage);
+//    CGContextDrawImage(context, CGRectMake(-25, -25, drawRect.size.width+50, drawRect.size.height+50), baseImage);
     
     CGContextBeginTransparencyLayer(context, nil);
     CGContextSetAlpha( context, alpha );

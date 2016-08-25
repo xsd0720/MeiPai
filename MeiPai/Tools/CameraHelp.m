@@ -95,9 +95,7 @@ static CameraHelp* g_camera = 0;
 -(void)dealloc
 {
 #if PRODUCER_HAS_VIDEO_CAPTURE
-    [mCaptureSession release];
-    [mCaptureDevice release];
-    [mPreview release];
+   
 #endif
 
 }
@@ -190,9 +188,8 @@ static CameraHelp* g_camera = 0;
     dispatch_queue_t queue = dispatch_queue_create("com.gh.cecall", NULL);
     [avCaptureVideoDataOutput setSampleBufferDelegate:self queue:queue];
     [mCaptureSession addOutput:avCaptureVideoDataOutput];
-    [settings release];
-    [avCaptureVideoDataOutput release];
-    dispatch_release(queue);
+
+
     mFirstFrame = YES;
     mStarted = YES;
     
@@ -206,10 +203,10 @@ static CameraHelp* g_camera = 0;
 #if PRODUCER_HAS_VIDEO_CAPTURE
     if(mCaptureSession){
         [mCaptureSession stopRunning];
-        [mCaptureSession release], mCaptureSession = nil;
+  
         NSLog(@"Video capture stopped");
     }
-    [mCaptureDevice release], mCaptureDevice = nil;
+
     
     if(mPreview){
         for (UIView *view in mPreview.subviews) {
@@ -253,16 +250,16 @@ static CameraHelp* g_camera = 0;
                     break;
                 }
             }
-            [mPreview release], mPreview = nil;
+   
         }
     }
     else {
         //start preview
         if (mPreview) {
-            [mPreview release];
-            mPreview = nil;
+     
+     
         }
-        if((mPreview = [preview retain])){
+        if((mPreview = preview)){
             [self startPreview];
         }
     }
