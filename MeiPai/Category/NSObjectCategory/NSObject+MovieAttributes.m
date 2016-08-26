@@ -37,7 +37,7 @@
     if (getifaddrs(&ifa_list) == -1)
     {
         return 0;
-    }
+    } 
     
     uint32_t iBytes = 0;
     uint32_t oBytes = 0;
