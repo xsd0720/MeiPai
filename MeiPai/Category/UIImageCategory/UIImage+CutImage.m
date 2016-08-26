@@ -40,7 +40,7 @@ static CGContextRef CreateRGBABitmapContext (CGImageRef inImage)
     return context;
 }
 //传入png图片  返回 签名处图
-+ (CGPoint)processImage:(UIImage*)inImage
++ (UIImage *)processImage:(UIImage*)inImage
 {
     //    unsigned char *imgPixel = RequestImagePixelData(inImage);
     CGImageRef img = [inImage CGImage];
@@ -80,14 +80,13 @@ static CGContextRef CreateRGBABitmapContext (CGImageRef inImage)
             
             
             int alpha=(unsigned char)imgPixel[pixOff+3];
-            
-            NSLog(@"%i    %i     %i     %i", red, green, blue, alpha);
+            NSLog(@"%d   %d    %d  %d",  red, green, blue, alpha);
             
             if (alpha != 0) {
 //                //                              NSLog(@"%i",alpha);
-//                imgPixel[pixOff] = 255;
-//                imgPixel[pixOff+1] = 255;
-//                imgPixel[pixOff+2] = 255;
+                imgPixel[pixOff] = 255;
+                imgPixel[pixOff+1] = 255;
+                imgPixel[pixOff+2] = 255;
                 
                 //                imgPixel[pixOff+3] = 0;
                 if (x<minx) {
@@ -111,28 +110,30 @@ static CGContextRef CreateRGBABitmapContext (CGImageRef inImage)
         }
         wOff += w * 4;
     }
-//    NSInteger dataLength = w*h* 4;
-//    //下面的代码创建要输出的图像的相关参数
-//    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, imgPixel, dataLength, NULL);
-//    // prep the ingredients
-//    int bitsPerComponent = 8;
-//    int bitsPerPixel = 32;
-//    size_t bytesPerRow = 4 * w;
-//    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-//    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-//    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-//    
-//    //创建要输出的图像
-//    CGImageRef imageRef = CGImageCreate(w, h,
-//                                        bitsPerComponent,
-//                                        bitsPerPixel,
-//                                        bytesPerRow,
-//                                        colorSpaceRef,
-//                                        bitmapInfo,
-//                                        provider,
-//                                        NULL, NO, renderingIntent);
-//    
-//    UIImage *my_Image = [UIImage imageWithCGImage:imageRef];
+    NSInteger dataLength = w*h* 4;
+    //下面的代码创建要输出的图像的相关参数
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, imgPixel, dataLength, NULL);
+    // prep the ingredients
+    int bitsPerComponent = 8;
+    int bitsPerPixel = 32;
+    size_t bytesPerRow = 4 * w;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo =  kCGBitmapByteOrderDefault|kCGImageAlphaPremultipliedLast;
+    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+    
+    //创建要输出的图像
+    CGImageRef imageRef = CGImageCreate(w, h,
+                                        bitsPerComponent,
+                                        bitsPerPixel,
+                                        bytesPerRow,
+                                        colorSpaceRef,
+                                        bitmapInfo,
+                                        provider,
+                                        NULL, NO, renderingIntent);
+    
+    UIImage *my_Image = [UIImage imageWithCGImage:imageRef];
+
+    return  my_Image;
     
     
 //    CGColorSpaceRelease(colorSpaceRef);
@@ -140,7 +141,7 @@ static CGContextRef CreateRGBABitmapContext (CGImageRef inImage)
     //    280    396     534    672
 //    NSLog(@"%i   %i   %i   %i    ",minx,maxx,miny,maxy);
 
-    return CGPointMake(minx, miny);
+//    return CGPointMake(minx, miny);
     
     //    UIImage *cutimageResult = [self imageFromImage:inImage inRect:CGRectMake(minx, miny, maxx-minx, maxy-miny)];
 //

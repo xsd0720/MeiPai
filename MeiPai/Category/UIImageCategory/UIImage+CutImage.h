@@ -10,6 +10,6 @@
 
 @interface UIImage (CutImage)
 //传入png图片  返回 坐标
-+ (CGPoint)processImage:(UIImage*)inImage;
++ (UIImage *)processImage:(UIImage*)inImage;
 
 @end
