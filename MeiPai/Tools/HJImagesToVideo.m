@@ -8,11 +8,11 @@
 
 #import "HJImagesToVideo.h"
 
-CGSize const DefaultFrameSize                             = (CGSize){480, 320};
+CGSize const DefaultFrameSize                             = (CGSize){640, 640};
 
 NSInteger const DefaultFrameRate                          = 1;
-NSInteger const TransitionFrameCount                      = 20;
-NSInteger const FramesToWaitBeforeTransition              = 20;
+NSInteger const TransitionFrameCount                      = 30;
+NSInteger const FramesToWaitBeforeTransition              = 10;
 
 BOOL const DefaultTransitionShouldAnimate = YES;
 
@@ -156,6 +156,145 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                    }];
 }
 
+//+ (void)writeImageAsMovie:(NSArray *)array
+//                   toPath:(NSString*)path
+//                     size:(CGSize)size
+//                      fps:(int)fps
+//       animateTransitions:(BOOL)shouldAnimateTransitions
+//        withCallbackBlock:(SuccessBlock)callbackBlock
+//{
+//    NSLog(@"%@", path);
+//    NSError *error = nil;
+//    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:path]
+//                                                           fileType:AVFileTypeMPEG4
+//                                                              error:&error];
+//    if (error) {
+//        if (callbackBlock) {
+//            callbackBlock(NO);
+//        }
+//        return;
+//    }
+//    NSParameterAssert(videoWriter);
+//    
+//    NSDictionary *videoSettings = @{AVVideoCodecKey: AVVideoCodecH264,
+//                                    AVVideoWidthKey: [NSNumber numberWithInt:size.width],
+//                                    AVVideoHeightKey: [NSNumber numberWithInt:size.height]};
+//    
+//    AVAssetWriterInput* writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo
+//                                                                         outputSettings:videoSettings];
+//    
+//    AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:writerInput
+//                                                                                                                     sourcePixelBufferAttributes:nil];
+//    NSParameterAssert(writerInput);
+//    NSParameterAssert([videoWriter canAddInput:writerInput]);
+//    [videoWriter addInput:writerInput];
+//    
+//    //Start a session:
+//    [videoWriter startWriting];
+//    [videoWriter startSessionAtSourceTime:kCMTimeZero];
+//    
+//    CVPixelBufferRef buffer;
+//    CVPixelBufferPoolCreatePixelBuffer(NULL, adaptor.pixelBufferPool, &buffer);
+//    
+//    CMTime presentTime = CMTimeMake(0, fps);
+//    
+//    int i = 0;
+//    while (1)
+//    {
+//        
+//		if(writerInput.readyForMoreMediaData){
+//            
+//			presentTime = CMTimeMake(i, fps);
+//            
+//			if (i >= [array count]) {
+//				buffer = NULL;
+//			} else {
+//                UIImage *im = array[i];
+//				buffer = [HJImagesToVideo pixelBufferFromCGImage:[im CGImage] size:CGSizeMake(im.size.width, im.size.height)];
+//			}
+//			
+//			if (buffer) {
+//                //append buffer
+//                
+//                BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
+//                                                          pixelBuffer:buffer
+//                                                               atTime:presentTime
+//                                                            withInput:writerInput];
+//
+//                
+//                NSAssert(appendSuccess, @"Failed to append");
+//                
+//                if (i + 1 < array.count) {
+//
+//                    //Create time each fade frame is displayed
+//                    CMTime fadeTime = CMTimeMake(1, fps*TransitionFrameCount);
+//            
+//                    //Add a delay, causing the base image to have more show time before fade begins.
+//                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
+//                        presentTime = CMTimeAdd(presentTime, fadeTime);
+//                    }
+//       
+////                    presentTime = CMTimeMake(i, fps);
+//                    
+////                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
+////                        presentTime = CMTimeAdd(presentTime, fadeTime);
+////                    }
+////
+//                    
+//                    //Adjust fadeFrameCount so that the number and curve of the fade frames and their alpha stay consistant
+//                    NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;
+//                    
+//                    //Apply fade frames
+//                    for (double j = 1; j < framesToFadeCount; j++) {
+//                         UIImage *im = array[i];
+//                        buffer = [HJImagesToVideo crossFadeImage:[array[i] CGImage]
+//                                                         toImage:[array[i + 1] CGImage]
+//                                                          atSize:CGSizeMake(im.size.width, im.size.height)
+//                                                       withAlpha:j/framesToFadeCount];
+//                        
+//                        BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
+//                                                                  pixelBuffer:buffer
+//                                                                       atTime:presentTime
+//                                                                    withInput:writerInput];
+//                        presentTime = CMTimeAdd(presentTime, fadeTime);
+//                        
+//                        NSAssert(appendSuccess, @"Failed to append");
+//                    }
+//                    
+//                    
+//                    
+//                    
+//                }
+//                
+//                i++;
+//			} else {
+//				
+//				//Finish the session:
+//				[writerInput markAsFinished];
+//                
+//				[videoWriter finishWritingWithCompletionHandler:^{
+//                    NSLog(@"Successfully closed video writer");
+//                    if (videoWriter.status == AVAssetWriterStatusCompleted) {
+//                        if (callbackBlock) {
+//                            callbackBlock(YES);
+//                        }
+//                    } else {
+//                        if (callbackBlock) {
+//                            callbackBlock(NO);
+//                        }
+//                    }
+//                }];
+//				
+//				CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
+//				
+//				NSLog (@"Done");
+//                break;
+//            }
+//        }
+//    }
+//}
+
+
 + (void)writeImageAsMovie:(NSArray *)array
                    toPath:(NSString*)path
                      size:(CGSize)size
@@ -202,55 +341,48 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     while (1)
     {
         
-		if(writerInput.readyForMoreMediaData){
+        if(writerInput.readyForMoreMediaData){
             
-			presentTime = CMTimeMake(i, fps);
+//            presentTime = CMTimeMake(i, fps);
             
-			if (i >= [array count]) {
-				buffer = NULL;
-			} else {
+            if (i >= [array count]) {
+                buffer = NULL;
+            } else {
                 UIImage *im = array[i];
-				buffer = [HJImagesToVideo pixelBufferFromCGImage:[im CGImage] size:CGSizeMake(im.size.width, im.size.height)];
-			}
-			
-			if (buffer) {
+                buffer = [HJImagesToVideo pixelBufferFromCGImage:[im CGImage] size:CGSizeMake(im.size.width, im.size.height)];
+            }
+            
+            if (buffer) {
                 //append buffer
                 
                 BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
                                                           pixelBuffer:buffer
                                                                atTime:presentTime
                                                             withInput:writerInput];
-
+                
                 
                 NSAssert(appendSuccess, @"Failed to append");
                 
                 if (i + 1 < array.count) {
-
+                    
                     //Create time each fade frame is displayed
                     CMTime fadeTime = CMTimeMake(1, fps*TransitionFrameCount);
-            
+                    
                     //Add a delay, causing the base image to have more show time before fade begins.
                     for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
                         presentTime = CMTimeAdd(presentTime, fadeTime);
                     }
-       
-//                    presentTime = CMTimeMake(i, fps);
-                    
-//                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
-//                        presentTime = CMTimeAdd(presentTime, fadeTime);
-//                    }
-//
-                    
+   
                     //Adjust fadeFrameCount so that the number and curve of the fade frames and their alpha stay consistant
-                    NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;
+                    NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;;
                     
                     //Apply fade frames
                     for (double j = 1; j < framesToFadeCount; j++) {
-                         UIImage *im = array[i];
+                        UIImage *im = array[i];
                         buffer = [HJImagesToVideo crossFadeImage:[array[i] CGImage]
                                                          toImage:[array[i + 1] CGImage]
                                                           atSize:CGSizeMake(im.size.width, im.size.height)
-                                                       withAlpha:j/framesToFadeCount];
+                                                       withAlpha:j/framesToFadeCount index:j];
                         
                         BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
                                                                   pixelBuffer:buffer
@@ -267,12 +399,12 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                 }
                 
                 i++;
-			} else {
-				
-				//Finish the session:
-				[writerInput markAsFinished];
+            } else {
                 
-				[videoWriter finishWritingWithCompletionHandler:^{
+                //Finish the session:
+                [writerInput markAsFinished];
+                
+                [videoWriter finishWritingWithCompletionHandler:^{
                     NSLog(@"Successfully closed video writer");
                     if (videoWriter.status == AVAssetWriterStatusCompleted) {
                         if (callbackBlock) {
@@ -284,10 +416,10 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                         }
                     }
                 }];
-				
-				CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
-				
-				NSLog (@"Done");
+                
+                CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
+                
+                NSLog (@"Done");
                 break;
             }
         }
@@ -326,11 +458,15 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     return pxbuffer;
 }
+// 200* 150            220 165
+
+
 
 + (CVPixelBufferRef)crossFadeImage:(CGImageRef)baseImage
                            toImage:(CGImageRef)fadeInImage
                             atSize:(CGSize)imageSize
                          withAlpha:(CGFloat)alpha
+                             index:(int)index
 {
     NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
                               (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
@@ -354,12 +490,16 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                  (imageSize.height-CGImageGetHeight(baseImage))/2,
                                  CGImageGetWidth(baseImage),
                                  CGImageGetHeight(baseImage));
+    CGFloat p = drawRect.size.width/drawRect.size.height;
+    CGFloat abc = drawRect.size.height*0.3;
+    CGFloat incrementY = (abc/(TransitionFrameCount - FramesToWaitBeforeTransition))*index;
+    CGFloat incrementX = incrementY*p;
     
-//    CGContextDrawImage(context, CGRectMake(-25, -25, drawRect.size.width+50, drawRect.size.height+50), baseImage);
+    CGContextDrawImage(context, CGRectMake(-incrementX/2, -incrementY/2, drawRect.size.width+incrementX, drawRect.size.height+incrementY), baseImage);
     
     CGContextBeginTransparencyLayer(context, nil);
     CGContextSetAlpha( context, alpha );
-    CGContextDrawImage(context, drawRect, fadeInImage);
+//    CGContextDrawImage(context, drawRect, fadeInImage);
     CGContextEndTransparencyLayer(context);
     
     CGColorSpaceRelease(rgbColorSpace);

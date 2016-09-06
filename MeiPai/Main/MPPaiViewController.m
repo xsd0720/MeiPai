@@ -17,6 +17,7 @@
 #import "MPVideoProcessing.h"
 #import "MPPhotoMovieEditViewController.h"
 #import "HJImagesToVideo.h"
+#import "WHImageManager.h"
 #define MinRecordDuration     3.0
 
 @interface MPPaiViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MPCameraManagerRecorderDelegate, UIViewControllerTransitioningDelegate, UIAlertViewDelegate, WHImagePickerControllerDelegate>
@@ -437,6 +438,14 @@
 //        [self presentViewController:photoMovieEditVC animated:YES completion:nil];
 //    }];
 
+    UIImage *im = photos[0];
+    [UIImagePNGRepresentation(im) writeToFile:[NSHomeDirectory() stringByAppendingPathComponent:@"9999.png"] atomically:YES];
+
+//    [[WHImageManager manager] getPhotosBytesWithArray:@[photos[0]] completion:^(NSString *totalBytes) {
+////        _originalPhotoLable.text = [NSString stringWithFormat:@"(%@)",totalBytes];
+//        NSLog(@"%@", totalBytes);
+//    }];
+    
     
     [HJImagesToVideo saveVideoToPhotosWithImages:photos
                               animateTransitions:YES
