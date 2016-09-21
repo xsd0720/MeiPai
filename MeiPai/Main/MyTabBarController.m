@@ -77,7 +77,7 @@
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button addTarget:self action:@selector(buttonPaiClick:) forControlEvents:UIControlEventTouchUpInside];
             button.frame = CGRectMake(i*BUTTONWIDTH,0, BUTTONWIDTH, self.tabBar.frame.size.height);
-            [button setImage:[UIImage imageNamed:@"tab_pai"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"tabbar_camera_a_64x49_"] forState:UIControlStateNormal];
             [self.tabBar addSubview:button];
             continue;
         }

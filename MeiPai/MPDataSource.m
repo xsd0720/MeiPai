@@ -21,10 +21,10 @@
 
 
 -(NSArray *)tabbarNormalImageArray{
-    return @[@"icon_left_homepage_a",@"tabbar_contacts",@"tabbar_discover",@"tabbar_me", @"tabbar_me"];
+    return @[@"tabbar_home_a_28x28_",@"tabbar_friend_a_28x28_",@"tabbar_camera_a_64x49_",@"tabbar_explore_a_28x28_", @"tabbar_user_a_28x28_"];
 }
 -(NSArray *)tabbarHlImageArray{
-    return @[@"icon_left_homepage_b",@"tabbar_contactsHL",@"tabbar_discoverHL",@"tabbar_meHL", @"tabbar_me"];
+    return @[@"tabbar_home_b_28x28_",@"tabbar_friend_b_28x28_",@"tabbar_camera_b_64x49_",@"tabbar_explore_b_28x28_", @"tabbar_user_b_28x28_"];
 }
 -(NSArray *)tabbarTitleArray{
     return @[@"美拍",@"我的关注",@"开始拍",@"最热话题", @"我"];
